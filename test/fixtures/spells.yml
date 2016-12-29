@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  level: 1
+  school: 1
+  casting_time: 1
+  range: 1
+  duration: 1
+  description: MyString
+
+two:
+  name: MyString
+  level: 1
+  school: 1
+  casting_time: 1
+  range: 1
+  duration: 1
+  description: MyString

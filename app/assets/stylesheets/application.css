@@ -1,0 +1,112 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+ .search-container {
+   height: 70px;
+   margin: 0;
+   background-color: #006699;
+ }
+
+ .search-input-container {
+   display: inline-block;
+   padding: 15px;
+   box-sizing: border-box;
+   height: 100%;
+   width: 100%;
+ }
+
+ .search-input {
+   height: 100%;
+   width: 100%;
+   margin: 0px;
+   padding: 0px;
+   border-style: none;
+   border-color: none;
+   border-bottom: solid white 1px;
+   color: white;
+   font-family: sans-serif;
+   font-size: 32px;
+   font-weight: bold;
+   background-color: transparent;
+   appearance: none;
+   box-shadow: none;
+   cursor: pointer;
+ }
+
+ .search-input:focus {
+   outline: 0;
+ }
+
+ input.search-button {
+   height: 100%;
+   width: 100%;
+   margin: 0px;
+   padding: 0px;
+   border-style: none;
+   border-color: none;
+   border-bottom: solid white 1px;
+   cursor: pointer;
+   color: #006699;
+   font-family: sans-serif;
+   font-size: 32px;
+   font-weight: bold;
+   background-color: white;
+   appearance: none;
+   box-shadow: none;
+   position: relative;
+ }
+
+ input.search-button:hover {
+   background-color: lightgrey;
+   border-bottom: solid lightgrey 1px;
+   outline: 0;
+ }
+
+ input.search-button:focus {
+   position: relative;
+   top: 1px;
+   background-color: lightgrey;
+   border-bottom: solid lightgrey 1px;
+   outline: 0;
+ }
+
+ .search-button-container {
+   display: inline-block;
+   padding: 15px;
+   box-sizing: border-box;
+   height: 100%;
+   width: 100%;
+   border: solid black 1px;
+ }
+
+ .search-advanced-button-container {
+   display: inline-block;
+   padding: 5px;
+   box-sizing: border-box;
+   height: 100%;
+   width: 100%;
+   border: solid black 1px;
+ }
+
+ .search-advanced-image {
+   height: 100%;
+   width: 100%;
+   -webkit-filter: invert(100%);
+ }
+
+ .search-advanced-image:hover {
+   -webkit-filter: invert(80%);
+ }

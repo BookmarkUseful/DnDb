@@ -1,0 +1,57 @@
+<script>
+$(document).ready( function() {
+    $("#search-input").focus( function() {
+        if ( $(this).val()=="Search here...") {
+            $(this).val('');
+        }
+    });
+});
+</script>
+
+<body>
+  <div id="main-content">
+    <div id="header-container">
+      <h1 class="main-header">Spells</h1>
+      <% if !params[:search_phrase].blank? then %>
+        <h2 class="search-term-header"><%=@spells.count%> spells found for '<%= params[:search_phrase].downcase%>'</h2>
+      <% end %>
+    </div>
+    <div class="search-container">
+      <%= form_tag(spells_path, :method => :get) do %>
+        <div style="float:left; width:70%; display:inline-block">
+          <div class="search-input-container">
+            <%= text_field_tag(
+              :search_phrase,
+              (params[:search_phrase].present? ? params[:search_phrase] : "Search here..."),
+              {:id => "search-input", :class => "search-input"})
+            %>
+          </div>
+        </div>
+        <div style="float:right; width:10%; display:inline-block">
+          <div class="search-advanced-button-container">
+            <%= image_tag("gear.png", :alt => "advanced", :class => "search-advanced-image") %>
+          </div>
+        </div>
+        <div style="float:right; width:20%; display:inline-block">
+          <div class="search-button-container">
+            <%= submit_tag("Search", :class => "search-button") %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div id="index-container">
+      <table class="index">
+        <tr style="background-color: white">
+          <th>Name</th>
+          <th>Level</th>
+          <th>School</th>
+          <th>Concentration</th>
+          <th>Ritual</th>
+          <th>Casting Time</th>
+          <th>Duration</th>
+        </tr>
+        <%= render :partial => 'spell', :collection => @spells, :as => :spell %>
+      </table>
+    </div>
+  </div>
+</body>

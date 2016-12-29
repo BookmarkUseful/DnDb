@@ -1,0 +1,29 @@
+<script>
+$(document).ready(function () {
+  var pr = $(".parent-row");
+  var i;
+
+  for (i = 0; i < pr.length; ++i) {
+    pr[i].onclick = function(){
+      this.classList.toggle("active");
+      $( this ).next( "tr" ).toggle();
+    }
+  }
+});
+</script>
+
+<tr class="parent-row">
+  <td class="parent-cell"><%=spell.print_name%></td>
+  <td class="parent-cell"><%=spell.print_level%></td>
+  <td class="parent-cell"><%=spell.print_school.try(:titleize)%></td>
+  <td class="parent-cell"><%=spell.concentration%></td>
+  <td class="parent-cell"><%=spell.ritual%></td>
+  <td class="parent-cell"><%=spell.print_casting_time(false)%></td>
+  <td class="parent-cell"><%=spell.print_duration(false)%></td>
+</tr>
+<tr class="hidden-row">
+  <td class="hidden-content" colspan="7">
+    <p><%=spell.print_range%></p>
+    <p><%=spell.print_description%></p>
+  </td>
+</tr>

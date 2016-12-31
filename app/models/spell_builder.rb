@@ -3,7 +3,7 @@ class SpellBuilder
   FIRST_NON_WHITESPACE_REGEX = /[^\s]/
   MULTIPLE_SPACE_REGEX = /[ ]{2,}/
   LINE_OF_DIGITS_REGEX = /^[0-9]*$/
-  CHAPTER_INDICATOR_REGEX = /^chapter [0-9]/i
+  CHAPTER_INDICATOR_REGEX = /^chapter [0-9][0-9]*/i
   MAX_TAB_LENGTH = 4
 
   MapSchools = {
@@ -29,43 +29,79 @@ class SpellBuilder
 
   def self.build_spells(text, source_id, num_cols)
     blocks = self.build_spell_blocks(text, source_id, num_cols)
-    blocks = blocks.map do |block|
+    spells_and_attrs = blocks.map do |block|
       self.initialize_block_parse(block)
     end
-    blocks.map do |block|
-      self.compose_spell_from_block(block)
+    spells_and_attrs.map do |spell_attrs|
+      self.compose_spell_from_attrs(spell_attrs, source_id)
     end
   end
 
-  def self.build_spell_blocks(text, source_id, num_cols)
-    processed_text = self.process_text(page_texts, num_cols)
-    self.seperate_blocks(processed_text)
+  def self.build_spell_blocks(source_text, source_id, num_cols)
+    text = self.flatten_text(source_text, num_cols)
+    text = self.cleanup_text(text)
+    self.seperate_blocks(text)
   end
 
-  def self.compose_spell_from_block(block)
-    raise NotImplementedError
+  def self.compose_spell_from_attrs(spell_attrs, source_id)
+    spell_attrs.merge!(:source_id => source_id)
+    Spell.new(spell_attrs)
   end
 
-  def self.collect_text(pdf, page_start, page_end)
-    page_texts = pdf.pages[page_start..page_end].map(&:text)
-    self.process_text(page_texts, num_cols)
+  # blocks can be detected by relying on the school/level line, which is always
+  # the second line of the spell in the books.
+  def self.seperate_blocks(text)
+    blocks = []
+    lines = text.split("\n")
+    spell_name_indices = self.find_school_level_lines(lines).map{|l| l-1}
+    spell_name_indices.each_with_index do |line_index, array_index|
+      start = line_index
+      finish = if array_index+1 < spell_name_indices.length
+                 spell_name_indices[array_index+1] - 1 # line index at end of block
+               else
+                 lines.length - 1 # last line index of given text
+               end
+      blocks << lines[start..finish].map(&:strip).join("\n")
+    end
+    blocks
   end
 
-  def self.process_text(page_texts, num_cols)
-    parsed_text = if num_cols == 2 then
-                    page_texts.map do |page_text|
-                      self.split_two_columns(page_text)
-                    end.join("\n")
-                  else
-                    page_texts.join("\n")
-                  end
-    self.cleanup_text(parsed_text)
+  def self.find_school_level_lines(lines)
+    indices = []
+    lines.each_with_index do |line, index|
+      (indices << index) if self.is_school_level_line?(line)
+    end
+    indices
+  end
+
+  def self.is_school_level_line?(line)
+    line = line.downcase
+    school = Spell.schools.map do |school|
+               line.include?(school)
+             end.any?
+    ordinalized = (Spell::MIN_LEVEL..Spell::MAX_LEVEL).map(&:ordinalize)
+    ordinal_level = ordinalized.map do |ord|
+                      line.include?(ord)
+                    end.any?
+    cantrip = line.include?("cantrip")
+    level = ordinal_level || cantrip
+    school && level
+  end
+
+  def self.flatten_text(page_texts, num_cols)
+    if num_cols == 2
+      page_texts.map do |page_text|
+        self.flatten_two_columns(page_text)
+      end.join("\n")
+    else
+      page_texts.join("\n")
+    end
   end
 
   # split_two_columns assumes that there is always more than one space between
   # characters belonging to different columns. Unofrtunately right now this
   # logic only works for two columns
-  def self.split_two_columns(page_text)
+  def self.flatten_two_columns(page_text)
     num_cols = 2
     lines = page_text.split("\n")
     lines = lines.map do |line|
@@ -93,7 +129,6 @@ class SpellBuilder
       col_segments
     end
 
-
     # combine column segments into complete columns
     columns = []
     while lines.map(&:any?).any? do
@@ -108,10 +143,14 @@ class SpellBuilder
   def self.cleanup_text(text)
     text.split("\n").reject do |line|
       line.strip.empty? ||
-        line =~ PAGE_NUMBER_REGEX ||
+        line =~ LINE_OF_DIGITS_REGEX ||
         line =~ CHAPTER_INDICATOR_REGEX
     end.join("\n")
   end
+
+#################
+# BLOCK PARSING #
+#################
 
   def self.initialize_block_parse(block)
   	lines = block.split("\n")
@@ -236,7 +275,7 @@ class SpellBuilder
     line = lines[1]
     puts "Checking line '#{line}' for school"
     # only checks for valid schools from Spell class
-    schools = line.downcase.split(" ") & Spell.schools.keys
+    schools = line.downcase.split(" ") & Spell.schools
     puts "Found schools #{schools}"
     raise "No valid schools found! Make sure to include a school on the second line." if schools.count == 0
     raise "Multiple schools found! Include only one school on the second line." if schools.count > 1

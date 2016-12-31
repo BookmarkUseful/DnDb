@@ -8,6 +8,8 @@ class Spell < ActiveRecord::Base
   SecondsInMinute = 60
   SecondsInRound = 6
   SecondsInAction = 6
+  MIN_LEVEL = 0 # not including cantrips
+  MAX_LEVEL = 9
 
   TimeMapping = {
     0 => "Instantaneous",
@@ -32,8 +34,11 @@ class Spell < ActiveRecord::Base
     :evocation => 4,
     :illusion => 5,
     :necromancy => 6,
-    :transmutation => 7
-    # any following schools are homebrew
+    :transmutation => 7,
+    ### any following schools are homebrew ##
+    # Hemomancy: introduced by the Dark Arts Player's Companion.
+    # Sub-school of necromancy.
+    :hemomancy => 8
   }
 
   enum :school => Schools unless instance_methods.include? :school
@@ -43,7 +48,10 @@ class Spell < ActiveRecord::Base
             :length => { :minimum => 1 }
   validates :level,
             :presence => true,
-            :numericality => { :greater_than_or_equal_to => 0, :less_than_or_equal_to => 9 }
+            :numericality => {
+              :greater_than_or_equal_to => MIN_LEVEL,
+              :less_than_or_equal_to => MAX_LEVEL
+            }
   validates :school,
             :presence => true
   validates :casting_time,
@@ -66,6 +74,10 @@ class Spell < ActiveRecord::Base
   scope :noncore, -> { joins(:source).where('sources.kind is not ?', Source::Kinds[:core]) }
   scope :homebrew, -> { joins(:source).where('sources.kind' => Source::Kinds[:homebrew]) }
 
+  def self.schools
+    Schools.keys.map(&:to_s)
+  end
+
 ############
 # PRINTING #
 ############
@@ -75,6 +87,7 @@ class Spell < ActiveRecord::Base
     level_school = print_level_school
     casting_time = print_casting_time
     range = print_range
+    components = print_components
     duration = print_duration
     description = print_description
     [
@@ -83,6 +96,7 @@ class Spell < ActiveRecord::Base
       "",
       casting_time,
       range,
+      components,
       duration,
       "",
       description
@@ -150,6 +164,12 @@ class Spell < ActiveRecord::Base
     lbl = include_label ? "Range: " : nil
     return "#{lbl}#{RangeMapping[r]}" if RangeMapping[r].present?
     "#{lbl}#{r} feet"
+  end
+
+  def print_components(include_label=true)
+    c = self.components.to_s
+    lbl = include_label ? "Components: " : nil
+    lbl + c
   end
 
   def print_duration(include_label=true)

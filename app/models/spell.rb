@@ -49,9 +49,22 @@ class Spell < ActiveRecord::Base
 
   Schools = CoreSchools.merge(HomebrewSchools)
 
+  # as Rails 4.2.6 doesn't have prefixed enums, gonna replicate this enum to
+  # avoid duplicating enum methods.
+  ParentSchools = {
+    :parent_abjuration => 0,
+    :parent_conjuration => 1,
+    :parent_divination => 2,
+    :parent_enchantment => 3,
+    :parent_evocation => 4,
+    :parent_illusion => 5,
+    :parent_necromancy => 6,
+    :parent_transmutation => 7,
+    :parent_hemomancy => 8
+  }
+
   enum school: Schools unless instance_methods.include?(:school)
   enum parent_school: ParentSchools unless instance_methods.include?(:parent_school)
-
 
   validates :name,
             :presence => true,
@@ -62,23 +75,16 @@ class Spell < ActiveRecord::Base
               :greater_than_or_equal_to => MIN_LEVEL,
               :less_than_or_equal_to => MAX_LEVEL
             }
-  validates :school,
-            :presence => true,
-            :inclusion => {
-              :in => Schools.values
-            }
-  validates :parent_school,
-            :inclusion => {
-              :in => Schools.values
-            }
+  #validates_inclusion_of :school, :in => Schools.values
+  #validates_inclusion_of :parent_school, :in => ParentSchools.values
   validates :casting_time,
             :presence => true
   validates :range,
             :presence => true
   validates :duration,
             :presence => true
-  validates :concentration, :presence => true
-  validates :ritual, :presence => true
+  #validates :concentration, :presence => true
+  #validates :ritual, :presence => true
   validates :description,
             :presence => true
 
@@ -99,6 +105,8 @@ class Spell < ActiveRecord::Base
   def source_name
     self.source.name
   end
+
+
 
   ############
   # PRINTING #
@@ -151,7 +159,7 @@ class Spell < ActiveRecord::Base
   end
 
   def print_source
-    self.source.name
+    self.source_name
   end
 
   def print_casting_time(include_label=true)

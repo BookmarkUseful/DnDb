@@ -6,11 +6,18 @@ class SpellBuilder
   CHAPTER_INDICATOR_REGEX = /^chapter [0-9][0-9]*/i
   MAX_TAB_LENGTH = 4
 
-  MapRange = {
-    "infinite" => -1,
-    "unlimited" => -1,
-    "sight" => -2
-  }
+  ATTRIBUTES_TO_COLLECT = [
+    :name,
+    :casting_time,
+    :duration,
+    :school,
+    :level,
+    :description,
+    :range,
+    :concentration,
+    :ritual,
+    :components
+  ]
 
 ##############################
 # PREPARE BLOCKS FOR PARSING #
@@ -65,17 +72,16 @@ class SpellBuilder
   end
 
   def self.is_school_level_line?(line)
-    line = line
-    school = Spells::Spell.schools.map do |school|
+    has_school = Spells::Spell.schools.map do |school|
                line =~ /#{school}/i
              end.any?
     ordinalized = (Spells::Spell::MIN_LEVEL..Spells::Spell::MAX_LEVEL).map(&:ordinalize)
-    ordinal_level = ordinalized.map do |ord|
+    has_ordinal_level = ordinalized.map do |ord|
                       line =~ /#{ord}/i
                     end.any?
-    cantrip = line =~ /cantrip/i
-    level = ordinal_level || cantrip
-    school && level
+    has_cantrip = line =~ /cantrip/i
+    has_level = has_ordinal_level || has_cantrip
+    has_school && has_level
   end
 
   def self.flatten_text(page_texts, num_cols)
@@ -90,7 +96,7 @@ class SpellBuilder
   end
 
   # split_two_columns assumes that there is always more than one space between
-  # characters belonging to different columns. Unofrtunately right now this
+  # characters belonging to different columns. Unfortunately right now this
   # logic only works for two columns
   def self.flatten_two_columns(page_text)
     num_cols = 2
@@ -112,7 +118,7 @@ class SpellBuilder
         if col_break_index.present?
           start_of_next_col = line[col_break_index..-1] =~ FIRST_NON_WHITESPACE_REGEX
           col_lengths << start_of_next_col
-          col_segment = line[0..col_break_index]
+          col_segment = line[0..col_break_index].strip
           col_segments << col_segment
           line = line[col_break_index..-1].strip
           break if line.blank?
@@ -149,23 +155,10 @@ class SpellBuilder
 #################
 
   def self.initialize_block_parse(block)
-  	lines = block.split("\n")
-                 .reject{|line| line.empty?}
-                 .map(&:strip)
-  	attributes = [
-      :name,
-      :casting_time,
-      :duration,
-      :school,
-      :level,
-      :description,
-      :range,
-      :concentration,
-      :ritual,
-      :components
-    ]
+  	lines = block.split("\n").reject{|line| line.empty?}
   	results = {}
-  	attributes.each do |attribute|
+    
+  	ATTRIBUTES_TO_COLLECT.each do |attribute|
   		results[attribute] = _parse_attribute(lines, attribute)
   	end
   	results

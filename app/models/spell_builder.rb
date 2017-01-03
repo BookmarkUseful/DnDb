@@ -41,7 +41,7 @@ class SpellBuilder
 
   def self.compose_spell_from_attrs(spell_attrs, source_id)
     spell_attrs.merge!(:source_id => source_id)
-    Spells::Spell.new(spell_attrs)
+    Spell.new(spell_attrs)
   end
 
   # blocks can be detected by relying on the school/level line, which is always
@@ -72,10 +72,10 @@ class SpellBuilder
   end
 
   def self.is_school_level_line?(line)
-    has_school = Spells::Spell.schools.map do |school|
+    has_school = Spell.schools.map do |school|
                line =~ /#{school}/i
              end.any?
-    ordinalized = (Spells::Spell::MIN_LEVEL..Spells::Spell::MAX_LEVEL).map(&:ordinalize)
+    ordinalized = (Spell::MIN_LEVEL..Spell::MAX_LEVEL).map(&:ordinalize)
     has_ordinal_level = ordinalized.map do |ord|
                       line =~ /#{ord}/i
                     end.any?
@@ -157,7 +157,7 @@ class SpellBuilder
   def self.initialize_block_parse(block)
   	lines = block.split("\n").reject{|line| line.empty?}
   	results = {}
-    
+
   	ATTRIBUTES_TO_COLLECT.each do |attribute|
   		results[attribute] = _parse_attribute(lines, attribute)
   	end
@@ -249,7 +249,7 @@ class SpellBuilder
   	raise "No ranges found! Make sure to include line '#{prefix}...'" if range_lines.count == 0
   	raise "Multiple rangess found! Include only one line '#{prefix}..." if range_lines.count > 1
     puts "Checking line '#{range_line}' for range"
-    Spells::Spell::RangeMapping.invert.each do |key, val|
+    Spell::RangeMapping.invert.each do |key, val|
       puts "Checking '#{range_line}' for '#{key}'. Will assign #{val}"
       return val if range_line =~ /#{key}/i
     end
@@ -262,7 +262,7 @@ class SpellBuilder
     line = lines.second
     puts "Checking line '#{line}' for school"
     # only checks for valid schools from Spell class
-    schools = Spells::Spell.schools.select do |school|
+    schools = Spell.schools.select do |school|
       line =~ /#{school}/i
     end
     puts "Found schools #{schools}"
@@ -275,7 +275,7 @@ class SpellBuilder
                raise "No school found in #{line}"
              end
     puts "Selected school #{school}"
-    Spells::Spell::Schools[school.to_sym]
+    Spell::Schools[school.to_sym]
   end
 
   def self._parse_level(lines)

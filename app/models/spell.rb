@@ -26,6 +26,9 @@ class Spell < ActiveRecord::Base
     -2 => "Sight"
   }
 
+  # Some homebrew schools have 'parent' schools.
+  # Ex. Hemomancy spells (Dark Arts Player's Companion) are part of the
+  # Necromancy school.
   CoreSchools = {
     :abjuration => 0,
     :conjuration => 1,
@@ -46,28 +49,38 @@ class Spell < ActiveRecord::Base
 
   Schools = CoreSchools.merge(HomebrewSchools)
 
-  enum :school => Schools unless instance_methods.include? :school
+  enum school: Schools unless instance_methods.include?(:school)
+  enum parent_school: ParentSchools unless instance_methods.include?(:parent_school)
+
 
   validates :name,
-  :presence => true,
-  :length => { :minimum => 1 }
+            :presence => true,
+            :length => { :minimum => 1 }
   validates :level,
-  :presence => true,
-  :numericality => {
-    :greater_than_or_equal_to => MIN_LEVEL,
-    :less_than_or_equal_to => MAX_LEVEL
-  }
+            :presence => true,
+            :numericality => {
+              :greater_than_or_equal_to => MIN_LEVEL,
+              :less_than_or_equal_to => MAX_LEVEL
+            }
   validates :school,
-  :presence => true
+            :presence => true,
+            :inclusion => {
+              :in => Schools.values
+            }
+  validates :parent_school,
+            :inclusion => {
+              :in => Schools.values
+            }
   validates :casting_time,
-  :presence => true
+            :presence => true
   validates :range,
-  :presence => true
+            :presence => true
   validates :duration,
-  :presence => true
-  # validates :concentration, :presence => true
-  # validates :ritual, :presence => true
-  validates :description, :presence => true
+            :presence => true
+  validates :concentration, :presence => true
+  validates :ritual, :presence => true
+  validates :description,
+            :presence => true
 
   ##########
   # SCOPES #

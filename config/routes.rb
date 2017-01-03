@@ -14,8 +14,12 @@ Rails.application.routes.draw do
    root 'welcome#index'
 
   resources :spells do
+    collection do
+      get 'index'
+    end
+    # add individual show for spell to this route
     member do
-      get :index
+      get ':id' => 'spells#show'
     end
   end
 

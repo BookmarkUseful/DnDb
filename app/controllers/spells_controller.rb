@@ -3,10 +3,11 @@ class SpellsController < ApplicationController
 
   def index
     if params[:search_phrase].blank? then
-      @spells = Spell.order(:level, :name)
+      @spells = Spells::Spell.order(:level, :name)
     else
-      @spells = Spell.where("LOWER(name) LIKE ?", params[:search_phrase])
-      @spells += Spell.where("LOWER(description) LIKE ?", params[:search_phrase])
+      params[:search_phrase] = params[:search_phrase].downcase
+      @spells = Spells::Spell.where("LOWER(name) LIKE ?", params[:search_phrase])
+      @spells += Spells::Spell.where("LOWER(description) LIKE ?", params[:search_phrase])
       @spells = @spells.uniq
     end
     @spells
@@ -15,11 +16,12 @@ class SpellsController < ApplicationController
   # GET /spells/1
   # GET /spells/1.json
   def show
+    
   end
 
   # GET /spells/new
   def new
-    @spell = Spell.new
+    @spell = Spells::Spell.new
   end
 
   # GET /spells/1/edit
@@ -29,7 +31,7 @@ class SpellsController < ApplicationController
   # POST /spells
   # POST /spells.json
   def create
-    @spell = Spell.new(spell_params)
+    @spell = Spells::Spell.new(spell_params)
 
     respond_to do |format|
       if @spell.save
@@ -69,7 +71,7 @@ class SpellsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_spell
-      @spell = Spell.find(params[:id])
+      @spell = Spells::Spell.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

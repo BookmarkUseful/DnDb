@@ -6,17 +6,6 @@ class SpellBuilder
   CHAPTER_INDICATOR_REGEX = /^chapter [0-9][0-9]*/i
   MAX_TAB_LENGTH = 4
 
-  MapSchools = {
-    "abjuration" => 0,
-    "conjuration" => 1,
-    "divination" => 2,
-    "enchantment" => 3,
-    "evocation" => 4,
-    "illusion" => 5,
-    "necromancy" => 6,
-    "transmutation" => 7
-  }
-
   MapRange = {
     "infinite" => -1,
     "unlimited" => -1,
@@ -45,11 +34,12 @@ class SpellBuilder
 
   def self.compose_spell_from_attrs(spell_attrs, source_id)
     spell_attrs.merge!(:source_id => source_id)
-    Spell.new(spell_attrs)
+    Spells::Spell.new(spell_attrs)
   end
 
   # blocks can be detected by relying on the school/level line, which is always
   # the second line of the spell in the books.
+  # Not the best way to do this...
   def self.seperate_blocks(text)
     blocks = []
     lines = text.split("\n")
@@ -75,27 +65,28 @@ class SpellBuilder
   end
 
   def self.is_school_level_line?(line)
-    line = line.downcase
-    school = Spell.schools.map do |school|
-               line.include?(school)
+    line = line
+    school = Spells::Spell.schools.map do |school|
+               line =~ /#{school}/i
              end.any?
-    ordinalized = (Spell::MIN_LEVEL..Spell::MAX_LEVEL).map(&:ordinalize)
+    ordinalized = (Spells::Spell::MIN_LEVEL..Spells::Spell::MAX_LEVEL).map(&:ordinalize)
     ordinal_level = ordinalized.map do |ord|
-                      line.include?(ord)
+                      line =~ /#{ord}/i
                     end.any?
-    cantrip = line.include?("cantrip")
+    cantrip = line =~ /cantrip/i
     level = ordinal_level || cantrip
     school && level
   end
 
   def self.flatten_text(page_texts, num_cols)
-    if num_cols == 2
-      page_texts.map do |page_text|
-        self.flatten_two_columns(page_text)
-      end.join("\n")
-    else
-      page_texts.join("\n")
-    end
+    flattened_pages = if num_cols == 2
+                  page_texts.map do |page_text|
+                    self.flatten_two_columns(page_text)
+                  end
+                else
+                  page_texts.join("\n")
+                end
+    flattened_pages.join("\n")
   end
 
   # split_two_columns assumes that there is always more than one space between
@@ -104,6 +95,7 @@ class SpellBuilder
   def self.flatten_two_columns(page_text)
     num_cols = 2
     lines = page_text.split("\n")
+    # removing tabs and indents but preserving column layout
     lines = lines.map do |line|
       if line.present? && (line =~ FIRST_NON_WHITESPACE_REGEX) <= MAX_TAB_LENGTH
         line.strip
@@ -115,8 +107,11 @@ class SpellBuilder
       # try to split according to multiple space breaks
       col_segments = []
       num_cols.times do
+        col_lengths = []
         col_break_index = (line =~ MULTIPLE_SPACE_REGEX)
         if col_break_index.present?
+          start_of_next_col = line[col_break_index..-1] =~ FIRST_NON_WHITESPACE_REGEX
+          col_lengths << start_of_next_col
           col_segment = line[0..col_break_index]
           col_segments << col_segment
           line = line[col_break_index..-1].strip
@@ -131,6 +126,7 @@ class SpellBuilder
 
     # combine column segments into complete columns
     columns = []
+    # do while a column remains to be condensed
     while lines.map(&:any?).any? do
       combined_column = lines.map(&:shift).join("\n")
       columns << combined_column
@@ -142,7 +138,7 @@ class SpellBuilder
 
   def self.cleanup_text(text)
     text.split("\n").reject do |line|
-      line.strip.empty? ||
+      line.empty? ||
         line =~ LINE_OF_DIGITS_REGEX ||
         line =~ CHAPTER_INDICATOR_REGEX
     end.join("\n")
@@ -208,9 +204,10 @@ class SpellBuilder
   	result
   end
 
+  # assume name is first line
   def self._parse_name(lines)
     puts "PARSE NAME"
-    "Name found: #{lines.first}"
+    puts "Name found: #{lines.first}"
   	lines.first
   end
 
@@ -237,7 +234,7 @@ class SpellBuilder
   def self._parse_ritual(lines)
     puts "PARSE RITUAL"
     # assume ritual tag is on second line
-    line = lines[1].downcase
+    line = lines.second
     puts "Checking line '#{line}' for ritual"
     (line =~ /ritual/i).present?
   end
@@ -249,7 +246,7 @@ class SpellBuilder
   	raise "No durations found! Make sure to include line '#{prefix}...'" if duration_lines.count == 0
   	raise "Multiple durations found! Include only one line '#{prefix}..." if duration_lines.count > 1
     puts "Checking line '#{duration_lines.first}' for duration"
-  	_interpret_game_time(duration_lines.first[(prefix.length)..-1].strip)
+  	_interpret_game_time(duration_lines.first.remove(prefix).strip)
   end
 
   def self._parse_range(lines)
@@ -258,12 +255,9 @@ class SpellBuilder
   	range_lines = lines.select{ |line| line =~ /^#{prefix}/i }
   	raise "No ranges found! Make sure to include line '#{prefix}...'" if range_lines.count == 0
   	raise "Multiple rangess found! Include only one line '#{prefix}..." if range_lines.count > 1
-  	range_line = range_lines.first[(prefix.length)..-1].strip
     puts "Checking line '#{range_line}' for range"
-    return 0 if range_line =~ /self/i
-    return 5 if range_line =~ /touch/i
-    MapRange.each do |key, val|
-      puts "Checking '#{range_line.downcase}' for '#{key}'. Will assign #{val}"
+    Spells::Spell::RangeMapping.invert.each do |key, val|
+      puts "Checking '#{range_line}' for '#{key}'. Will assign #{val}"
       return val if range_line =~ /#{key}/i
     end
     range_line.gsub(/[^0-9]/, "").to_i
@@ -272,22 +266,31 @@ class SpellBuilder
   def self._parse_school(lines)
     puts "PARSE SCHOOL"
     # assumes school is on second line
-    line = lines[1]
+    line = lines.second
     puts "Checking line '#{line}' for school"
     # only checks for valid schools from Spell class
-    schools = line.downcase.split(" ") & Spell.schools
+    schools = Spells::Spell.schools.select do |school|
+      line =~ /#{school}/i
+    end
     puts "Found schools #{schools}"
-    raise "No valid schools found! Make sure to include a school on the second line." if schools.count == 0
-    raise "Multiple schools found! Include only one school on the second line." if schools.count > 1
-    MapSchools[schools.first]
+    school = if schools.size > 1
+               puts "Found multiple schools. Searching for special circumstances"
+               SpellBuilder._select_appropriate_school(schools)
+             elsif schools.size == 1
+               schools.first
+             else
+               raise "No school found in #{line}"
+             end
+    puts "Selected school #{school}"
+    Spells::Spell::Schools[school.to_sym]
   end
 
   def self._parse_level(lines)
     puts "PARSE LEVEL"
-    # assume level is on second lines
-    line = lines[1].downcase
+    # assume level is on second line
+    line = lines.second.downcase
     puts "Checking line '#{line}' for level"
-    return 0 if line.include?("cantrip")
+    return 0 if line =~ /cantrip/i
     levels = line.split(" ").select{|word| word =~ /\d/}
     puts "Found levels #{levels}"
     raise "No valid levels found! Make sure to include a level on the second line." if levels.count == 0
@@ -310,9 +313,9 @@ class SpellBuilder
     prefix = "Components: "
     comp_lines = lines.select{ |line| line =~ /^#{prefix}/i }
     raise "No components found! Make sure to include line '#{prefix}...'" if comp_lines.count == 0
-    raise "Multiple components found! Include only one line '#{prefix}..." if comp_lines.count > 1
+    raise "Multiple components found! Include only one line '#{prefix}...'" if comp_lines.count > 1
+    puts "Checking line '#{comp_lines.first}' for components"
     comp_line = comp_lines.first[(prefix.length)..-1].strip
-    puts "Checking line '#{comp_line}' for components"
     comp_line
   end
 
@@ -326,7 +329,7 @@ class SpellBuilder
   	return -1 if time_string =~ /bonus action/i
   	return -2 if time_string =~ /reaction/i
     return -3 if time_string =~ /until dispelled/i
-    return -4 if time_string =~ /special/i
+    return -4 if time_string =~ /special/i || time_string =~ /varies/i
   	unit = time_string.split(" ").last.chomp(".").chomp("s").downcase
   	number = time_string.delete("^0-9").to_i
     puts "Found #{number} #{unit}(s)"
@@ -341,6 +344,11 @@ class SpellBuilder
   	else
   		raise "Can't process time string '#{time_string}'!"
   	end
+  end
+
+  def self._select_appropriate_school(schools)
+    return "hemomancy" if schools.include?("hemomancy")
+    raise "unable to determine appropriate school from #{schools}"
   end
 
 =begin

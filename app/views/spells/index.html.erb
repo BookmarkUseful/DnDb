@@ -11,6 +11,7 @@ $(document).ready( function() {
 <body>
   <div id="main-content">
     <div id="header-container">
+      <!--Make this header a link back to Index -->
       <h1 class="main-header">Spells</h1>
       <% if !params[:search_phrase].blank? then %>
         <h2 class="search-term-header"><%=@spells.count%> spells found for '<%= params[:search_phrase].downcase%>'</h2>
@@ -27,11 +28,13 @@ $(document).ready( function() {
             %>
           </div>
         </div>
+      <!--
         <div style="float:right; width:10%; display:inline-block">
           <div class="search-advanced-button-container">
             <%= image_tag("gear.png", :alt => "advanced", :class => "search-advanced-image") %>
           </div>
         </div>
+      -->
         <div style="float:right; width:20%; display:inline-block">
           <div class="search-button-container">
             <%= submit_tag("Search", :class => "search-button") %>

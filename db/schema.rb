@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170103172110) do
+ActiveRecord::Schema.define(version: 20170105203828) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,9 +25,10 @@ ActiveRecord::Schema.define(version: 20170103172110) do
 
   create_table "character_classes", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.integer  "source_id"
+    t.text     "description"
   end
 
   add_index "character_classes", ["name"], name: "index_character_classes_on_name", unique: true, using: :btree

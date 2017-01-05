@@ -12,7 +12,7 @@ class CharacterClassesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_character_class
-      @spell = CharacterClass.find(params[:id])
+      @character_class = CharacterClass.find(params[:id])
     end
 
 end

@@ -11,15 +11,23 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-   root 'welcome#index'
+  root 'welcome#index'
 
   resources :spells do
     collection do
       get 'index'
     end
-    # add individual show for spell to this route
     member do
       get ':id' => 'spells#show'
+    end
+  end
+
+  resources :character_classes do
+    collection do
+      get 'index'
+    end
+    member do
+      get ':id' => 'character_classes#show'
     end
   end
 

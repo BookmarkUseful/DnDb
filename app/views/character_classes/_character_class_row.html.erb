@@ -1,0 +1,6 @@
+<% caster = character_class.is_caster_by_default? ? "yes" : "no" %>
+<tr class="parent-row">
+  <td class="parent-cell"><%=character_class.print_name%></td>
+  <td class="parent-cell"><%=caster%></td>
+  <td class="parent-cell"><%=character_class.source_kind%></td>
+</tr>

@@ -106,7 +106,9 @@ class Spell < ActiveRecord::Base
     self.source.name
   end
 
-
+  def source_kind
+    self.source.kind
+  end
 
   ############
   # PRINTING #

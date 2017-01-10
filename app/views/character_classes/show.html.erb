@@ -1,6 +1,14 @@
 <p id="notice"><%= notice %></p>
+<div class="main-header-container">
+  <%= link_to character_class_path(@character_class) do %>
+    <h1 class="main-header"><%= @character_class.name %></h1>
+  <% end %>
+</div>
 
-<p>
-  <strong>Name:</strong>
-  <%= @character_class.name %>
-</p>
+<div class="description-container">
+  <%= @character_class.description %>
+</div>
+
+<% unless @spells.empty? %>
+  <%= render :partial => 'spells', :object => @spells %>
+<% end %>

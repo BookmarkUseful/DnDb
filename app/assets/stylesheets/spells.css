@@ -18,20 +18,9 @@ th {
   background-color: #004c72;
 }
 
-div#header-container {
-  background-color: #006699;
-  padding: 15px;
-  margin: 0px;
-}
-
 div#icon-container {
   display: inline-block;
   float: right;
-}
-
-.main-header {
-  color: white;
-  font-size: 32px;
 }
 
 .search-term-header {

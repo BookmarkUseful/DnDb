@@ -1,0 +1,25 @@
+div.list-header-container {
+  background-color: #004c72;
+  margin: 0px;
+}
+
+h3.list-header {
+  color: white;
+  margin: 0px;
+  padding: 10px;
+}
+
+div.description-container {
+  background-color: #006699;
+  color: white;
+  margin: 0px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+div.class-spells-container {
+  background-color: white;
+  padding: 10px;
+  margin: 0px;
+}

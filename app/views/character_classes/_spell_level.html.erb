@@ -1,0 +1,12 @@
+<%
+level = level_and_spells.first
+spells = level_and_spells.last
+%>
+<strong><%= Spell.print_level(level) %></strong>
+<br>
+<% spells.each do |spell| %>
+  <%= link_to spell_path(spell), :target => '_blank' do %>
+    <%= spell.print_name %>
+  <% end %>
+  <br>
+<% end %>

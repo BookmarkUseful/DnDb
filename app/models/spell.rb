@@ -152,8 +152,7 @@ class Spell < ActiveRecord::Base
   end
 
   def print_level
-    return "Cantrip" if self.level == 0
-    "#{self.level.ordinalize}-level"
+    Spell.print_level(self.level)
   end
 
   def print_school
@@ -241,6 +240,11 @@ class Spell < ActiveRecord::Base
 
   def print_description
     self.description.gsub("At Higher Levels.", "\n    At Higher Levels.")
+  end
+
+  def self.print_level(level)
+    return "Cantrip" if level == 0
+    "#{level.ordinalize}-level"
   end
 
 end

@@ -1,3 +1,8 @@
+<%
+class_src = character_class.source.abbr
+class_src = character_class.source_id if class_src.nil?
+%>
+
 <tr class="parent-row">
   <td class="parent-cell">
     <%= link_to character_class_path(character_class) do %>
@@ -5,5 +10,5 @@
     <% end %>
   </td>
   <td class="parent-cell"><%=character_class.description%></td>
-  <td class="parent-cell"><%=character_class.source_kind%></td>
+  <td class="parent-cell"><%=class_src%></td>
 </tr>

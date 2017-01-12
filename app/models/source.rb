@@ -22,6 +22,15 @@ class Source < ActiveRecord::Base
   scope :indexed, -> { where(:indexed => 1) }
   scope :incomplete, -> { where(:indexed => 0) }
 
+  # shortened abbreviation getter
+  def abbr
+    self.abbreviation
+  end
+
+######################
+# READING SOURCE PDF #
+######################
+
   # Sources assume that the pdf is stored in the SOURCE_DIRECTORY and
   # the filename is in snakecase with no apostrophes or quotations, with a
   # pdf extension, determined by the string.snakecase method

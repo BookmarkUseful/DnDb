@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170105203828) do
+ActiveRecord::Schema.define(version: 20170112022826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,11 +52,12 @@ ActiveRecord::Schema.define(version: 20170105203828) do
     t.string   "name"
     t.integer  "page_count"
     t.integer  "kind"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.integer  "author_id"
     t.string   "link"
-    t.boolean  "indexed",    default: false
+    t.boolean  "indexed",      default: false
+    t.string   "abbreviation"
   end
 
   add_index "sources", ["author_id"], name: "index_sources_on_author_id", using: :btree

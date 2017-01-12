@@ -27,7 +27,7 @@ Rails.application.routes.draw do
       get 'index'
     end
     member do
-      get ':id'         => 'character_classes#show'
+      get ':id' => 'character_classes#show'
     end
   end
 

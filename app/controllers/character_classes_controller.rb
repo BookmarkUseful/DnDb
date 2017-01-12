@@ -9,11 +9,6 @@ class CharacterClassesController < ApplicationController
     @spells = @character_class.spells.group_by{ |spell| spell.level }
   end
 
-  def from_category
-    @selected = Item.where(:category_id => params[:cat_id])
-
-end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_character_class

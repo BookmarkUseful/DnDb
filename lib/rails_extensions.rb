@@ -19,7 +19,7 @@ end
 class Array
 
   def mode
-    self.group_by {|i| i}.max_by {|k, v| v.count }.first
+    self.group_by{|i| i}.max_by{|k, v| v.count }.first
   end
 
 end

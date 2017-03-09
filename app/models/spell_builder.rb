@@ -168,6 +168,7 @@ class SpellBuilder
 # PARSE SPECIFIC ATTRIBUTES FROM BLOCK #
 ########################################
 
+  #TODO: Will update with more dynamic methods, removing extensive if/else
   def self._parse_attribute(lines, attribute)
   	result = nil
   	if attribute == :name then
@@ -209,7 +210,7 @@ class SpellBuilder
   	prefix = "Casting Time: "
   	casting_time_lines = lines.select{ |line| line =~ /^#{prefix}/i }
   	raise "No casting times found! Make sure to include line '#{prefix}...'" if casting_time_lines.count == 0
-  	raise "Multiple casting times found! Include only one line '#{prefix}..." if casting_time_lines.count > 1
+  	raise "Multiple casting times found! Include only one line '#{prefix}..." if casting_time_lines.count != 1
     puts "Checking line '#{casting_time_lines.first}' for casting time"
     _interpret_game_time(casting_time_lines.first[(prefix.length)..-1].strip)
   end
@@ -219,7 +220,7 @@ class SpellBuilder
     prefix = "Duration: "
   	duration_lines = lines.select{ |line| line =~ /^#{prefix}/i }
     raise "No durations found! Make sure to include line '#{prefix}...'" if duration_lines.count == 0
-    raise "Multiple durations found! Include only one line '#{prefix} ..." if duration_lines.count > 1
+    raise "Multiple durations found! Include only one line '#{prefix} ..." if duration_lines.count != 1
     puts "Checking line '#{duration_lines.first}' for concentration"
     (duration_lines.first =~ /concentration/i).present?
   end
@@ -237,7 +238,7 @@ class SpellBuilder
   	prefix = "Duration: "
   	duration_lines = lines.select{ |line| line =~ /^#{prefix}/i }
   	raise "No durations found! Make sure to include line '#{prefix}...'" if duration_lines.count == 0
-  	raise "Multiple durations found! Include only one line '#{prefix}..." if duration_lines.count > 1
+  	raise "Multiple durations found! Include only one line '#{prefix}..." if duration_lines.count != 1
     puts "Checking line '#{duration_lines.first}' for duration"
   	_interpret_game_time(duration_lines.first.remove(prefix).strip)
   end
@@ -247,7 +248,7 @@ class SpellBuilder
   	prefix = "Range: "
   	range_lines = lines.select{ |line| line =~ /^#{prefix}/i }
   	raise "No ranges found! Make sure to include line '#{prefix}...'" if range_lines.count == 0
-  	raise "Multiple rangess found! Include only one line '#{prefix}..." if range_lines.count > 1
+  	raise "Multiple rangess found! Include only one line '#{prefix}..." if range_lines.count != 1
     puts "Checking line '#{range_line}' for range"
     Spell::RangeMapping.invert.each do |key, val|
       puts "Checking '#{range_line}' for '#{key}'. Will assign #{val}"
@@ -287,7 +288,7 @@ class SpellBuilder
     levels = line.split(" ").select{|word| word =~ /\d/}
     puts "Found levels #{levels}"
     raise "No valid levels found! Make sure to include a level on the second line." if levels.count == 0
-    raise "Multiple levels found! Include only one level on the second line." if levels.count > 1
+    raise "Multiple levels found! Include only one level on the second line." if levels.count != 1
     levels.first.first.to_i
   end
 
@@ -306,16 +307,17 @@ class SpellBuilder
     prefix = "Components: "
     comp_lines = lines.select{ |line| line =~ /^#{prefix}/i }
     raise "No components found! Make sure to include line '#{prefix}...'" if comp_lines.count == 0
-    raise "Multiple components found! Include only one line '#{prefix}...'" if comp_lines.count > 1
+    raise "Multiple components found! Include only one line '#{prefix}...'" if comp_lines.count != 1
     puts "Checking line '#{comp_lines.first}' for components"
     comp_line = comp_lines.first[(prefix.length)..-1].strip
     comp_line
   end
 
-  # returning 0 indicates instantaneous
+  # returning  0 indicates instantaneous
   # returning -1 indicates a bonus action
   # returning -2 indicates a reaction
   # returning -3 indicates infinite
+  # returning -4 indicates otherwise undefined
   # else return is time in seconds
   def self._interpret_game_time(time_string)
   	return 0 if time_string =~ /instantaneous/i
@@ -340,7 +342,7 @@ class SpellBuilder
   end
 
   def self._select_appropriate_school(schools)
-    return "hemomancy" if schools.include?("hemomancy")
+    return "hemomancy" if schools.include?("hemomancy") && schools.include?("necromancy")
     raise "unable to determine appropriate school from #{schools}"
   end
 

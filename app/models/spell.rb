@@ -261,8 +261,8 @@ end
 # concentration boolean
 # ritual        boolean
 # components    string
-# range         integer
-# source_id     integer
+# range         integer (enumerated)
+# source_id     integer (foreign key)
 # created_at    datetime
 # updated_at    datetime
 #

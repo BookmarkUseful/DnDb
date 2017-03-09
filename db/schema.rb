@@ -13,9 +13,6 @@
 
 ActiveRecord::Schema.define(version: 20170112022826) do
 
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
   create_table "authors", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
@@ -31,8 +28,8 @@ ActiveRecord::Schema.define(version: 20170112022826) do
     t.text     "description"
   end
 
-  add_index "character_classes", ["name"], name: "index_character_classes_on_name", unique: true, using: :btree
-  add_index "character_classes", ["source_id"], name: "index_character_classes_on_source_id", using: :btree
+  add_index "character_classes", ["name"], name: "index_character_classes_on_name", unique: true
+  add_index "character_classes", ["source_id"], name: "index_character_classes_on_source_id"
 
   create_table "character_classes_spells", id: false, force: :cascade do |t|
     t.integer "character_class_id", null: false
@@ -60,7 +57,7 @@ ActiveRecord::Schema.define(version: 20170112022826) do
     t.string   "abbreviation"
   end
 
-  add_index "sources", ["author_id"], name: "index_sources_on_author_id", using: :btree
+  add_index "sources", ["author_id"], name: "index_sources_on_author_id"
 
   create_table "spells", force: :cascade do |t|
     t.string   "name"
@@ -79,10 +76,7 @@ ActiveRecord::Schema.define(version: 20170112022826) do
     t.integer  "parent_school"
   end
 
-  add_index "spells", ["name"], name: "index_spells_on_name", unique: true, using: :btree
-  add_index "spells", ["source_id"], name: "index_spells_on_source_id", using: :btree
+  add_index "spells", ["name"], name: "index_spells_on_name", unique: true
+  add_index "spells", ["source_id"], name: "index_spells_on_source_id"
 
-  add_foreign_key "character_classes", "sources"
-  add_foreign_key "sources", "authors"
-  add_foreign_key "spells", "sources"
 end

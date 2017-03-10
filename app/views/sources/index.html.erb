@@ -1,20 +1,39 @@
+<script>
+$(document).ready(function () {
+  var pr = $(".parent-row");
+  var i;
+
+  for (i = 0; i < pr.length; ++i) {
+    pr[i].onclick = function(){
+      this.classList.toggle("active");
+      $( this ).next( "tr" ).toggle();
+    }
+  }
+});
+</script>
+
 <div id="main-content">
+
   <div class="main-header-container">
     <%= link_to sources_path do %>
       <h1 class="main-header">Sources</h1>
     <% end %>
   </div>
-</div>
 
-<div id="index-container">
-  <table class="index">
-    <tr style="background-color: white">
-      <th>Name</th>
-      <th>Author</th>
-      <th>Kind</th>
-      <th>Pages</th>
-    </tr>
-    <%= render :partial => 'source', :collection => @sources, :as => :source %>
-  </table>
-</div>
+  <%= render :partial => 'unimported_sources', :object => @new_sources, :as => :new_sources %>
+
+  <br>
+
+  <div id="index-container">
+    <table class="index">
+      <tr style="background-color: white">
+        <th>Name</th>
+        <th>Author</th>
+        <th>Kind</th>
+        <th>Pages</th>
+      </tr>
+      <%= render :partial => 'source', :collection => @sources, :as => :source %>
+    </table>
+  </div>
+
 </div>

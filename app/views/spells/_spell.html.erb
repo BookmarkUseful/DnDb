@@ -19,7 +19,7 @@ $(document).ready(function () {
     <% end %>
   </td>
   <td class="parent-cell"><%=spell.print_level%></td>
-  <td class="parent-cell"><%=spell.print_school.try(:titleize)%></td>
+  <td class="parent-cell"><%=spell.print_school.titleize%></td>
   <td class="parent-cell"><%=spell.concentration%></td>
   <td class="parent-cell"><%=spell.ritual%></td>
   <td class="parent-cell"><%=spell.print_casting_time(false)%></td>

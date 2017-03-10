@@ -1,0 +1,24 @@
+<script>
+$(document).ready( function() {
+  $("#search-input").focus( function() {
+    if ( $(this).val()=="Search here...") {
+      $(this).val('');
+    }
+  });
+});
+</script>
+
+<div>
+  <table class="index">
+    <tr class="parent-row">
+      <td><h2>Unimported Sources</h2></td>
+    </tr>
+    <tr class="hidden-row">
+      <td class="hidden-content">
+        <table class="index">
+          <%= render :partial => 'unimported_source', :collection => new_sources, :as => :source %>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>

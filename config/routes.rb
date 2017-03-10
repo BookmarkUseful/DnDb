@@ -16,6 +16,10 @@ Rails.application.routes.draw do
   resources :sources do
     collection do
       get 'index'
+      get 'new'
+    end
+    member do
+      post 'create'
     end
   end
 

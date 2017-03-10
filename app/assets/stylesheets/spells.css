@@ -34,7 +34,22 @@ div#icon-container {
   transition: 0.15s ease-in-out;
 }
 
+.row {
+  height: 40px;
+  background-color: #0073ad;
+  transition: 0.15s ease-in-out;
+}
+
+.row.active, .row:hover {
+  background-color: #006699;
+}
+
 .parent-cell {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.cell {
   font-size: 14px;
   font-weight: bold;
 }

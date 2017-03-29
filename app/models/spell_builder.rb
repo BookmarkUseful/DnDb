@@ -6,6 +6,15 @@ class SpellBuilder
   CHAPTER_INDICATOR_REGEX = /^chapter [0-9][0-9]*/i
   MAX_TAB_LENGTH = 4
 
+  TIME_UNITS = [
+    "second",
+    "action",
+    "round",
+    "minute",
+    "hour",
+    "day"
+  ]
+
   ATTRIBUTES_TO_COLLECT = [
     :name,
     :casting_time,
@@ -207,7 +216,7 @@ class SpellBuilder
 
   def self._parse_casting_time(lines)
     puts "PARSE CASTING TIME"
-  	prefix = "Casting Time: "
+  	prefix = "Casting Time:"
   	casting_time_lines = lines.select{ |line| line =~ /^#{prefix}/i }
   	raise "No casting times found! Make sure to include line '#{prefix}...'" if casting_time_lines.count == 0
   	raise "Multiple casting times found! Include only one line '#{prefix}..." if casting_time_lines.count != 1
@@ -217,12 +226,18 @@ class SpellBuilder
 
   def self._parse_concentration(lines)
     puts "PARSE CONCENTRATION"
-    prefix = "Duration: "
+    prefix = "Duration:"
   	duration_lines = lines.select{ |line| line =~ /^#{prefix}/i }
     raise "No durations found! Make sure to include line '#{prefix}...'" if duration_lines.count == 0
     raise "Multiple durations found! Include only one line '#{prefix} ..." if duration_lines.count != 1
     puts "Checking line '#{duration_lines.first}' for concentration"
-    (duration_lines.first =~ /concentration/i).present?
+    conc = (duration_lines.first =~ /concentration/i).present?
+    if conc
+      puts "This is a concentration!"
+    else
+      puts "This was found to not be a concentration spell"
+    end
+    conc
   end
 
   def self._parse_ritual(lines)
@@ -235,7 +250,7 @@ class SpellBuilder
 
   def self._parse_duration(lines)
     puts "PARSE DURATION"
-  	prefix = "Duration: "
+  	prefix = "Duration:"
   	duration_lines = lines.select{ |line| line =~ /^#{prefix}/i }
   	raise "No durations found! Make sure to include line '#{prefix}...'" if duration_lines.count == 0
   	raise "Multiple durations found! Include only one line '#{prefix}..." if duration_lines.count != 1
@@ -245,10 +260,11 @@ class SpellBuilder
 
   def self._parse_range(lines)
     puts "PARSE RANGE"
-  	prefix = "Range: "
+  	prefix = "Range:"
   	range_lines = lines.select{ |line| line =~ /^#{prefix}/i }
   	raise "No ranges found! Make sure to include line '#{prefix}...'" if range_lines.count == 0
   	raise "Multiple rangess found! Include only one line '#{prefix}..." if range_lines.count != 1
+    range_line = range_lines.first
     puts "Checking line '#{range_line}' for range"
     Spell::RangeMapping.invert.each do |key, val|
       puts "Checking '#{range_line}' for '#{key}'. Will assign #{val}"
@@ -304,7 +320,7 @@ class SpellBuilder
 
   def self._parse_components(lines)
     puts "PARSE COMPONENTS"
-    prefix = "Components: "
+    prefix = "Components:"
     comp_lines = lines.select{ |line| line =~ /^#{prefix}/i }
     raise "No components found! Make sure to include line '#{prefix}...'" if comp_lines.count == 0
     raise "Multiple components found! Include only one line '#{prefix}...'" if comp_lines.count != 1
@@ -325,8 +341,12 @@ class SpellBuilder
   	return -2 if time_string =~ /reaction/i
     return -3 if time_string =~ /until dispelled/i
     return -4 if time_string =~ /special/i || time_string =~ /varies/i
-  	unit = time_string.split(" ").last.chomp(".").chomp("s").downcase
-  	number = time_string.delete("^0-9").to_i
+    unit = time_string.split(" ").map do |word|
+      TIME_UNITS.select do |unit|
+        word =~ /#{unit}/i
+      end.first
+    end.compact.first
+    number = time_string.delete("^0-9").to_i
     puts "Found #{number} #{unit}(s)"
   	if unit == "action" || unit == "round" then
   		return number * 6 # since each action/round is 6 seconds

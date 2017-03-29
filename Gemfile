@@ -24,6 +24,7 @@ gem 'bootstrap-sass'
 
 # Add mechanize to scrape sites
 gem 'mechanize'
+gem 'nokogiri'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'

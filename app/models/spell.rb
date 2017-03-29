@@ -1,12 +1,14 @@
 class Spell < ActiveRecord::Base
 
+  # TODO: Fix missing Thunderous Smite and Aura of Vitality spells in DB
+
   belongs_to :source
   has_and_belongs_to_many :character_classes
 
-  SecondsInDay = 86400
-  SecondsInHour = 3600
+  SecondsInDay    = 86400
+  SecondsInHour   = 3600
   SecondsInMinute = 60
-  SecondsInRound = 6
+  SecondsInRound  = 6
   SecondsInAction = 6
   MIN_LEVEL = 0
   MAX_LEVEL = 9
@@ -20,8 +22,8 @@ class Spell < ActiveRecord::Base
   }
 
   RangeMapping = {
-    0 => "Self",
-    5 => "Touch",
+    0 =>  "Self",
+    5 =>  "Touch",
     -1 => "Unlimited",
     -2 => "Sight"
   }

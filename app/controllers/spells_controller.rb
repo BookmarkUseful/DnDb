@@ -7,7 +7,8 @@ class SpellsController < ApplicationController
     else
       params[:search_phrase] = params[:search_phrase].downcase
       @spells = Spell.where("LOWER(name) LIKE ?", params[:search_phrase])
-      @spells += Spell.where("LOWER(description) LIKE ?", params[:search_phrase])
+      @spells += Spell.where("LOWER(name) LIKE ?", "%#{params[:search_phrase]}%").uniq
+      @spells += Spell.where("LOWER(description) LIKE ?", "%#{params[:search_phrase]}%")
       @spells = @spells.uniq
     end
     @spells
@@ -16,7 +17,7 @@ class SpellsController < ApplicationController
   # GET /spells/1
   # GET /spells/1.json
   def show
-    
+
   end
 
   # GET /spells/new

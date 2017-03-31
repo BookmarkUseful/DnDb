@@ -1,3 +1,8 @@
+/*
+ *= require_self
+ *= require_tree
+ */
+
 *= require jquery-ui
 
 p#notice {
@@ -10,8 +15,6 @@ p#notice {
 
 #content {
   padding-top: 75px;
-  padding-left: 10px;
-  padding-right: 10px;
 }
 
 div.dndb {
@@ -172,14 +175,14 @@ img.sidebar-scroll-image:hover {
   -ms-transform: rotate(22deg);
 }
 
-div.spell-top {
-  height:140px;
+div.top {
+  height:160px;
   /*background-image: url('spell_artwork.jpeg');*/
-  background-color: white;
+  z-index: 0;
 }
 
 div.main-header-container {
-  padding: 30px;
+  padding: 50px;
   margin: 0px;
 }
 
@@ -197,7 +200,7 @@ img.top-icon {
   width: 60px;
 }
 
-img.spell-fire:hover {
+img.spell-icon:hover {
   /* change colour red on hover */
 }
 
@@ -323,10 +326,6 @@ h1.top-header {
    -webkit-filter: invert(80%);
  }
 
- div#index-container {
-   margin:10px;
- }
-
  table.index {
    border-spacing: 0;
    border-collapse: collapse;
@@ -335,18 +334,23 @@ h1.top-header {
 
  th, td {
    color: black;
-   padding-left: 5px;
    margin: 0px;
  }
 
- td.a {
+ td a {
    color: black;
+   text-decoration: none;
+ }
+
+ td.left {
+   padding-left: 10px;
  }
 
  th {
+   padding: 5px;
    background-color: black;
+   font-family: 'Georgia';
    color: white;
-   border: solid white 1px;
  }
 
  div#icon-container {
@@ -359,9 +363,17 @@ h1.top-header {
    font-size: 20px;
  }
 
- .parent-row {
+ tr.parent-row {
    height: 40px;
    transition: 0.15s ease-in-out;
+ }
+
+ tr.odd {
+   background-color: white;
+ }
+
+ tr.even {
+   background-color: #f2f2f2;
  }
 
  .row {
@@ -369,30 +381,99 @@ h1.top-header {
    transition: 0.15s ease-in-out;
  }
 
- .row.active, .row:hover {
-   background-color: grey;
- }
-
- .parent-cell {
-   font-size: 14px;
- }
-
  .cell {
    font-size: 14px;
  }
 
+ .centred {
+   text-align: center;
+ }
+
  .parent-row.active, .parent-row:hover {
-   background-color: grey;
+   background-color: #d9d9d9;
  }
 
- .hidden-row {
-   display: none;
-   background-color: grey;
-   width: 100%;
-   overflow: hidden;
- }
+.hidden-row {
+  display: none;
+  background-color: #d9d9d9;
+  width: 100%;
+  overflow: hidden;
+}
 
- .hidden-content {
-   padding-left: 5px;
-   padding-right: 5px;
- }
+.hidden-content {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+/* The side navigation menu */
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0;
+  left: 0;
+  margin: 0 auto;
+  background-color: black;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.sidenav a {
+  padding: 2px;
+  margin-bottom: 8px;
+  text-decoration: none;
+  font-size: 25px;
+  font-family: "Georgia";
+  color: white;
+  display: block;
+  transition: 0.3s;
+  /* add some kind of color flash/highlight on hover */
+}
+
+.home-link {
+  border-bottom: solid #ffd633 1px;
+}
+
+.classes-link {
+  border-bottom: solid #ff8c1a 1px;
+}
+
+.spells-link {
+  border-bottom: solid #ff4d4d 1px;
+}
+
+.items-link {
+  border-bottom: solid #9966ff 1px;
+}
+
+.sources-link {
+  border-bottom: solid #3366ff 1px;
+}
+
+.monsters-link {
+  border-bottom: solid #339966 1px;
+}
+
+.sidebar-dragon {
+  -webkit-filter: invert(100%);
+  height: 80px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.artwork-fade {
+  position: relative;
+  z-index: -1;
+  width: 75%;
+  height: 160px;
+  float: right;
+}
+
+img.artwork {
+  width: 100%;
+  position: absolute;
+  right: 0;
+}

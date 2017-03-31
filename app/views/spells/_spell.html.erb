@@ -1,3 +1,11 @@
+<%
+counter_class = if spell_counter % 2 == 0
+                  "even"
+                else
+                  "odd"
+                end
+%>
+
 <script>
 $(document).ready(function () {
   var pr = $(".parent-row");
@@ -12,18 +20,18 @@ $(document).ready(function () {
 });
 </script>
 
-<tr class="parent-row">
-  <td class="parent-cell">
+<tr class="parent-row <%=counter_class%>">
+  <td class="parent-cell left">
     <%= link_to spell_path(spell) do %>
       <%=spell.print_name%>
     <% end %>
   </td>
-  <td class="parent-cell"><%=spell.print_level%></td>
-  <td class="parent-cell"><%=spell.print_school.titleize%></td>
-  <td class="parent-cell"><%=spell.concentration%></td>
-  <td class="parent-cell"><%=spell.ritual%></td>
-  <td class="parent-cell"><%=spell.print_casting_time(false)%></td>
-  <td class="parent-cell"><%=spell.print_duration(false)%></td>
+  <td class="parent-cell cell centred"><%=spell.print_level%></td>
+  <td class="parent-cell cell centred"><%=spell.print_school.titleize%></td>
+  <td class="parent-cell cell centred"><%=spell.concentration%></td>
+  <td class="parent-cell cell centred"><%=spell.ritual%></td>
+  <td class="parent-cell cell centred"><%=spell.print_casting_time(false)%></td>
+  <td class="parent-cell cell centred"><%=spell.print_duration(false)%></td>
 </tr>
 <tr class="hidden-row">
   <td class="hidden-content" colspan="7">

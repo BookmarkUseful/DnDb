@@ -13,6 +13,10 @@ class CharacterClass < ActiveRecord::Base
   scope :noncore, -> { joins(:sources).where('sources.core', false) }
   scope :homebrew, -> { joins(:sources).where('sources.homebrew', true) }
 
+  def searchable?
+    true
+  end
+
   def image_name
     self.name.downcase + '.jpg'
   end
@@ -33,6 +37,10 @@ class CharacterClass < ActiveRecord::Base
 
   def source_kind
     self.source.kind
+  end
+
+  def self.search(term)
+    self.where('LOWER(name) LIKE :term', term: "%#{term.downcase}%")
   end
 
   ############

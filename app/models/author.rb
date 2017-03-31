@@ -2,6 +2,10 @@ class Author < ActiveRecord::Base
 
   has_many :sources
 
+  def searchable?
+    true
+  end
+
 end
 
 #

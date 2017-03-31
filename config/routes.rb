@@ -13,6 +13,12 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
+  resources :crystal_search do
+    member do
+      get 'index'
+    end
+  end
+
   resources :sources do
     collection do
       get 'index'

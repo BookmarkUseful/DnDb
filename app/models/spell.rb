@@ -100,6 +100,10 @@ class Spell < ActiveRecord::Base
   scope :noncore, -> { joins(:source).where('sources.kind is not ?', Source::Kinds[:core]) }
   scope :homebrew, -> { joins(:source).where('sources.kind' => Source::Kinds[:homebrew]) }
 
+  def searchable?
+    true
+  end
+
   def self.schools
     Schools.keys.map(&:to_s)
   end
@@ -110,6 +114,10 @@ class Spell < ActiveRecord::Base
 
   def source_kind
     self.source.kind
+  end
+
+  def self.search(term)
+    self.where('LOWER(name) LIKE :term', term: "%#{term.downcase}%")
   end
 
   ############

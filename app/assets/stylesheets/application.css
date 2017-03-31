@@ -1,45 +1,159 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any styles
- * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
- * file per style scope.
- *
- *= require_tree .
- *= require_self
- */
+*= require jquery-ui
 
- p#notice {
-   margin: 0px;
- }
+p#notice {
+  margin: 0px;
+}
 
- div.main-header-container {
-   background-color: #grey;
-   padding: 10px;
-   margin: 0px;
- }
+#main {
+  transition: margin-left .5s;
+}
 
- div.head {
-   padding: 10px;
-   background-color: darkgrey;
-   width: 100%;
-   height: 60px;
- }
+#content {
+  padding-top: 75px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
 
- h1.main-header {
-   color: darkred;
-   font-size: 32px;
-   font-family: "Georgia";
- }
+div.dndb {
+  height: 100%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+a.dndb {
+  display: inline-block;
+  color: white;
+  text-align: middle;
+  font-size: 42px;
+  font-family: "Georgia";
+  text-decoration: none;
+  align: center;
+}
+
+a.dndb:hover {
+  color: #cccccc;
+}
+
+.head-break {
+  vertical-align: middle;
+  display: inline-block;
+  font-size: 42px;
+  font-family: "Georgia";
+  color: #262626;
+}
+
+div.head {
+  padding: 10px;
+  background-color: black;
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  position: fixed;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+div.crystal-search-container {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+div.crystal-search-input-container {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.crystal-search-input {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 30px;
+  height: 30px;
+  width: 460px;
+  border-style: none;
+  border-color: none;
+  color: lightgrey;
+  font-family: "Trebuchet MS";
+  font-size: 16px;
+  background-color: #262626;
+  appearance: none;
+  box-shadow: none;
+  cursor: pointer;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 10px;
+}
+
+.ui-menu {
+	position: fixed;
+	list-style: none;
+	background-color: #262626;
+	z-index: 10;
+	width: 460px;
+	line-height: 140%;
+	font-size: 16px;
+  font-family: "Trebuchet MS";
+	padding: 5px 0;
+}
+
+.ui-menu-item {
+	padding: 10px;
+  color: lightgrey;
+}
+
+.ui-helper-hidden-accessible {
+  display: none;
+}
+
+.crystal-search-input:focus {
+  outline: 0;
+}
+
+img.crystal-ball-icon {
+  display: inline-block;
+  vertical-align: middle;
+  height: 50px;
+  -webkit-filter: invert(100%);
+  background-color: #d9d9d9;
+  -moz-border-radius: 25px; /* or 50% */
+  border-radius: 25px; /* or 50% */
+}
+
+.scroll-icon-container {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+img.sidebar-scroll-image {
+  display: inline-block;
+  vertical-align: middle;
+  height: 60px;
+  width: 60px;
+  color: black;
+  background-color: white;
+  -moz-border-radius: 50%; /* or 50% */
+  border-radius: 50%; /* or 50% */
+}
+
+img.sidebar-scroll-image:hover {
+	background-color: #cccccc;
+}
+
+div.main-header-container {
+  padding: 30px;
+  margin: 0px;
+}
+
+h1.main-header {
+  color: black;
+  font-size: 32px;
+  font-family: "Georgia";
+  text-decoration: none;
+}
 
  body {
    margin: 0 auto;
-   background-color: lightgrey;
+   background-color: white;
    width: 100%;
  }
 
@@ -65,13 +179,13 @@
 
  .search-input {
    height: 100%;
-   width: 100%;
+   width: 90%;
    margin: 0px;
    padding: 0px;
    border-style: none;
    border-color: none;
    border-bottom: solid darkred 1px;
-   color: darkred;
+   color: darkgrey;
    font-family: "Georgia";
    font-size: 32px;
    font-weight: bold;
@@ -79,6 +193,10 @@
    appearance: none;
    box-shadow: none;
    cursor: pointer;
+ }
+
+ .clear-search {
+   font-size: 32px;
  }
 
  .search-input:focus {
@@ -142,15 +260,6 @@
    -webkit-filter: invert(100%);
  }
 
- img.sidebar-scroll-image {
-   height: 50px;
-   width:  50px;
- }
-
-img.sidebar-scroll-image:hover {
-	-webkit-animation: flash 1.5s;
-	animation: flash 1.5s;
-}
 
  .search-advanced-image:hover {
    -webkit-filter: invert(80%);
@@ -177,7 +286,9 @@ img.sidebar-scroll-image:hover {
  }
 
  th {
-   background-color: grey;
+   background-color: black;
+   color: white;
+   border: solid white 1px;
  }
 
  div#icon-container {

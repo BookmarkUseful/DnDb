@@ -1,0 +1,27 @@
+<script>
+  function clearCrystalSearch() {
+    $("#crystal-search-input").val("");
+  }
+</script>
+
+<div id="head" class="head">
+  <div class="scroll-icon-container" onclick="toggleNav()">
+    <%=image_tag("scroll.png", :class => "sidebar-scroll-image") %>
+  </div>
+  <div class="head-break">|</div>
+  <div class="dndb">
+    <%=link_to "DNDb", welcome_index_path, :class => "dndb"%>
+  </div>
+  <div class="head-break">|</div>
+  <div class="crystal-search-container">
+    <div class="crystal-search-input-container">
+      <%= text_field_tag(
+      :search_phrase,
+      (params[:search_phrase].present? ? params[:search_phrase] : "..."),
+      {:id => "crystal-search-input", :class => "crystal-search-input", :onclick => "clearCrystalSearch()"})
+      %>
+      <div class="crystal-results" id="crystal-results"></div>
+    </div>
+    <%= image_tag("crystal_ball.png", :class => "crystal-ball-icon") %>
+  </div>
+</div>

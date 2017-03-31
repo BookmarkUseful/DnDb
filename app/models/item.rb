@@ -18,4 +18,8 @@ class Item < ActiveRecord::Base
   validates :weight, :presence => true, :numericality => { :greater_than => 0 }
   validates :value, :presence => true, :numericality => { :greater_than => 0 }
 
+  def self.search(term)
+    self.where('LOWER(name) LIKE :term', term: "%#{term.downcase}%")
+  end
+
 end

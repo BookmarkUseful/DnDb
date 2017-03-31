@@ -1,5 +1,12 @@
-<div id="main-content">
-  <div class="main-header-container">
+<script>
+
+  function clearSearch() {
+    $("#search-input").val("");
+  }
+
+</script>
+
+<div class="main-header-container">
     <%= link_to spells_path do %>
       <h1 class="main-header">Spells</h1>
     <% end %>
@@ -14,7 +21,7 @@
         <%= text_field_tag(
         :search_phrase,
         (params[:search_phrase].present? ? params[:search_phrase] : "Search here..."),
-        {:id => "search-input", :class => "search-input"})
+        {:id => "search-input", :class => "search-input", :onclick => "clearSearch()"})
         %>
       </div>
     </div>
@@ -45,5 +52,4 @@
       </tr>
       <%= render :partial => 'spell', :collection => @spells, :as => :spell %>
     </table>
-  </div>
 </div>

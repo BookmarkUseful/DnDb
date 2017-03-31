@@ -22,9 +22,17 @@ class Source < ActiveRecord::Base
   scope :indexed, -> { where(:indexed => 1) }
   scope :incomplete, -> { where(:indexed => 0) }
 
+  def searchable?
+    true
+  end
+
   # shortened abbreviation getter
   def abbr
     self.abbreviation
+  end
+
+  def self.search(term)
+    self.where('LOWER(name) LIKE :term', term: "%#{term.downcase}%")
   end
 
 ######################

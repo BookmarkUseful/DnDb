@@ -1,9 +1,13 @@
-<div class="main-header-container">
-    <%= link_to character_classes_path do %>
-      <h1 class="main-header">Classes</h1>
+<div class="top">
+  <div class="main-header-container">
+    <%= link_to character_classes_path, :class => 'top-link' do %>
+      <%= image_tag("class_icon.png", :class => "top-icon class-icon") %>
+      <h1 class="top-header">Classes</h1>
     <% end %>
   </div>
-  <div id="index-container">
+</div>
+
+<div id="index-container">
     <table class="index">
       <tr style="background-color: white">
         <th>Name</th>
@@ -15,4 +19,4 @@
                  :as => :character_class
       %>
     </table>
-  </div>
+</div>

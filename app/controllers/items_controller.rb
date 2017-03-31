@@ -1,5 +1,10 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy]
+  before_action :set_icon_color
+
+  def set_icon_color
+    @icon_color = "items-color"
+  end
 
   # GET /items
   # GET /items.json

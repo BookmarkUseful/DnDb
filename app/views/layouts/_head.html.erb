@@ -1,12 +1,28 @@
+<%
+scroll_class = if @icon_color.present?
+  "sidebar-scroll-image " + @icon_color
+else
+  "sidebar-scroll-image undefined-color"
+end
+%>
+
 <script>
   function clearCrystalSearch() {
     $("#crystal-search-input").val("");
   }
+
+  $( "#scroll" ).click(function() {
+    if (  $( this ).css( "transform" ) == 'none' ){
+      $(this).css("transform","rotate(22deg)");
+    } else {
+      $(this).css("transform","" );
+    }
+  });
 </script>
 
 <div id="head" class="head">
   <div class="scroll-icon-container" onclick="toggleNav()">
-    <%=image_tag("scroll.png", :class => "sidebar-scroll-image") %>
+    <%=image_tag("scroll.png", :class => scroll_class, :id => "scroll") %>
   </div>
   <div class="head-break">|</div>
   <div class="dndb">

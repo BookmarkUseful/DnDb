@@ -73,7 +73,7 @@ div.crystal-search-input-container {
   border-color: none;
   color: lightgrey;
   font-family: "Trebuchet MS";
-  font-size: 16px;
+  font-size: 20px;
   background-color: #262626;
   appearance: none;
   box-shadow: none;
@@ -124,19 +124,58 @@ img.crystal-ball-icon {
   vertical-align: middle;
 }
 
+img.classes-color {
+  background-color: #ff8c1a;
+}
+
+img.welcome-color {
+  background-color: #ffd633;
+}
+
+img.spells-color {
+  background-color: #ff4d4d;
+}
+
+img.items-color {
+  background-color: #9966ff;
+}
+
+img.sources-color {
+  background-color: #3366ff;
+}
+
+img.undefined-color {
+  background-color: #cccccc;
+}
+
 img.sidebar-scroll-image {
   display: inline-block;
   vertical-align: middle;
   height: 60px;
   width: 60px;
   color: black;
-  background-color: white;
-  -moz-border-radius: 50%; /* or 50% */
-  border-radius: 50%; /* or 50% */
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-transition-duration: 0.5s;
+  -moz-transition-duration: 0.5s;
+  -o-transition-duration: 0.5s;
+  transition-duration: 0.5s;
+  -webkit-transition-property: -webkit-transform;
+  -moz-transition-property: -moz-transform;
+  -o-transition-property: -o-transform;
+  transition-property: transform;
 }
 
 img.sidebar-scroll-image:hover {
-	background-color: #cccccc;
+  transform: rotate(22deg);
+  -webkit-transform: rotate(22deg);
+  -ms-transform: rotate(22deg);
+}
+
+div.spell-top {
+  height:140px;
+  /*background-image: url('spell_artwork.jpeg');*/
+  background-color: white;
 }
 
 div.main-header-container {
@@ -144,11 +183,30 @@ div.main-header-container {
   margin: 0px;
 }
 
-h1.main-header {
+a.top-link {
+  display: inline-block;
+  vertical-align: middle;
+  text-decoration: none;
+}
+
+img.top-icon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 15px;
+  height: 60px;
+  width: 60px;
+}
+
+img.spell-fire:hover {
+  /* change colour red on hover */
+}
+
+h1.top-header {
+  display: inline-block;
+  vertical-align: middle;
   color: black;
   font-size: 32px;
   font-family: "Georgia";
-  text-decoration: none;
 }
 
  body {

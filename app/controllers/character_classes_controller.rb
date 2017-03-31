@@ -1,5 +1,10 @@
 class CharacterClassesController < ApplicationController
   before_action :set_character_class, only: [:show, :edit, :update, :destroy]
+  before_action :set_icon_color
+
+  def set_icon_color
+    @icon_color = "classes-color"
+  end
 
   def index
     @classes = CharacterClass.all

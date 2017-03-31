@@ -1,4 +1,9 @@
 class SourcesController < ApplicationController
+  before_action :set_icon_color
+
+  def set_icon_color
+    @icon_color = "sources-color"
+  end
 
   def index
     @sources = Source.all

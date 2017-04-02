@@ -120,6 +120,10 @@ class Spell < ActiveRecord::Base
     self.where('LOWER(name) LIKE :term', term: "%#{term.downcase}%")
   end
 
+  def self.icon
+    image_path("spell_icon.png")
+  end
+
   ############
   # PRINTING #
   ############

@@ -43,6 +43,10 @@ class CharacterClass < ActiveRecord::Base
     self.where('LOWER(name) LIKE :term', term: "%#{term.downcase}%")
   end
 
+  def self.icon
+    ActionController::Base.helpers.image_path("class_icon.png")
+  end
+
   ############
   # PRINTING #
   ############

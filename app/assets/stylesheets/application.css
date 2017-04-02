@@ -161,11 +161,9 @@ img.sidebar-scroll-image {
   border-radius: 50%;
   -webkit-transition-duration: 0.5s;
   -moz-transition-duration: 0.5s;
-  -o-transition-duration: 0.5s;
   transition-duration: 0.5s;
   -webkit-transition-property: -webkit-transform;
   -moz-transition-property: -moz-transform;
-  -o-transition-property: -o-transform;
   transition-property: transform;
 }
 
@@ -212,186 +210,80 @@ h1.top-header {
   font-family: "Georgia";
 }
 
- body {
-   margin: 0 auto;
-   background-color: white;
-   width: 100%;
- }
+body {
+  margin: 0 auto;
+  background-color: white;
+  width: 100%;
+}
 
- div.four-columns {
-   -webkit-columns: 70px 4; /* Chrome, Safari, Opera */
-   -moz-columns: 70px 4; /* Firefox */
-   columns: 70px 4;
- }
-
- .search-container {
-   height: 70px;
-   margin: 10px;
- }
-
- .search-input-container {
-   display: inline-block;
-   padding-top: 10px;
-   padding-bottom: 10px;
-   box-sizing: border-box;
-   height: 100%;
-   width: 100%;
- }
-
- .search-input {
-   height: 100%;
-   width: 90%;
-   margin: 0px;
-   padding: 0px;
-   border-style: none;
-   border-color: none;
-   border-bottom: solid darkred 1px;
-   color: darkgrey;
-   font-family: "Georgia";
-   font-size: 32px;
-   font-weight: bold;
-   background-color: transparent;
-   appearance: none;
-   box-shadow: none;
-   cursor: pointer;
- }
-
- .clear-search {
-   font-size: 32px;
- }
-
- .search-input:focus {
-   outline: 0;
- }
-
- input.search-button {
-   height: 100%;
-   width: 100%;
-   margin: 0px;
-   padding: 0px;
-   border-style: none;
-   border-color: none;
-   border-bottom: solid white 1px;
-   cursor: pointer;
-   color: #006699;
-   font-family: "Georgia";
-   font-size: 32px;
-   font-weight: bold;
-   background-color: white;
-   appearance: none;
-   box-shadow: none;
-   position: relative;
- }
-
- input.search-button:hover {
-   background-color: lightgrey;
-   border-bottom: solid lightgrey 1px;
-   outline: 0;
- }
-
- input.search-button:focus {
-   position: relative;
-   top: 1px;
-   background-color: lightgrey;
-   border-bottom: solid lightgrey 1px;
-   outline: 0;
- }
-
- .search-button-container {
-   display: inline-block;
-   padding: 15px;
-   box-sizing: border-box;
-   height: 100%;
-   width: 100%;
-   border: solid black 1px;
- }
-
- .search-advanced-button-container {
-   display: inline-block;
-   padding: 5px;
-   box-sizing: border-box;
-   height: 100%;
-   width: 100%;
-   border: solid black 1px;
- }
-
- img.search-advanced-image {
-   height: 100%;
-   width: 100%;
-   -webkit-filter: invert(100%);
- }
+div.four-columns {
+  -webkit-columns: 70px 4; /* Chrome, Safari, Opera */
+  -moz-columns: 70px 4; /* Firefox */
+  columns: 70px 4;
+}
 
 
- .search-advanced-image:hover {
-   -webkit-filter: invert(80%);
- }
+table.index {
+  border-spacing: 0;
+  border-collapse: collapse;
+  width: 100%;
+}
 
- table.index {
-   border-spacing: 0;
-   border-collapse: collapse;
-   width: 100%;
- }
+th, td {
+  color: black;
+  margin: 0px;
+}
 
- th, td {
-   color: black;
-   margin: 0px;
- }
+td a {
+  color: black;
+  text-decoration: none;
+}
 
- td a {
-   color: black;
-   text-decoration: none;
- }
+td.left {
+  padding-left: 10px;
+}
 
- td.left {
-   padding-left: 10px;
- }
+th {
+  padding: 5px;
+  background-color: black;
+  font-family: 'Georgia';
+  color: white;
+}
 
- th {
-   padding: 5px;
-   background-color: black;
-   font-family: 'Georgia';
-   color: white;
- }
+div#icon-container {
+  display: inline-block;
+  float: right;
+}
 
- div#icon-container {
-   display: inline-block;
-   float: right;
- }
+tr.parent-row {
+  height: 40px;
+  transition: 0.15s ease-in-out;
+}
 
- .search-term-header {
-   color: white;
-   font-size: 20px;
- }
+tr.odd {
+  background-color: white;
+}
 
- tr.parent-row {
-   height: 40px;
-   transition: 0.15s ease-in-out;
- }
+tr.even {
+  background-color: #f2f2f2;
+}
 
- tr.odd {
-   background-color: white;
- }
+.row {
+  height: 40px;
+  transition: 0.15s ease-in-out;
+}
 
- tr.even {
-   background-color: #f2f2f2;
- }
+.cell {
+  font-size: 14px;
+}
 
- .row {
-   height: 40px;
-   transition: 0.15s ease-in-out;
- }
+.centred {
+  text-align: center;
+}
 
- .cell {
-   font-size: 14px;
- }
-
- .centred {
-   text-align: center;
- }
-
- .parent-row.active, .parent-row:hover {
-   background-color: #d9d9d9;
- }
+.parent-row.active, .parent-row:hover {
+  background-color: #d9d9d9;
+}
 
 .hidden-row {
   display: none;
@@ -430,6 +322,10 @@ h1.top-header {
   display: block;
   transition: 0.3s;
   /* add some kind of color flash/highlight on hover */
+}
+
+.sidenav a:hover {
+  color: #d9d9d9;
 }
 
 .home-link {
@@ -473,7 +369,7 @@ div.artwork-fade {
 }
 
 img.artwork {
-  width: 100%;
+  width: 1000px;
   position: absolute;
   right: 0;
 }

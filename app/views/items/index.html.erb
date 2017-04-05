@@ -1,3 +1,7 @@
+<div class="artwork-fade head-artwork">
+  <%= image_tag("item_artwork1.png", :class => "artwork") %>
+</div>
+
 <div class="top">
   <div class="main-header-container">
     <%= link_to items_path, :class => 'top-link' do %>
@@ -5,4 +9,16 @@
       <h1 class="top-header">Items</h1>
     <% end %>
   </div>
+</div>
+
+<div id="index-container">
+  <table class="index">
+    <tr style="background-color: white">
+      <th>Name</th>
+      <th>Weight</th>
+      <th>Value</th>
+      <th>Source</th>
+    </tr>
+    <%= render :partial => 'item', :collection => @items, :as => :item %>
+  </table>
 </div>

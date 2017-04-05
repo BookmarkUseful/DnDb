@@ -7,16 +7,13 @@ class SpellsController < ApplicationController
   end
 
   def index
-    if params[:search_phrase].blank? then
-      @spells = Spell.order(:level, :name)
-    else
-      params[:search_phrase] = params[:search_phrase].downcase
-      @spells = Spell.where("LOWER(name) LIKE ?", params[:search_phrase])
-      @spells += Spell.where("LOWER(name) LIKE ?", "%#{params[:search_phrase]}%").uniq
-      @spells += Spell.where("LOWER(description) LIKE ?", "%#{params[:search_phrase]}%")
-      @spells = @spells.uniq
-    end
-    @spells
+    params[:class_ids] ||= CharacterClass.pluck(:id)
+    params[:levels] ||= Spell::MIN_LEVEL..Spell::MAX_LEVEL
+    params[:schools] ||= Spell::Schools.values
+    params[:sources] ||= Source::Kinds.values
+    @spells = Spell.where(:level => params[:levels],
+                          :school => params[:schools])
+                   .order(:level, :name)
   end
 
   # GET /spells/1

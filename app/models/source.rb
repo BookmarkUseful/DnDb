@@ -5,6 +5,7 @@ class Source < ActiveRecord::Base
   belongs_to :author
   has_many :spells
   has_many :character_classes
+  has_many :items
 
   Kinds = {
     :core => 0,

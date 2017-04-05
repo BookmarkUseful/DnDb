@@ -26,12 +26,12 @@ $(document).ready(function () {
       <%=spell.print_name%>
     <% end %>
   </td>
-  <td class="parent-cell cell centred"><%=spell.print_level%></td>
-  <td class="parent-cell cell centred"><%=spell.print_school.titleize%></td>
-  <td class="parent-cell cell centred"><%=spell.concentration%></td>
-  <td class="parent-cell cell centred"><%=spell.ritual%></td>
-  <td class="parent-cell cell centred"><%=spell.print_casting_time(false)%></td>
-  <td class="parent-cell cell centred"><%=spell.print_duration(false)%></td>
+  <td class="cell centred"><%=spell.print_level%></td>
+  <td class="cell centred"><%=spell.print_school.titleize%></td>
+  <td class="cell centred"><%=spell.concentration%></td>
+  <td class="cell centred"><%=spell.ritual%></td>
+  <td class="cell centred"><%=spell.print_casting_time(false)%></td>
+  <td class="cell centred"><%=spell.print_duration(false)%></td>
 </tr>
 <tr class="hidden-row">
   <td class="hidden-content" colspan="7">

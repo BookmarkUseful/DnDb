@@ -168,9 +168,9 @@ img.sidebar-scroll-image {
 }
 
 img.sidebar-scroll-image:hover {
-  transform: rotate(22deg);
-  -webkit-transform: rotate(22deg);
-  -ms-transform: rotate(22deg);
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
 }
 
 div.top {
@@ -250,11 +250,6 @@ th {
   color: white;
 }
 
-div#icon-container {
-  display: inline-block;
-  float: right;
-}
-
 tr.parent-row {
   height: 40px;
   transition: 0.15s ease-in-out;
@@ -282,12 +277,12 @@ tr.even {
 }
 
 .parent-row.active, .parent-row:hover {
-  background-color: #d9d9d9;
+  background-color: #cccccc;
 }
 
 .hidden-row {
   display: none;
-  background-color: #d9d9d9;
+  background-color: #cccccc;
   width: 100%;
   overflow: hidden;
 }
@@ -320,12 +315,11 @@ tr.even {
   font-family: "Georgia";
   color: white;
   display: block;
-  transition: 0.3s;
   /* add some kind of color flash/highlight on hover */
 }
 
 .sidenav a:hover {
-  color: #d9d9d9;
+  color: #cccccc;
 }
 
 .home-link {
@@ -363,13 +357,89 @@ tr.even {
 div.artwork-fade {
   position: relative;
   z-index: -1;
-  width: 75%;
-  height: 160px;
+  width: 70%;
   float: right;
+}
+
+div.head-artwork {
+  height: 160px;
 }
 
 img.artwork {
   width: 1000px;
   position: absolute;
   right: 0;
+}
+
+div.spell-advanced-search-container {
+  padding: 10px;
+  padding-left: 50px;
+  padding-right: 50px;
+  background-color: black;
+}
+
+div.advanced-search-drop {
+  height: 40px;
+  display: inline-block;
+  vertical-align: middle;
+  font-family: "Trebuchet MS";
+  font-size: 20px;
+  color: white;
+}
+
+.button {
+  background-color: black;
+  border: none;
+  color: white;
+  height: 100%;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Trebuchet MS";
+  transition: 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+.button:focus {
+  outline: 0;
+}
+.active {
+  background-color: #262626;
+}
+
+div.advanced-search-options {
+  border-top: solid #262626 1px;
+  border-bottom: solid #262626 1px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: white;
+  font-family: "Trebuchet MS";
+}
+
+table.spell-filter-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+tr.spell-filter-table-row td {
+  color: white;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-family: "Trebuchet MS";
+  vertical-align: top;
+}
+
+div.parent {
+  transition: 0.15s ease-in-out;
+}
+
+div.child {
+  transition: 0.15s ease-in-out;
+  display: none;
+  width: 100%;
+  overflow: hidden;
 }

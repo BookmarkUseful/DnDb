@@ -1,11 +1,17 @@
-<tr class="parent-row">
-  <td class="parent-cell">
+<%
+counter = if source_counter % 2 == 0
+                  "even"
+                else
+                  "odd"
+                end
+%>
+
+<tr class="parent-row <%=counter%>">
+  <td class="parent-cell left">
     <%= link_to source_path(source) do %>
-      <%=source.print_name%>
+      <%=source.name%>
     <% end %>
   </td>
-  <td class="parent-cell"><%=source.name%></td>
-  <td class="parent-cell">na</td>
-  <td class="parent-cell"><%=source.kind%></td>
-  <td class="parent-cell"><%=source.page_count%></td>
+  <td class="parent-cell cell centred"><%=source.author.name%></td>
+  <td class="parent-cell cell centred"><%=source.kind.titleize%></td>
 </tr>

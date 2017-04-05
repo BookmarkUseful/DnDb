@@ -1,18 +1,6 @@
-<!--
-<script>
-$(document).ready(function () {
-  var pr = $(".parent-row");
-  var i;
-
-  for (i = 0; i < pr.length; ++i) {
-    pr[i].onclick = function(){
-      this.classList.toggle("active");
-      $( this ).next( "tr" ).toggle();
-    }
-  }
-});
-</script>
--->
+<div class="artwork-fade head-artwork">
+  <%= image_tag("source_artwork1.png", :class => "artwork") %>
+</div>
 
 <div class="top">
   <div class="main-header-container">
@@ -23,22 +11,13 @@ $(document).ready(function () {
   </div>
 </div>
 
-<!--
-
-  <br>
-
-
-  <div id="index-container">
-    <table class="index">
-      <tr style="background-color: white">
-        <th>Name</th>
-        <th>Author</th>
-        <th>Kind</th>
-        <th>Pages</th>
-      </tr>
-    </table>
-  </div>
-
--->
-
+<div id="index-container">
+  <table class="index">
+    <tr style="background-color: white">
+      <th>Name</th>
+      <th>Author</th>
+      <th>Kind</th>
+    </tr>
+    <%= render :partial => 'source', :collection => @sources, :as => :source %>
+  </table>
 </div>

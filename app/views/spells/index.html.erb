@@ -1,12 +1,20 @@
 <script>
 
-  function clearSearch() {
-    $("#search-input").val("");
-  }
+  $(document).ready(function () {
+    var pr = $(".parent");
+    var i;
+
+    for (i = 0; i < pr.length; ++i) {
+      pr[i].onclick = function(){
+        this.classList.toggle("active");
+        $( this ).next( "div" ).toggle();
+      }
+    }
+  });
 
 </script>
 
-<div class="artwork-fade">
+<div class="artwork-fade head-artwork">
   <%= image_tag("spell_artwork1.png", :class => "artwork") %>
 </div>
 
@@ -20,6 +28,7 @@
 </div>
 
 <div id="index-container">
+  <%= render :partial => "index_filter_form" %>
   <table class="index">
     <tr style="background-color: white">
       <th>Name</th>

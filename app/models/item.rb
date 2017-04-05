@@ -1,5 +1,7 @@
 class Item < ActiveRecord::Base
 
+  belongs_to :source
+
   Rarities = {
     :unspecified => 0,
     :non_magical => 1,

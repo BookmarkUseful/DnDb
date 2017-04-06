@@ -1,4 +1,6 @@
 class CharacterClass < ActiveRecord::Base
+  after_save :load_into_soulmate
+	before_destroy :remove_from_soulmate
 
   belongs_to :source
   has_and_belongs_to_many :spells
@@ -53,6 +55,22 @@ class CharacterClass < ActiveRecord::Base
 
   def print_name
     self.name.titleize
+  end
+
+  private
+
+  def load_into_soulmate
+    loader = Soulmate::Loader.new("classes")
+    loader.add("term" => self.name, "id" => self.id, "data" => {
+      "link" => Rails.application.routes.url_helpers.character_class_path(self),
+      "source" => self.source.abbr
+      # can add icon here!
+    })
+  end
+
+  def remove_from_soulmate
+    loader = Soulmate::Loader.new("classes")
+    loader.remove("id" => self.id)
   end
 
 end

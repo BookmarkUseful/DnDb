@@ -16,15 +16,15 @@ gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
-# Just cuz
-gem 'progress_bar'
-
 # Add Bootstrap sass-rails
 gem 'bootstrap-sass'
 
-# Add mechanize to scrape sites
-gem 'mechanize'
+# Use nokogiri to scrape sites
 gem 'nokogiri'
+
+gem 'rack-contrib'
+# Use soulmate for rich autocomplete on crystal search
+gem 'soulmate', :require => 'soulmate/server'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails', "~> 2.3.0"
@@ -32,15 +32,6 @@ gem 'jquery-rails', "~> 2.3.0"
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use Unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
 
 # Use hirb to cleanly display ActiveRecords in console
 gem 'hirb'

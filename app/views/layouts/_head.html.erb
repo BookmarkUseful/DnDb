@@ -27,15 +27,18 @@ end
   <div class="head-break">|</div>
   <div class="crystal-search-container">
     <div class="crystal-search-input-container">
-      <%= text_field_tag(
-      :search_phrase,
-      nil,
-      {
-        :id => "crystal-search-input",
-        :class => "crystal-search-input",
-        :placeholder => "..."
-      })
-      %>
+      <%= form_tag do %>
+        <%= text_field_tag(
+        :search_phrase,
+        nil,
+        {
+          :id => "crystal-search",
+          :class => "crystal-search-input",
+          :placeholder => "...",
+          :autocomplete => :off
+        })
+        %>
+        <% end %>
       <div class="crystal-results" id="crystal-results"></div>
     </div>
     <%= image_tag("crystal_ball.png", :class => "crystal-ball-icon") %>

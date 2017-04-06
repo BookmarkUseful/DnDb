@@ -1,5 +1,7 @@
+require 'soulmate/server'
+
 Rails.application.routes.draw do
-  resources :spells
+
   get 'welcome/index'
 
   resources :items
@@ -46,6 +48,8 @@ Rails.application.routes.draw do
       get ':id' => 'character_classes#show'
     end
   end
+
+  mount Soulmate::Server, :at => "/autocomplete"
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

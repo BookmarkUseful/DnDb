@@ -1,4 +1,6 @@
 class Source < ActiveRecord::Base
+  after_save :load_into_soulmate
+  before_destroy :remove_from_soulmate
 
   SOURCE_DIRECTORY = "lib/sources/"
 
@@ -81,6 +83,21 @@ class Source < ActiveRecord::Base
   def grab_spells(start_page, end_page, num_cols)
     spell_text = self.collect_text(start_page, end_page)
     SpellBuilder.build_spells(spell_text, self.id, num_cols)
+  end
+
+  private
+
+  def load_into_soulmate
+    loader = Soulmate::Loader.new("sources")
+    loader.add("term" => self.name, "id" => self.id, "data" => {
+      "link" => Rails.application.routes.url_helpers.source_path(self)
+      # can add icon here!
+    })
+  end
+
+  def remove_from_soulmate
+    loader = Soulmate::Loader.new("sources")
+    loader.remove("id" => self.id)
   end
 
 end

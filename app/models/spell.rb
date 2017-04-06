@@ -1,4 +1,6 @@
 class Spell < ActiveRecord::Base
+  after_save :load_into_soulmate
+	before_destroy :remove_from_soulmate
 
   # TODO: Fix missing Thunderous Smite and Aura of Vitality spells in DB
 
@@ -262,6 +264,22 @@ class Spell < ActiveRecord::Base
     return "Cantrip" if level == 0
     "#{level.ordinalize}-level"
   end
+
+  private
+
+  def load_into_soulmate
+    loader = Soulmate::Loader.new("spells")
+  	loader.add("term" => self.name, "id" => self.id, "data" => {
+  		"link" => Rails.application.routes.url_helpers.spell_path(self),
+      "source" => self.source.abbr
+      # can add icon here!
+    })
+  end
+
+  def remove_from_soulmate
+		loader = Soulmate::Loader.new("spells")
+	  loader.remove("id" => self.id)
+	end
 
 end
 

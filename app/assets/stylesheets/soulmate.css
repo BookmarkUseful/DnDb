@@ -1,0 +1,57 @@
+#soulmate {
+    background-color: #262626;
+    display: none;
+    font: 12px "Trebuchet MS", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    list-style: none;
+    margin: 0 0 0 10px;
+    padding: 0;
+    position: absolute;
+    z-index: 1000;
+}
+ #soulmate .soulmate-type-container {
+}
+ #soulmate .soulmate-type-container:first-child {
+}
+ #soulmate .soulmate-type-suggestions {
+    float: right;
+    list-style: none;
+    padding: 5px 0;
+    width: 490px;
+    letter-spacing: 0.5px;
+}
+ #soulmate .soulmate-suggestion {
+    color: lightgrey;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 12px;
+    padding: 5px 0 5px 10px;
+    text-decoration: none;
+}
+ #soulmate .soulmate-suggestion.focus {
+    color: white;
+    background-color: black;
+    margin-left: -1px;
+    margin-right: -1px;
+    padding-left: 13px;
+    position: relative;
+    z-index: 1;
+}
+ #soulmate .soulmate-type {
+    color: lightgrey;
+    font-family: "Trebuchet MS", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    margin-right: 490px;
+    padding: 10px 10px 0 10px;
+    text-align: right;
+    text-transform: capitalize;
+    vertical-align: top;
+    zoom: 1;
+}
+ #soulmate .soulmate-type:before, #soulmate .soulmate-type:after {
+    content: "";
+    display: table;
+}
+ #soulmate .soulmate-type:after {
+    clear: both;
+}

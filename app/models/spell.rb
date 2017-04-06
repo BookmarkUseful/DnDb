@@ -110,10 +110,6 @@ class Spell < ActiveRecord::Base
     Schools.keys.map(&:to_s)
   end
 
-  def source_name
-    self.source.name
-  end
-
   def source_kind
     self.source.kind
   end
@@ -133,7 +129,6 @@ class Spell < ActiveRecord::Base
   def print
     name = print_name.upcase
     level_school = print_level_school
-    source = print_source
     casting_time = print_casting_time
     range = print_range
     components = print_components
@@ -142,7 +137,6 @@ class Spell < ActiveRecord::Base
     [
       name,
       level_school,
-      source,
       "",
       casting_time,
       range,

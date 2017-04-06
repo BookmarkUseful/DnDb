@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170112022826) do
+ActiveRecord::Schema.define(version: 20170406211555) do
 
   create_table "authors", force: :cascade do |t|
     t.string   "name"
@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(version: 20170112022826) do
     t.text     "components"
     t.integer  "source_id"
     t.integer  "parent_school"
+    t.string   "source_name"
   end
 
   add_index "spells", ["name"], name: "index_spells_on_name", unique: true

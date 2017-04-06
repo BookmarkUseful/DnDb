@@ -82,7 +82,7 @@ class Source < ActiveRecord::Base
   # to provide this also.
   def grab_spells(start_page, end_page, num_cols)
     spell_text = self.collect_text(start_page, end_page)
-    SpellBuilder.build_spells(spell_text, self.id, num_cols)
+    SpellBuilder.build_spells(spell_text, self, num_cols)
   end
 
   private

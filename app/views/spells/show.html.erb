@@ -1,39 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @spell.print_name %>
-</p>
-
-<p>
-  <strong>Level:</strong>
-  <%= @spell.print_level %>
-</p>
-
-<p>
-  <strong>School:</strong>
-  <%= @spell.print_school %>
-</p>
-
-<p>
-  <strong>Casting time:</strong>
-  <%= @spell.print_casting_time(include_label=false) %>
-</p>
-
-<p>
-  <strong>Range:</strong>
-  <%= @spell.print_range(include_label=false) %>
-</p>
-
-<p>
-  <strong>Duration:</strong>
-  <%= @spell.print_duration(include_label=false) %>
-</p>
-
-<p>
-  <strong>Description:</strong>
-  <%= @spell.print_description %>
-</p>
+<%= simple_format(@spell.print) %>
 
 <%= link_to 'Edit', edit_spell_path(@spell) %> |
 <%= link_to 'Back', spells_path %>

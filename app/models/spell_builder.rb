@@ -32,13 +32,13 @@ class SpellBuilder
 # PREPARE BLOCKS FOR PARSING #
 ##############################
 
-  def self.build_spells(text, source_id, num_cols)
+  def self.build_spells(text, source, num_cols)
     blocks = self.build_spell_blocks(text, source_id, num_cols)
     spells_and_attrs = blocks.map do |block|
       self.initialize_block_parse(block)
     end
     spells_and_attrs.map do |spell_attrs|
-      self.compose_spell_from_attrs(spell_attrs, source_id)
+      self.compose_spell_from_attrs(spell_attrs, source)
     end
   end
 
@@ -48,8 +48,8 @@ class SpellBuilder
     self.seperate_blocks(text)
   end
 
-  def self.compose_spell_from_attrs(spell_attrs, source_id)
-    spell_attrs.merge!(:source_id => source_id)
+  def self.compose_spell_from_attrs(spell_attrs, source)
+    spell_attrs.merge!({:source_id => source.id, :source_name => source.name)
     Spell.new(spell_attrs)
   end
 

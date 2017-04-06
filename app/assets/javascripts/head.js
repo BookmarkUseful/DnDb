@@ -23,7 +23,7 @@ var ready = function(){
     renderCallback : render,
     selectCallback : select,
     minQueryLength : 2,
-    maxResults     : 5
+    maxResults     : 10
   })
 
 

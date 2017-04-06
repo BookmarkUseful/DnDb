@@ -1,7 +1,38 @@
-<p id="notice"><%= notice %></p>
+<div class="top">
+  <div class="main-header-container">
+    <%= link_to spells_path, :class => 'top-link' do %>
+      <h1 class="top-header"><%=@spell.name%></h1>
+    <% end %>
+  </div>
+</div>
 
-<div class="show-background">
-  <%= simple_format(@spell.print) %>
+<div id="index-container">
+  <table>
+    <tbody>
+      <tr>
+        <td colspan=2><%=@spell.print_level_school%></td>
+      </tr>
+      <tr>
+        <td>Source</td>
+        <td><%="#{@spell.source.name} (#{@spell.source.kind})"%></td>
+      </tr>
+      <tr>
+        <td>Range</td>
+        <td><%=@spell.print_range(false)%></td>
+      </tr>
+      <tr>
+        <td>Casting Time</td>
+        <td><%=@spell.print_casting_time(false)%></td>
+      </tr>
+      <tr>
+        <td>Duration</td>
+        <td><%=@spell.print_duration(false)%></td>
+      </tr>
+      <tr>
+        <td colspan=2><%=simple_format(@spell.print_description)%></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 

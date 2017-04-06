@@ -12,6 +12,7 @@ class Spell < ActiveRecord::Base
   SecondsInMinute = 60
   SecondsInRound  = 6
   SecondsInAction = 6
+  FeetInMile      = 5280
   MIN_LEVEL = 0
   MAX_LEVEL = 9
 
@@ -215,7 +216,11 @@ class Spell < ActiveRecord::Base
     r = self.range
     lbl = include_label ? "Range: " : nil
     return "#{lbl}#{RangeMapping[r]}" if RangeMapping[r].present?
-    "#{lbl}#{r} feet"
+    if r != 0 && r % FeetInMile == 0
+      "#{lbl}#{r/FeetInMile} mile(s)"
+    else
+      "#{lbl}#{r} feet"
+    end
   end
 
   def print_components(include_label=true)

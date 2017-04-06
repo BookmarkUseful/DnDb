@@ -156,12 +156,13 @@ class Spell < ActiveRecord::Base
   end
 
   def print_level_school
+    ritual = self.ritual? ? " (ritual)" : ""
     level_line = print_level
     school_line = print_school
     if level_line == "Cantrip" then
-      return "#{school_line.titleize} #{level_line}"
+      return "#{school_line.titleize} #{level_line}#{ritual}"
     else
-      return "#{level_line} #{school_line}"
+      return "#{level_line} #{school_line}#{ritual}"
     end
   end
 
@@ -225,7 +226,8 @@ class Spell < ActiveRecord::Base
 
   def print_duration(include_label=true)
     d = self.duration
-    lbl = include_label ? "Duration:" : nil
+    lbl = include_label ? "Duration:" : ""
+    lbl += self.concentration? ? " Concentration, up to" : ""
     return "#{lbl} #{TimeMapping[d]}" if TimeMapping[d].present?
     if (d % SecondsInDay == 0) && (d / SecondsInDay > 1) then
       return "#{lbl} #{d / SecondsInDay} days"

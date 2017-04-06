@@ -164,7 +164,7 @@ class SpellBuilder
 #################
 
   def self.initialize_block_parse(block)
-  	lines = block.split("\n").reject{|line| line.empty?}
+  	lines = block.gsub("\t", "\s").split("\n").reject{|line| line.empty?}
   	results = {}
 
   	ATTRIBUTES_TO_COLLECT.each do |attribute|

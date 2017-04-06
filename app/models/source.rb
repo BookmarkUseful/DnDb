@@ -10,8 +10,9 @@ class Source < ActiveRecord::Base
   Kinds = {
     :core => 0,
     :supplement => 1,
-    :unearthed_arcana => 2,
-    :homebrew => 3
+    :module => 2,
+    :unearthed_arcana => 3,
+    :homebrew => 4
   }
 
   enum :kind => Kinds unless instance_methods.include? :kind
@@ -46,12 +47,12 @@ class Source < ActiveRecord::Base
 
   # @return [String] the relative path of the source pdfs
   def filepath
-    SOURCE_DIRECTORY + self.filename
+    "#{SOURCE_DIRECTORY}#{self.kind.snakecase}/#{self.filename}"
   end
 
   # @return [String] the snakecased filename
   def filename
-    self.name.snakecase + ".pdf"
+    "#{self.name.snakecase}.pdf"
   end
 
   # @return [PDF::Reader] parsed source pdf

@@ -6,7 +6,7 @@ class SourcesController < ApplicationController
   end
 
   def index
-    @sources = Source.all
+    @sources = Source.order(:kind)
     @new_sources = Dir.entries(Source::SOURCE_DIRECTORY).select do |filename|
       filename.end_with?(".pdf")
     end

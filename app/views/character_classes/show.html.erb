@@ -1,8 +1,13 @@
-<p id="notice"><%= notice %></p>
-<div class="main-header-container">
-  <%= link_to character_class_path(@character_class) do %>
-    <h1 class="main-header"><%= @character_class.name %></h1>
-  <% end %>
+<div class="artwork-fade head-artwork">
+  <%= image_tag("character_classes/#{@character_class.name.snakecase}_artwork1.png", :class => "artwork") %>
+</div>
+
+<div class="top">
+  <div class="main-header-container">
+    <%= link_to character_classes_path, :class => 'top-link' do %>
+      <h1 class="top-header"><%=@character_class.name%></h1>
+    <% end %>
+  </div>
 </div>
 
 <div class="description-container">

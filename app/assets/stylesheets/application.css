@@ -86,27 +86,6 @@ div.crystal-search-input-container {
   margin-left: 10px;
 }
 
-.ui-menu {
-	position: fixed;
-	list-style: none;
-	background-color: #262626;
-	z-index: 10;
-	width: 460px;
-	line-height: 140%;
-	font-size: 16px;
-  font-family: "Trebuchet MS";
-	padding: 5px 0;
-}
-
-.ui-menu-item {
-	padding: 10px;
-  color: lightgrey;
-}
-
-.ui-helper-hidden-accessible {
-  display: none;
-}
-
 .crystal-search-input:focus {
   outline: 0;
 }
@@ -173,8 +152,7 @@ img.sidebar-scroll-image:hover {
 }
 
 div.top {
-  height:160px;
-  /*background-image: url('spell_artwork.jpeg');*/
+  height: 160px;
   z-index: 0;
 }
 

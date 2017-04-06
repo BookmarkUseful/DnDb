@@ -92,6 +92,10 @@ class Spell < ActiveRecord::Base
   validates :description,
             :presence => true
 
+  def to_param
+    permalink
+  end
+
   ##########
   # SCOPES #
   ##########

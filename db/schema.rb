@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170406211555) do
+ActiveRecord::Schema.define(version: 20170406220545) do
 
   create_table "authors", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean  "trusted"
+    t.string   "permalink"
   end
 
   create_table "character_classes", force: :cascade do |t|
@@ -26,6 +27,7 @@ ActiveRecord::Schema.define(version: 20170406211555) do
     t.datetime "updated_at",  null: false
     t.integer  "source_id"
     t.text     "description"
+    t.string   "permalink"
   end
 
   add_index "character_classes", ["name"], name: "index_character_classes_on_name", unique: true
@@ -43,6 +45,7 @@ ActiveRecord::Schema.define(version: 20170406211555) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
     t.integer  "rarity",     default: 0
+    t.string   "permalink"
   end
 
   create_table "sources", force: :cascade do |t|
@@ -55,6 +58,7 @@ ActiveRecord::Schema.define(version: 20170406211555) do
     t.string   "link"
     t.boolean  "indexed",      default: false
     t.string   "abbreviation"
+    t.string   "permalink"
   end
 
   add_index "sources", ["author_id"], name: "index_sources_on_author_id"
@@ -75,6 +79,7 @@ ActiveRecord::Schema.define(version: 20170406211555) do
     t.integer  "source_id"
     t.integer  "parent_school"
     t.string   "source_name"
+    t.string   "permalink"
   end
 
   add_index "spells", ["name"], name: "index_spells_on_name", unique: true

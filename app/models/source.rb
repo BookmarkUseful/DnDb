@@ -19,6 +19,10 @@ class Source < ActiveRecord::Base
 
   enum :kind => Kinds unless instance_methods.include? :kind
 
+  def to_param
+    permalink
+  end
+
 ##########
 # SCOPES #
 ##########

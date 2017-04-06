@@ -1,6 +1,8 @@
 <p id="notice"><%= notice %></p>
 
-<%= simple_format(@spell.print) %>
+<div class="show-background">
+  <%= simple_format(@spell.print) %>
+</div>
 
-<%= link_to 'Edit', edit_spell_path(@spell) %> |
+
 <%= link_to 'Back', spells_path %>

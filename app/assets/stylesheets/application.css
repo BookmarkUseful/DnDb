@@ -442,3 +442,9 @@ div.child {
   width: 100%;
   overflow: hidden;
 }
+
+.show-background {
+  background-image:url("assets/parchment.jpeg");
+  height:100%;
+  width:100%
+}

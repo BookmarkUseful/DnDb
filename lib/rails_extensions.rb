@@ -14,6 +14,16 @@ class String
         .downcase
   end
 
+  def to_permalink
+    self.gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2')
+        .gsub(/([a-z\d])([A-Z])/,'\1_\2')
+        .tr('-', '_')
+        .gsub(/\s/, '-')
+        .gsub(/__+/, '-')
+        .delete("\"\'")
+        .downcase
+  end
+
 end
 
 class Array

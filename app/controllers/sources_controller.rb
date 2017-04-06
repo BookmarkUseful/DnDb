@@ -1,4 +1,5 @@
 class SourcesController < ApplicationController
+  before_action :set_source, only: [:show]
   before_action :set_icon_color
 
   def set_icon_color
@@ -12,11 +13,10 @@ class SourcesController < ApplicationController
     end
   end
 
-  def new
-    @authors = Author.all
-    @source = Source.new
-  end
+  private
 
-
+    def set_source
+      @source = Source.find_by_permalink(params[:id])
+    end
 
 end

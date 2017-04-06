@@ -1,33 +1,21 @@
 require 'soulmate/server'
 
 Rails.application.routes.draw do
-
-  get 'welcome/index'
-
-  resources :items
-
-  # root :to => "items#index"
-  # root :to => "spells#index"
-
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
+  get  'welcome/index'
   root 'welcome#index'
 
-  resources :crystal_search do
-    member do
-      get 'index'
-    end
-  end
+  resources :items
 
   resources :sources do
     collection do
       get 'index'
-      get 'new'
     end
     member do
-      post 'create'
+      get ':id' => 'sources#show'
     end
   end
 

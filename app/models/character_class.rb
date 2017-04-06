@@ -7,6 +7,10 @@ class CharacterClass < ActiveRecord::Base
 
   IMAGE_DIR = "app/assets/character_classes/"
 
+  def to_param
+    permalink
+  end
+
 ##########
 # SCOPES #
 ##########

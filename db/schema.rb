@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170406220545) do
+ActiveRecord::Schema.define(version: 20170420212258) do
 
   create_table "authors", force: :cascade do |t|
     t.string   "name"
@@ -23,11 +23,15 @@ ActiveRecord::Schema.define(version: 20170406220545) do
 
   create_table "character_classes", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
     t.integer  "source_id"
     t.text     "description"
     t.string   "permalink"
+    t.integer  "hit_die",       limit: 1
+    t.string   "saving_throws"
+    t.string   "spell_slots"
+    t.integer  "spell_ability", limit: 1
   end
 
   add_index "character_classes", ["name"], name: "index_character_classes_on_name", unique: true
@@ -36,6 +40,13 @@ ActiveRecord::Schema.define(version: 20170406220545) do
   create_table "character_classes_spells", id: false, force: :cascade do |t|
     t.integer "character_class_id", null: false
     t.integer "spell_id",           null: false
+  end
+
+  create_table "class_features", force: :cascade do |t|
+    t.string  "name"
+    t.text    "description"
+    t.integer "level",              limit: 1
+    t.integer "character_class_id",           null: false
   end
 
   create_table "items", force: :cascade do |t|
@@ -84,5 +95,17 @@ ActiveRecord::Schema.define(version: 20170406220545) do
 
   add_index "spells", ["name"], name: "index_spells_on_name", unique: true
   add_index "spells", ["source_id"], name: "index_spells_on_source_id"
+
+  create_table "subclass_features", force: :cascade do |t|
+    t.string  "name"
+    t.text    "description"
+    t.integer "level",       limit: 1
+    t.integer "subclass_id",           null: false
+  end
+
+  create_table "subclasses", force: :cascade do |t|
+    t.string  "name"
+    t.integer "character_class_id", null: false
+  end
 
 end

@@ -151,6 +151,10 @@ img.sidebar-scroll-image:hover {
   -ms-transform: rotate(45deg);
 }
 
+img.sidebar-scroll-image:active {
+  filter: brightness(70%);
+}
+
 div.top {
   height: 160px;
   z-index: 0;

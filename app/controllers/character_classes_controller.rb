@@ -12,6 +12,7 @@ class CharacterClassesController < ApplicationController
 
   def show
     @spells = @character_class.spells.group_by{ |spell| spell.level }
+    @features = @character_class.features
   end
 
   private

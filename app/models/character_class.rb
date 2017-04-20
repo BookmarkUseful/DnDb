@@ -4,6 +4,8 @@ class CharacterClass < ActiveRecord::Base
 
   belongs_to :source
   has_and_belongs_to_many :spells
+  has_many :features, :class_name => "ClassFeature"
+  has_many :subclasses
 
   IMAGE_DIR = "app/assets/character_classes/"
 

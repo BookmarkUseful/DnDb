@@ -23,4 +23,17 @@ module Dnd
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
   end
+
+  Abilities = {
+    :strength     => 0,
+    :dexterity    => 1,
+    :consitution  => 2,
+    :wisdom       => 3,
+    :intelligence => 4,
+    :charisma     => 5
+  }
+
+  MaxCharacterLevel = 20
+  MinCharacterLevel = 1
+  
 end

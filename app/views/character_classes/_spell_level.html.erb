@@ -6,7 +6,11 @@ spells = level_and_spells.last
 <br>
 <% spells.each do |spell| %>
   <%= link_to spell_path(spell), :target => '_blank' do %>
-    <%= spell.print_name %>
+    <% if spell.source_name == "PHB" %>
+      <%= spell.print_name %>
+    <% else %>
+        <%= "#{spell.print_name} (#{spell.source_name})" %>
+    <% end %>
   <% end %>
   <br>
 <% end %>

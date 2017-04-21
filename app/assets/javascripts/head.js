@@ -19,7 +19,7 @@ var ready = function(){
 
   $('#crystal-search').soulmate({
     url: '/autocomplete/search',
-    types: ['spells', 'classes', 'sources'],
+    types: ['spells', 'classes', 'sources', 'class_features'],
     renderCallback : render,
     selectCallback : select,
     minQueryLength : 2,

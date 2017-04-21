@@ -2,7 +2,9 @@
 level = level_and_spells.first
 spells = level_and_spells.last
 %>
-<strong><%= Spell.print_level(level) %></strong>
+<div class="class-spell-level">
+  <strong><%= Spell.print_level(level) %></strong>
+</div>
 <br>
 <% spells.each do |spell| %>
   <%= link_to spell_path(spell), :target => '_blank' do %>

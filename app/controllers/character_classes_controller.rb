@@ -12,7 +12,7 @@ class CharacterClassesController < ApplicationController
 
   def show
     @spells = @character_class.spells.order("level").group_by{ |spell| spell.level }
-    @features = @character_class.features
+    @features = @character_class.features.order("level")
   end
 
   private

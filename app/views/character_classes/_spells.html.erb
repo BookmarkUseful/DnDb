@@ -1,12 +1,9 @@
-<div class="list-header-container">
-  <h3 class ="list-header">Spells</h3>
-</div>
 <div class="class-spells-container">
-<div class="four-columns">
-  <%=
-  render :partial => 'spell_level',
-         :collection => spells.to_a,
-         :as => :level_and_spells
-  %>
-</div>
+  <div class="four-columns">
+    <%=
+    render :partial => 'spell_level',
+           :collection => spells.to_a,
+           :as => :level_and_spells
+    %>
+  </div>
 </div>

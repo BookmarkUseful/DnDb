@@ -11,13 +11,23 @@
 </div>
 
 <div class="description-container">
-  <%= @character_class.description %>
+  <div class="description">
+    <%= @character_class.description %>
+  </div>
 </div>
 
-<% unless @features.empty? %>
-  <%= render :partial => 'feature', :collection=> @features %>
+<% if @features.any? %>
+  <div class="list-header-container">
+    <h3 class="list-header">Class Features</h3>
+  </div>
+  <div class="features-container">
+    <%= render :partial => 'feature', :collection=> @features %>
+  </div>
 <% end %>
 
-<% unless @spells.empty? %>
+<% if @spells.any? %>
+  <div class="list-header-container">
+    <h3 class ="list-header">Spells</h3>
+  </div>
   <%= render :partial => 'spells', :object => @spells %>
 <% end %>

@@ -24,6 +24,11 @@ class String
         .downcase
   end
 
+  # Renders string in html with markdown formatting
+  def markdown
+    Redcarpet::Markdown.new(Redcarpet::Render::HTML).render(self)
+  end
+
 end
 
 class Array

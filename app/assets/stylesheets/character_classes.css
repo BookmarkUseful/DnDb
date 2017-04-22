@@ -7,10 +7,8 @@ h3.list-header {
   padding-top: 10px;
   padding-bottom: 10px;
   font-family: "Trebuchet MS";
-  font-size: 20px;
-  background-color: black;
+  font-size: 30px;
   color: white;
-  font-size: 14px;
   margin: 0 auto;
 }
 
@@ -57,12 +55,24 @@ div.features-container {
 }
 
 h4.text-chunk-title {
-  margin-top: 5px;
+  margin-top: 30px;
   margin-bottom: 5px;
   border-bottom: 1px solid #cccccc;
   text-align: justify;
+  font-weight: normal;
   font-family: "Trebuchet MS";
-  font-size: 18px;
+  font-size: 20px;
+  color: white;
+}
+
+h5 {
+  margin-top: 5px;
+  margin-bottom: 0;
+  text-align: justify;
+  font-family: "Trebuchet MS";
+  font-size: 16px;
+  font-style: italic;
+  font-weight: normal;
   color: white;
 }
 

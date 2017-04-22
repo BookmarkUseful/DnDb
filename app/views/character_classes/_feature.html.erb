@@ -2,5 +2,5 @@
   <%= "#{feature.name} (Level #{feature.level})" %>
 </h4>
 <div class="text-chunk">
-  <%= simple_format(feature.description) %>
+  <%= simple_format(feature.description.markdown) %>
 </div>

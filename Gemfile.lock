@@ -130,6 +130,7 @@ GEM
     rake (12.0.0)
     rb-readline (0.5.4)
     rdoc (4.3.0)
+    redcarpet (3.4.0)
     redis (3.3.3)
     ruby-rc4 (0.1.5)
     sass (3.4.23)
@@ -193,6 +194,7 @@ DEPENDENCIES
   rack-contrib
   rails (= 4.2.6)
   rb-readline
+  redcarpet
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   soulmate

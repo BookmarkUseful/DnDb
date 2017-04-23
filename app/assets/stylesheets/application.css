@@ -198,9 +198,9 @@ body {
 }
 
 div.four-columns {
-  -webkit-columns: 70px 4; /* Chrome, Safari, Opera */
-  -moz-columns: 70px 4; /* Firefox */
-  columns: 70px 4;
+  -webkit-columns: 4; /* Chrome, Safari, Opera */
+  -moz-columns: 4; /* Firefox */
+  columns: 4;
 }
 
 

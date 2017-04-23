@@ -2,17 +2,18 @@
 level = level_and_spells.first
 spells = level_and_spells.last
 %>
-<div class="class-spell-level">
-  <strong><%= Spell.print_level(level) %></strong>
-</div>
-<br>
-<% spells.each do |spell| %>
-  <%= link_to spell_path(spell), :target => '_blank' do %>
-    <% if spell.source_name == "PHB" %>
-      <%= spell.print_name %>
-    <% else %>
-        <%= "#{spell.print_name} (#{spell.source_name})" %>
+<h4 class="text-chunk-title">
+  <%= Spell.print_level(level) %>
+</h4>
+<div class="text-chunk">
+  <% spells.each do |spell| %>
+    <%= link_to spell_path(spell), :target => '_blank' do %>
+      <% if spell.source_name == "PHB" %>
+        <%= spell.print_name %>
+      <% else %>
+          <%= "#{spell.print_name} (#{spell.source_name})" %>
+      <% end %>
     <% end %>
+    <br>
   <% end %>
-  <br>
-<% end %>
+</div>

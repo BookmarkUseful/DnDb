@@ -17,17 +17,19 @@
 </div>
 
 <% if @features.any? %>
-  <div class="list-header-container">
-    <h3 class="list-header">Class Features</h3>
+  <div class="aspect-header-container">
+    <h3 class="aspect-header">Class Features</h3>
   </div>
-  <div class="features-container">
+  <div class="aspect-container two-cols">
     <%= render :partial => 'feature', :collection=> @features %>
   </div>
 <% end %>
 
 <% if @spells.any? %>
-  <div class="list-header-container">
-    <h3 class ="list-header">Spells</h3>
+  <div class="aspect-header-container">
+    <h3 class ="aspect-header">Spells</h3>
   </div>
-  <%= render :partial => 'spells', :object => @spells %>
+  <div class="aspect-container four-cols">
+    <%= render :partial => 'spells', :object => @spells %>
+  </div>
 <% end %>

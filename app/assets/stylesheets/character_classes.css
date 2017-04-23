@@ -1,8 +1,8 @@
-div.list-header-container {
+div.aspect-header-container {
   background-color: black;
 }
 
-h3.list-header {
+h3.aspect-header {
   padding-left: 50px;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -18,49 +18,38 @@ div.description-container {
   width: 100%;
   font-family: "Trebuchet MS";
   font-size: 20px;
-  background-color: black;
+  background-color: #262626;
   color: white;
   font-size: 14px;
 }
 
 div.description {
   padding-left:50px;
-  font-size: 20px;
+  font-size: 16px;
   font-family: "Georgia";
-}
-
-div.class-spells-container {
-  font-family: "Georgia";
-  background-color: white;
-  padding: 10px;
-  margin: 0px;
+  font-style: italic;
 }
 
 div.class-spells-container a {
   text-decoration: none;
-  color: black;
+  color: white;
   cursor: pointer;
 }
 
-div.class-spell-level {
-  margin-top: 5px;
-  margin-bottom: 5px;
-  border-bottom: 1px solid black;
-}
-
-div.features-container {
+div.aspect-container {
   padding: 50px;
   background-color: #262626;
-
 }
 
 h4.text-chunk-title {
-  margin-top: 30px;
-  margin-bottom: 5px;
-  border-bottom: 1px solid #cccccc;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-bottom: 1px solid #ff8c1a;
   text-align: justify;
   font-weight: normal;
-  font-family: "Trebuchet MS";
+  font-family: "Georgia";
   font-size: 20px;
   color: white;
 }
@@ -77,8 +66,18 @@ h5 {
 }
 
 div.text-chunk {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 10px;
+  margin-right: 10px;
   text-align: justify;
   font-family: "Trebuchet MS";
   font-size: 14px;
   color: white;
+}
+
+div.two-cols {
+  -moz-column-count: 2;
+  -webkit-column-count: 2;
+  column-count: 2;
 }

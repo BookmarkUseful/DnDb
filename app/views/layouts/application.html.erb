@@ -7,12 +7,84 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <%= render "layouts/navigation" %>
+  <div id="menu" class="menu">
+    <%=image_tag "icons/dragon.png", :class => "sidebar-dragon" %>
+    <%=link_to "HOME",      welcome_index_path,     :class => "home-link"%>
+    <%=link_to "CLASSES",   character_classes_path, :class => "classes-link"%>
+    <%=link_to "SPELLS",    spells_path,            :class => "spells-link"%>
+    <%=link_to "ITEMS",     items_path,             :class => "items-link"%>
+    <%=link_to "SOURCES",   sources_path,           :class => "sources-link"%>
+    <%=link_to "MONSTERS",  welcome_index_path,     :class => "monsters-link"%>
+  </div>
+
   <div id="main">
-    <%= render "layouts/head" %>
+    <%
+      scroll_class = if @icon_color.present?
+        "icon " + @icon_color
+      else
+        "icon undefined-color"
+      end
+    %>
+
+    <div id="head" class="head">
+      <div class="centered">
+        <%=image_tag("icons/scroll.png", :class => scroll_class, :id => "menu-button") %>
+      </div>
+      <div class="centered">
+        <%=link_to "DNDb", welcome_index_path, :class => "dndb"%>
+      </div>
+      <div class="centered">
+        <%= form_tag do %>
+          <%= text_field_tag(
+            :search_phrase,
+            nil,
+            {
+              :id => "crystal-search",
+              :class => "crystal-search-input",
+              :placeholder => "...",
+              :autocomplete => :off
+            })
+          %>
+        <% end %>
+      </div>
+      <div class="crystal-results" id="crystal-results"></div>
+    </div>
     <div id="content">
       <%= yield %>
     </div>
   </div>
+</div>
+  <script>
+    $( "#menu-button" ).click(function() {
+      if (  $( this ).css( "transform" ) == 'none' ){
+        $(this).css("transform","rotate(22deg)");
+      } else {
+        $(this).css("transform","" );
+      }
+    });
+  </script>
+
+  <script>
+    var navOpen = false;
+    $("#head").on("click", "#menu-button", function() {
+      if (navOpen == true) {
+        closeNav();
+      } else {
+        openNav();
+      }
+    });
+
+    function openNav() {
+      $("#menu").css("width", "150px");
+      $("#main").css("marginLeft", "150px");
+      navOpen = true;
+    }
+
+    function closeNav() {
+      $("#menu").css("width", "0");
+      $("#main").css("marginLeft", "0");
+      navOpen = false;
+    }
+  </script>
 </body>
 </html>

@@ -1,0 +1,226 @@
+@import "bootstrap";
+@import "./globals.scss";
+@import "./main.scss";
+@import "./header.scss";
+@import "./menu.scss";
+@import "./soulmate.scss";
+
+#content {
+  padding-top: 75px;
+}
+
+div.top {
+  height: 160px;
+  z-index: 0;
+}
+
+div.main-header-container {
+  padding: 50px;
+  margin: 0px;
+}
+
+a.top-link {
+  display: inline-block;
+  vertical-align: middle;
+  text-decoration: none;
+}
+
+img.top-icon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 15px;
+  height: 60px;
+  width: 60px;
+}
+
+img.spell-icon:hover {
+  /* change colour red on hover */
+}
+
+h1.top-header {
+  display: inline-block;
+  vertical-align: middle;
+  color: black;
+  font-size: 32px;
+  font-family: "Georgia";
+}
+
+body {
+  margin: 0 auto;
+  background-color: white;
+  width: 100%;
+}
+
+div.four-columns {
+  -webkit-columns: 4; /* Chrome, Safari, Opera */
+  -moz-columns: 4; /* Firefox */
+  columns: 4;
+}
+
+
+table.index {
+  border-spacing: 0;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  color: black;
+  margin: 0px;
+}
+
+td a {
+  color: black;
+  text-decoration: none;
+}
+
+td.left {
+  padding-left: 10px;
+}
+
+th {
+  padding: 5px;
+  background-color: black;
+  font-family: 'Georgia';
+  color: white;
+}
+
+tr.parent-row {
+  height: 40px;
+  transition: 0.15s ease-in-out;
+}
+
+tr.odd {
+  background-color: white;
+}
+
+tr.even {
+  background-color: #f2f2f2;
+}
+
+.row {
+  height: 40px;
+  transition: 0.15s ease-in-out;
+}
+
+.cell {
+  font-size: 14px;
+}
+
+.centred {
+  text-align: center;
+}
+
+.parent-row.active, .parent-row:hover {
+  background-color: #cccccc;
+}
+
+.hidden-row {
+  display: none;
+  background-color: #cccccc;
+  width: 100%;
+  overflow: hidden;
+}
+
+.hidden-content {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+
+
+div.artwork-fade {
+  position: relative;
+  z-index: -1;
+  width: 70%;
+  float: right;
+}
+
+div.head-artwork {
+  height: 160px;
+}
+
+img.artwork {
+  width: 1000px;
+  position: absolute;
+  right: 0;
+}
+
+div.spell-advanced-search-container {
+  padding: 10px;
+  padding-left: 50px;
+  padding-right: 50px;
+  background-color: black;
+}
+
+div.advanced-search-drop {
+  height: 40px;
+  display: inline-block;
+  vertical-align: middle;
+  font-family: "Trebuchet MS";
+  font-size: 20px;
+  color: white;
+}
+
+.button {
+  background-color: black;
+  border: none;
+  color: white;
+  height: 100%;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Trebuchet MS";
+  transition: 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+.button:focus {
+  outline: 0;
+}
+.active {
+  background-color: #262626;
+}
+
+div.advanced-search-options {
+  border-top: solid #262626 1px;
+  border-bottom: solid #262626 1px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: white;
+  font-family: "Trebuchet MS";
+}
+
+table.spell-filter-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+tr.spell-filter-table-row td {
+  color: white;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-family: "Trebuchet MS";
+  vertical-align: top;
+}
+
+div.parent {
+  transition: 0.15s ease-in-out;
+}
+
+div.child {
+  transition: 0.15s ease-in-out;
+  display: none;
+  width: 100%;
+  overflow: hidden;
+}
+
+.show-background {
+  background-image:url("assets/parchment.jpeg");
+  height:100%;
+  width:100%
+}

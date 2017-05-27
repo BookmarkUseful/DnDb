@@ -1,9 +1,10 @@
-@import "bootstrap";
 @import "./globals.scss";
+@import "./character_classes.scss";
+@import "./menu.scss";
 @import "./main.scss";
 @import "./header.scss";
-@import "./menu.scss";
 @import "./soulmate.scss";
+@import "./welcome.scss";
 
 #content {
   padding-top: 75px;
@@ -217,10 +218,4 @@ div.child {
   display: none;
   width: 100%;
   overflow: hidden;
-}
-
-.show-background {
-  background-image:url("assets/parchment.jpeg");
-  height:100%;
-  width:100%
 }

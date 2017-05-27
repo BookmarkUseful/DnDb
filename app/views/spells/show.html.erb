@@ -1,8 +1,11 @@
-<div class="top">
-  <div class="main-header-container">
-    <%= link_to spells_path, :class => 'top-link' do %>
-      <h1 class="top-header"><%=@spell.name%></h1>
-    <% end %>
+<% content_for :head do %>
+  <link rel="canonical" href="<%= url_for(format: :html, only_path: false) %>" >
+  <link rel="amphtml" href="<%= url_for(format: :amp, only_path: false) %>" >
+<% end %>
+
+<div id="amp-name">
+  <div class="image" background-image="url(<%= asset_path(@artwork) %>)">
+    <h1><%= @spell.name %></h1>
   </div>
 </div>
 

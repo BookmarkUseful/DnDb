@@ -13,6 +13,14 @@ class CharacterClassesController < ApplicationController
   def show
     @spells = @character_class.spells.order("level").group_by{ |spell| spell.level }
     @features = @character_class.features.order("level")
+    @artwork = "character_classes/#{@character_class.name.snakecase}_artwork1.png"
+    if self.mobile?
+      return render :formats => [:amp]
+    end
+    respond_to do |format|
+      format.html
+      format.amp
+    end
   end
 
   private

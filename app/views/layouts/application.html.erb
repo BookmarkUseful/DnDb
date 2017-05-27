@@ -2,14 +2,16 @@
 <html>
 <head>
   <title>Dnd</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <%= stylesheet_link_tag    'application', media: 'all'%>
   <%= javascript_include_tag 'application'%>
-  <%= csrf_meta_tags %>
+
+  <%= yield :head %>
+  
 </head>
 <body>
   <div id="menu" class="menu">
     <%=image_tag "icons/dragon.png", :class => "sidebar-dragon" %>
-    <%=link_to "HOME",      welcome_index_path,     :class => "home-link"%>
     <%=link_to "CLASSES",   character_classes_path, :class => "classes-link"%>
     <%=link_to "SPELLS",    spells_path,            :class => "spells-link"%>
     <%=link_to "ITEMS",     items_path,             :class => "items-link"%>
@@ -25,7 +27,6 @@
         "icon undefined-color"
       end
     %>
-
     <div id="head" class="head">
       <div class="centered">
         <%=image_tag("icons/scroll.png", :class => scroll_class, :id => "menu-button") %>
@@ -34,20 +35,21 @@
         <%=link_to "DNDb", welcome_index_path, :class => "dndb"%>
       </div>
       <div class="centered">
-        <%= form_tag do %>
-          <%= text_field_tag(
-            :search_phrase,
-            nil,
-            {
-              :id => "crystal-search",
-              :class => "crystal-search-input",
-              :placeholder => "...",
-              :autocomplete => :off
-            })
-          %>
-        <% end %>
+        <div class="search-container">
+          <%= form_tag do %>
+            <%= text_field_tag(
+              :search_phrase,
+              nil,
+              {
+                :id => "crystal-search",
+                :class => "crystal-search",
+                :placeholder => "...",
+                :autocomplete => :off
+              })
+            %>
+          <% end %>
+        </div>
       </div>
-      <div class="crystal-results" id="crystal-results"></div>
     </div>
     <div id="content">
       <%= yield %>

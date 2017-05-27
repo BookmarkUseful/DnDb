@@ -29,6 +29,9 @@ gem 'soulmate', :require => 'soulmate/server'
 # add markdown formatting for long form descriptions
 gem "redcarpet"
 
+# add browser to detect device sending requests
+gem "browser"
+
 # Use jquery as the JavaScript library
 gem 'jquery-rails', "~> 2.3.0"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder

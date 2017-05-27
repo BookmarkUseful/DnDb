@@ -1,0 +1,39 @@
+<% content_for :head do %>
+  <title><%= "#{@character_class.name} on DNDb" %></title>
+  <!-- TODO: Fill out later -->
+  <script type="application/ld+json"></script> 
+  <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
+<% end %>
+
+<div id="amp-name">
+  <div class="image">
+    <h1><%= @character_class.name %></h1>
+  </div>
+</div>
+<div id="amp-content">
+  <p class="short-blurb"><%= @character_class.description %></p>
+  <amp-accordion>
+    <section>
+      <h3 class="section-name">Description</h3>
+      <div>
+        <p>In here goes the more long-winded explanation of the class. Includes examples and such from book.</p>
+      </div>
+    </section>
+    <section>
+      <h3 class="section-name">Class Features</h3>
+      <div>
+        <amp-accordion class="inner">
+          <% @character_class.features.each do |f| %>
+            <section>
+              <h4 class="feature-name"><%= "#{f.name} (Level #{f.level})" %></h4>
+              <div>
+                <%= simple_format(f.description.markdown) %>
+              </div>
+            </section>
+          <% end %>
+        </amp-accordion>
+      </div>
+    </section>
+  </amp-accordion>
+  
+</div>

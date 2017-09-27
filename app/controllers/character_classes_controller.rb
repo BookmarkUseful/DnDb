@@ -8,6 +8,10 @@ class CharacterClassesController < ApplicationController
 
   def index
     @classes = CharacterClass.all
+    respond_to do |format|
+      format.html
+      format.json { render :json => @classes.to_json }
+    end
   end
 
   def show

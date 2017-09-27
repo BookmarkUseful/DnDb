@@ -1,6 +1,7 @@
 <head>
-  <%= stylesheet_link_tag "application.scss", media: "all" %>
-  <style type="text/scss">
+  <%= stylesheet_link_tag "application", :media => "all" %>
+  <%= javascript_include_tag 'application'%>
+  <style type="text/css">
     body {
       height: 100%;
     }
@@ -16,26 +17,36 @@
     }
 
     .welcome-centered-content {
+      box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+      background-color: black;
+      padding: 10px;
       position: fixed;
       top: 50%;
       left: 50%;
       /* bring your own prefixes */
       transform: translate(-50%, -50%);
+    }
 
-      .welcome-title {
-        text-align: center;
-      }
+    .welcome-title {
+      margin-top: 5px;
+      text-align: center;
+      width: 500;
+      color: white;
+    }
 
-      search-container {
-        align: center;
-      }
+    .search-container {
+      margin-bottom: 5px;
+    }
+
+    .welcome-title {
+      color: white;
+      width: 500;
     }
   </style>
 </head>
 
-
 <div class="welcome-background" style="background-image:url(<%=image_path('home.jpg')%>">
-  <div class="welcome-centered-content">
+  <div class="welcome-centered-content img-rounded">
     <h1 class="welcome-title">DNDb</h1>
     <div class="search-container">
       <%= form_tag do %>

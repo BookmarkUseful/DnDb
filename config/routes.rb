@@ -8,6 +8,19 @@ Rails.application.routes.draw do
   get  'welcome/index'
   root 'welcome#index'
 
+  namespace :api do
+    resources :spells, :only => [:index, :show, :create, :update, :destroy] do
+    end
+    resources :character_classes, :only => [:index] do
+    end
+    resources :items, :only => [:index] do
+    end
+    resources :sources, :only => [:index] do
+    end
+    resources :monsters, :only => [:index] do
+    end
+  end
+
   resources :items
 
   resources :sources do
@@ -25,6 +38,7 @@ Rails.application.routes.draw do
     end
     member do
       get ':id' => 'spells#show'
+      put ':id' => 'spells#update'
     end
   end
 

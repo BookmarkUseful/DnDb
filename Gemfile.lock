@@ -100,6 +100,7 @@ GEM
     rack-contrib (1.4.0)
       git-version-bump (~> 0.15)
       rack (~> 1.4)
+    rack-cors (1.0.1)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.3)
@@ -194,6 +195,7 @@ DEPENDENCIES
   nokogiri
   pdf-reader
   rack-contrib
+  rack-cors
   rails (= 4.2.6)
   rb-readline
   redcarpet

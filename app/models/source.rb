@@ -43,6 +43,15 @@ class Source < ActiveRecord::Base
     self.where('LOWER(name) LIKE :term', term: "%#{term.downcase}%")
   end
 
+  def api_form
+    {
+      :name => self.name,
+      :author => self.author,
+      :page_count => self.page_count,
+      :kind => self.kind
+    }
+  end
+
 ######################
 # READING SOURCE PDF #
 ######################

@@ -15,6 +15,3 @@
 //= require jquery_ujs
 //= require jquery.soulmate
 //= require_tree .
-
-console.log(`Width:  ${screen.width}`);
-console.log(`Height: ${screen.height}`);

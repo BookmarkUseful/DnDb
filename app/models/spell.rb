@@ -106,6 +106,7 @@ class Spell < ActiveRecord::Base
   scope :core, -> { joins(:source).where('sources.kind' => Source::Kinds[:core]) }
   scope :noncore, -> { joins(:source).where('sources.kind is not ?', Source::Kinds[:core]) }
   scope :homebrew, -> { joins(:source).where('sources.kind' => Source::Kinds[:homebrew]) }
+  scope :api, -> { select(:id, :name, :level, :school, :casting_time, :range, :duration, :description, :ritual, :concentration, :components, :source_name)}
 
   def searchable?
     true
@@ -125,6 +126,33 @@ class Spell < ActiveRecord::Base
 
   def self.icon
     image_path("spell_icon.png")
+  end
+
+  def api_form
+    {
+      :id => self.id,
+      :name => self.name,
+      :level => self.level,
+      :school => self.school,
+      :description => self.description,
+      :casting_time => self.casting_time,
+      :range => self.range,
+      :duration => self.duration,
+      :ritual => self.ritual,
+      :concentration => self.concentration,
+      :components => self.components,
+      :source_name => self.source_name,
+      :read_level => self.print_level,
+      :read_casting_time => self.print_casting_time(false),
+      :read_duration => self.print_duration(false),
+    }
+  end
+
+  def api_show
+    spell = self.api_form
+    spell[:source] = self.source.api_form
+    spell[:character_classes] = self.character_classes.map(&:api_form)
+    spell
   end
 
   ############

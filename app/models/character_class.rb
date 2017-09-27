@@ -20,6 +20,7 @@ class CharacterClass < ActiveRecord::Base
   scope :core, -> { joins(:sources).where('sources.core', true) }
   scope :noncore, -> { joins(:sources).where('sources.core', false) }
   scope :homebrew, -> { joins(:sources).where('sources.homebrew', true) }
+  scope :api, -> { select(:id, :name, :description, :hit_die, :saving_throws, :spell_ability, :spell_slots) }
 
   def searchable?
     true
@@ -33,9 +34,7 @@ class CharacterClass < ActiveRecord::Base
     IMAGE_DIR + self.image_name
   end
 
-  # Is this class a spellcaster? Ignores special subclasses that allow
-  # spellcasting.
-  def is_caster_by_default?
+  def is_caster?
     self.spells.any?
   end
 
@@ -53,6 +52,15 @@ class CharacterClass < ActiveRecord::Base
 
   def self.icon
     ActionController::Base.helpers.image_path("class_icon.png")
+  end
+
+  def api_form
+    {
+      name: self.name,
+      id: self.id,
+      description: self.description,
+      spellcasting: self.is_caster?
+    }
   end
 
   ############

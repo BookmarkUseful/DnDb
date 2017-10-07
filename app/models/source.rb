@@ -103,8 +103,7 @@ class Source < ActiveRecord::Base
   def load_into_soulmate
     loader = Soulmate::Loader.new("sources")
     loader.add("term" => self.name, "id" => self.id, "data" => {
-      "link" => Rails.application.routes.url_helpers.source_path(self)
-      # can add icon here!
+      "type" => "Source",
     })
   end
 

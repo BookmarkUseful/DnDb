@@ -75,10 +75,14 @@ class CharacterClass < ActiveRecord::Base
 
   def load_into_soulmate
     loader = Soulmate::Loader.new("classes")
+    src = self.source
     loader.add("term" => self.name, "id" => self.id, "data" => {
-      "link" => Rails.application.routes.url_helpers.character_class_path(self),
-      "source" => self.source.abbr
-      # can add icon here!
+      "type" => "Character Class",
+      "source" => {
+        "name" => src.name,
+        "abbreviation" => src.abbr,
+        "id" => src.id
+      }
     })
   end
 

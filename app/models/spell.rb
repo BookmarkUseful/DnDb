@@ -106,7 +106,7 @@ class Spell < ActiveRecord::Base
   scope :core, -> { joins(:source).where('sources.kind' => Source::Kinds[:core]) }
   scope :noncore, -> { joins(:source).where('sources.kind is not ?', Source::Kinds[:core]) }
   scope :homebrew, -> { joins(:source).where('sources.kind' => Source::Kinds[:homebrew]) }
-  scope :api, -> { select(:id, :name, :level, :school, :casting_time, :range, :duration, :description, :ritual, :concentration, :components, :source_name)}
+  scope :api, -> { select(:id, :name, :level, :school, :casting_time, :range, :duration, :description, :ritual, :concentration, :components, :source_name).order(:name) }
 
   def searchable?
     true
@@ -300,16 +300,20 @@ class Spell < ActiveRecord::Base
 
   def load_into_soulmate
     loader = Soulmate::Loader.new("spells")
+    src = self.source
   	loader.add("term" => self.name, "id" => self.id, "data" => {
-  		"link" => Rails.application.routes.url_helpers.spell_path(self),
-      "source" => self.source.abbr
-      # can add icon here!
+      "type" => "Spell",
+      "source" => {
+        "name" => src.name,
+        "abbreviation" => src.abbr,
+        "id" => src.id
+      }
     })
   end
 
   def remove_from_soulmate
 		loader = Soulmate::Loader.new("spells")
-	  loader.remove("id" => self.id)
+	  loader.remove(:id => self.id)
 	end
 
 end

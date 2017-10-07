@@ -8,10 +8,14 @@ class ClassFeature < ActiveRecord::Base
 
   def load_into_soulmate
     loader = Soulmate::Loader.new("class_features")
+    src = self.character_class.source
     loader.add("term" => self.name, "id" => self.id, "data" => {
-      "link" => Rails.application.routes.url_helpers.character_class_path(self.character_class),
-      "source" => self.character_class.source.abbr
-      # can add icon here!
+      "type" => "Class Feature",
+      "source" => {
+        "name" => src.name,
+        "abbreviation" => src.abbr,
+        "id" => src.id
+      }
     })
   end
 

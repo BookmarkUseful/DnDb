@@ -29,6 +29,7 @@ class Source < ActiveRecord::Base
 
   scope :indexed, -> { where(:indexed => 1) }
   scope :incomplete, -> { where(:indexed => 0) }
+  scope :api, -> { select(:name, :id, :page_count, :kind, :author_id) }
 
   def searchable?
     true

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170420212258) do
+ActiveRecord::Schema.define(version: 20171008180715) do
 
   create_table "authors", force: :cascade do |t|
     t.string   "name"
@@ -23,15 +23,16 @@ ActiveRecord::Schema.define(version: 20170420212258) do
 
   create_table "character_classes", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.integer  "source_id"
     t.text     "description"
     t.string   "permalink"
-    t.integer  "hit_die",       limit: 1
+    t.integer  "hit_die",          limit: 1
     t.string   "saving_throws"
     t.string   "spell_slots"
-    t.integer  "spell_ability", limit: 1
+    t.integer  "spell_ability",    limit: 1
+    t.text     "long_description"
   end
 
   add_index "character_classes", ["name"], name: "index_character_classes_on_name", unique: true

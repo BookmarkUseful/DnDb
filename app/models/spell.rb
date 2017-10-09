@@ -107,6 +107,7 @@ class Spell < ActiveRecord::Base
   scope :noncore, -> { joins(:source).where('sources.kind is not ?', Source::Kinds[:core]) }
   scope :homebrew, -> { joins(:source).where('sources.kind' => Source::Kinds[:homebrew]) }
   scope :api, -> { select(:id, :name, :level, :school, :casting_time, :range, :duration, :description, :ritual, :concentration, :components, :source_name).order(:name) }
+  scope :api_bundle, -> { select(:id, :name, :level, :school).order(:name) }
 
   def searchable?
     true

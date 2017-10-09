@@ -20,7 +20,7 @@ class CharacterClass < ActiveRecord::Base
   scope :core, -> { joins(:sources).where('sources.core', true) }
   scope :noncore, -> { joins(:sources).where('sources.core', false) }
   scope :homebrew, -> { joins(:sources).where('sources.homebrew', true) }
-  scope :api, -> { select(:id, :name, :description, :hit_die, :saving_throws, :spell_ability, :spell_slots) }
+  scope :api, -> { select(:id, :name, :description, :hit_die, :saving_throws, :spell_ability, :spell_slots, :features) }
 
   def searchable?
     true
@@ -47,7 +47,7 @@ class CharacterClass < ActiveRecord::Base
   end
 
   def self.search(term)
-    self.where('LOWER(name) LIKE :term', term: "%#{term.downcase}%")
+    self.where('LOWER(name) LIKE :term', :term => "%#{term.downcase}%")
   end
 
   def self.icon
@@ -59,8 +59,17 @@ class CharacterClass < ActiveRecord::Base
       name: self.name,
       id: self.id,
       description: self.description,
-      spellcasting: self.is_caster?
+      long_description: self.long_description,
+      spellcasting: self.is_caster?,
+      features: self.features
     }
+  end
+
+  def api_show
+    character_class = self.api_form
+    character_class[:source] = self.source.api_form
+    character_class[:spells] = self.spells.map(&:api_form).group_by{ |spell| spell[:level] }
+    character_class
   end
 
   ############

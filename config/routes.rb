@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   namespace :api do
     resources :spells, :only => [:index, :show, :create, :update, :destroy] do
     end
-    resources :character_classes, :only => [:index] do
+    resources :character_classes, :only => [:index, :show] do
     end
     resources :items, :only => [:index] do
     end

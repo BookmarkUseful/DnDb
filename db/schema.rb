@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171008180715) do
+ActiveRecord::Schema.define(version: 20171010005953) do
 
   create_table "authors", force: :cascade do |t|
     t.string   "name"
@@ -58,6 +58,12 @@ ActiveRecord::Schema.define(version: 20171008180715) do
     t.datetime "updated_at",             null: false
     t.integer  "rarity",     default: 0
     t.string   "permalink"
+  end
+
+  create_table "skills", force: :cascade do |t|
+    t.string  "name"
+    t.text    "description"
+    t.integer "ability",     limit: 1
   end
 
   create_table "sources", force: :cascade do |t|

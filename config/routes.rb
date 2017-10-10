@@ -19,6 +19,8 @@ Rails.application.routes.draw do
     end
     resources :monsters, :only => [:index] do
     end
+    resources :skills, :only => [:index] do
+    end
   end
 
   resources :items

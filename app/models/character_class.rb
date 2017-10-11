@@ -61,7 +61,8 @@ class CharacterClass < ActiveRecord::Base
       description: self.description,
       long_description: self.long_description,
       spellcasting: self.is_caster?,
-      features: self.features
+      features: self.features,
+      source: self.source.api_form
     }
   end
 
@@ -87,6 +88,7 @@ class CharacterClass < ActiveRecord::Base
     src = self.source
     loader.add("term" => self.name, "id" => self.id, "data" => {
       "type" => "Character Class",
+      "kind" => src.kind,
       "source" => {
         "name" => src.name,
         "abbreviation" => src.abbr,

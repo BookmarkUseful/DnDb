@@ -106,7 +106,7 @@ class Spell < ActiveRecord::Base
   scope :core, -> { joins(:source).where('sources.kind' => Source::Kinds[:core]) }
   scope :noncore, -> { joins(:source).where('sources.kind is not ?', Source::Kinds[:core]) }
   scope :homebrew, -> { joins(:source).where('sources.kind' => Source::Kinds[:homebrew]) }
-  scope :api, -> { select(:id, :name, :level, :school, :casting_time, :range, :duration, :description, :ritual, :concentration, :components, :source_name).order(:name) }
+  scope :api, -> { select(:id, :name, :level, :school, :casting_time, :range, :duration, :description, :ritual, :concentration, :components, :source_id).order(:name) }
   scope :api_bundle, -> { select(:id, :name, :level, :school).order(:name) }
 
   def searchable?
@@ -142,7 +142,7 @@ class Spell < ActiveRecord::Base
       :ritual => self.ritual,
       :concentration => self.concentration,
       :components => self.components,
-      :source_name => self.source_name,
+      :source => self.source.api_form,
       :read_level => self.print_level,
       :read_casting_time => self.print_casting_time(false),
       :read_duration => self.print_duration(false),
@@ -151,7 +151,6 @@ class Spell < ActiveRecord::Base
 
   def api_show
     spell = self.api_form
-    spell[:source] = self.source.api_form
     spell[:character_classes] = self.character_classes.map(&:api_form)
     spell
   end
@@ -304,6 +303,7 @@ class Spell < ActiveRecord::Base
     src = self.source
   	loader.add("term" => self.name, "id" => self.id, "data" => {
       "type" => "Spell",
+      "kind" => src.kind,
       "source" => {
         "name" => src.name,
         "abbreviation" => src.abbr,

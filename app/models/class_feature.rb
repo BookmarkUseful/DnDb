@@ -11,6 +11,7 @@ class ClassFeature < ActiveRecord::Base
     src = self.character_class.source
     loader.add("term" => self.name, "id" => self.id, "data" => {
       "type" => "Class Feature",
+      "kind" => src.kind,
       "source" => {
         "name" => src.name,
         "abbreviation" => src.abbr,

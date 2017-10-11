@@ -104,6 +104,7 @@ class Source < ActiveRecord::Base
   def load_into_soulmate
     loader = Soulmate::Loader.new("sources")
     loader.add("term" => self.name, "id" => self.id, "data" => {
+      "kind" => self.kind,
       "type" => "Source",
     })
   end

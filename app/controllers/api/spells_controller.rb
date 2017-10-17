@@ -55,8 +55,6 @@ class Api::SpellsController < ApplicationController
       CharacterClass.find(id)
     end if fields[:character_classes].present?
 
-    puts fields
-
     if @spell.update_attributes(fields)
       response = { :data => @spell.reload.api_show }
       render :status => 200, :json => response.to_json

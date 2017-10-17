@@ -152,6 +152,7 @@ class Spell < ActiveRecord::Base
   def api_show
     spell = self.api_form
     spell[:character_classes] = self.character_classes.map(&:api_form)
+    puts spell
     spell
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171010005953) do
+ActiveRecord::Schema.define(version: 20171011200310) do
 
   create_table "authors", force: :cascade do |t|
     t.string   "name"
@@ -23,20 +23,29 @@ ActiveRecord::Schema.define(version: 20171010005953) do
 
   create_table "character_classes", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.integer  "source_id"
     t.text     "description"
     t.string   "permalink"
-    t.integer  "hit_die",          limit: 1
+    t.integer  "hit_die",             limit: 1
     t.string   "saving_throws"
     t.string   "spell_slots"
-    t.integer  "spell_ability",    limit: 1
+    t.integer  "spell_ability",       limit: 1
     t.text     "long_description"
+    t.integer  "num_starting_skills"
   end
 
   add_index "character_classes", ["name"], name: "index_character_classes_on_name", unique: true
   add_index "character_classes", ["source_id"], name: "index_character_classes_on_source_id"
+
+  create_table "character_classes_skills", id: false, force: :cascade do |t|
+    t.integer "character_class_id", null: false
+    t.integer "skill_id",           null: false
+  end
+
+  add_index "character_classes_skills", ["character_class_id"], name: "index_character_classes_skills_on_character_class_id"
+  add_index "character_classes_skills", ["skill_id"], name: "index_character_classes_skills_on_skill_id"
 
   create_table "character_classes_spells", id: false, force: :cascade do |t|
     t.integer "character_class_id", null: false

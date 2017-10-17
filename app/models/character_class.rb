@@ -3,6 +3,7 @@ class CharacterClass < ActiveRecord::Base
 	before_destroy :remove_from_soulmate
 
   belongs_to :source
+  has_and_belongs_to_many :skills # starting proficiencies
   has_and_belongs_to_many :spells
   has_many :features, :class_name => "ClassFeature"
   has_many :subclasses
@@ -59,9 +60,10 @@ class CharacterClass < ActiveRecord::Base
       name: self.name,
       id: self.id,
       description: self.description,
+      hit_die: self.hit_die,
       long_description: self.long_description,
       spellcasting: self.is_caster?,
-      features: self.features,
+      features: self.features.order(:level),
       source: self.source.api_form
     }
   end

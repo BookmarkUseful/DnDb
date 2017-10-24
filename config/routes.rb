@@ -13,6 +13,8 @@ Rails.application.routes.draw do
     end
     resources :character_classes, :only => [:index, :show, :update] do
     end
+    resources :class_features, :only => [:show] do
+    end
     resources :items, :only => [:index] do
     end
     resources :sources, :only => [:index] do

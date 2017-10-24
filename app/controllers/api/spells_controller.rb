@@ -21,14 +21,6 @@ class Api::SpellsController < ApplicationController
     render :status => 200, :json => response.to_json
   end
 
-  # GET /api/spells/bundle
-  def bundle
-    spells = Spell.api_bundle
-    response = {
-      :data => spells,
-    }
-  end
-
   # GET /api/spells/:id
   def show
     response = {

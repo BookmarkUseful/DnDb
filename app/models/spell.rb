@@ -315,7 +315,7 @@ class Spell < ActiveRecord::Base
 
   def remove_from_soulmate
 		loader = Soulmate::Loader.new("spells")
-	  loader.remove(:id => self.id)
+	  loader.remove("id" => self.id)
 	end
 
 end

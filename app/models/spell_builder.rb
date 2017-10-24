@@ -33,7 +33,7 @@ class SpellBuilder
 ##############################
 
   def self.build_spells(text, source, num_cols)
-    blocks = self.build_spell_blocks(text, source_id, num_cols)
+    blocks = self.build_spell_blocks(text, source.id, num_cols)
     spells_and_attrs = blocks.map do |block|
       self.initialize_block_parse(block)
     end
@@ -49,7 +49,7 @@ class SpellBuilder
   end
 
   def self.compose_spell_from_attrs(spell_attrs, source)
-    spell_attrs.merge!({:source_id => source.id, :source_name => source.name)
+    spell_attrs.merge!({:source_id => source.id, :source_name => source.name})
     Spell.new(spell_attrs)
   end
 
@@ -94,14 +94,14 @@ class SpellBuilder
   end
 
   def self.flatten_text(page_texts, num_cols)
-    flattened_pages = if num_cols == 2
-                  page_texts.map do |page_text|
-                    self.flatten_two_columns(page_text)
-                  end
-                else
-                  page_texts.join("\n")
-                end
-    flattened_pages.join("\n")
+    if (num_cols == 2)
+      flattened_pages = page_texts.map do |page_text|
+                          self.flatten_two_columns(page_text).join("\n")
+                        end
+    else
+      flattened_pages = page_texts.join("\n")
+    end
+    flattened_pages
   end
 
   # split_two_columns assumes that there is always more than one space between

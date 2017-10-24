@@ -4,6 +4,17 @@ class ClassFeature < ActiveRecord::Base
 
   belongs_to :character_class
 
+  def api_show
+    char_class = self.character_class
+    {
+      :name => self.name,
+      :level => self.level,
+      :description => self.description,
+      :character_class => char_class.api_form,
+      :source => char_class.source.api_form
+    }
+  end
+
   private
 
   def load_into_soulmate

@@ -1,8 +1,12 @@
 class Source < ActiveRecord::Base
+
+  after_create :generate_images
   after_save :load_into_soulmate
   before_destroy :remove_from_soulmate
 
   SOURCE_DIRECTORY = "lib/sources/"
+  THUMBNAIL_DIRECTORY = "lib/thumbnails/"
+  ICON_DIRECTORY = "#{THUMBNAIL_DIRECTORY}icons/"
 
   belongs_to :author
   has_many :spells
@@ -71,6 +75,24 @@ class Source < ActiveRecord::Base
     "#{self.name.snakecase}.pdf"
   end
 
+  # Sources assume that the thumbnail is stored in the SOURCE_DIRECTORY and
+  # the filename is in snakecase with no apostrophes or quotations, with a
+  # jpg extension, determined by the string.snakecase method
+
+  # @return [String] the relative path of the source pdfs
+  def thumbnail_path
+    "#{THUMBNAIL_DIRECTORY}#{self.thumbnail_name}"
+  end
+
+  # @return [String] the snakecased filename
+  def thumbnail_name
+    "#{self.name.snakecase}.jpg"
+  end
+
+  def icon_path
+    "#{ICON_DIRECTORY}#{self.thumbnail_name}"
+  end
+
   # @return [PDF::Reader] parsed source pdf
   def pdf
     filepath = self.filepath
@@ -87,7 +109,7 @@ class Source < ActiveRecord::Base
 
   # @param  start_page [Integer] page number (from zero) from which to start
   # @param  end_page [Integer] page number (from zero) at which to end
-  # @param num_cols [Integer] number of columns on pages that present spells
+  # @param  num_cols [Integer] number of columns on pages that present spells
   # @return [Array<Spell>] unsaved spells grabbed from given page range
   # It is necessary to give the page range as its difficult to programmatically
   # determine where spells are in the book. It's easier to manually provide
@@ -97,6 +119,29 @@ class Source < ActiveRecord::Base
   def grab_spells(start_page, end_page, num_cols)
     spell_text = self.collect_text(start_page, end_page)
     SpellBuilder.build_spells(spell_text, self, num_cols)
+  end
+
+  # uses ImageMagick to generate an icon and thumbnail for the PDF based on
+  # the first page
+  # @return [Array<String>] array of pathes to new images
+  def generate_images
+    icon = self.generate_icon
+    thumbnail = self.generate_thumbnail
+    [icon, thumbnail]
+  end
+
+  def generate_icon
+    puts "Generating icon for #{self.name}..."
+    # command line ImageMagick conversion of pdf page to image
+    `convert #{self.filepath}[0] -resize 170x220 -background white -alpha remove #{self.icon_path} `
+    self.icon_path
+  end
+
+  def generate_thumbnail
+    puts "Generating thumbnail for #{self.name}..."
+    # command line ImageMagick conversion of pdf page to image
+    `convert #{self.filepath}[0] -resize 950x1100 -background white -alpha remove #{self.thumbnail_path}`
+    self.thumbnail_path
   end
 
   private

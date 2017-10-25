@@ -15,3 +15,7 @@ Finally, the search bar at the top of the page is a global autocompleting search
 ![Example 3](screens/e3.png)
 
 ![Example 4](screens/e4.png)
+
+External Dependencies:
+ * Global autcomplete is performed with an active Redis server
+ * `ImageMagick` is require for Source thumbnail generation from PDFs

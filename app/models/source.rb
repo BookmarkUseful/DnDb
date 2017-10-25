@@ -5,8 +5,8 @@ class Source < ActiveRecord::Base
   before_destroy :remove_from_soulmate
 
   SOURCE_DIRECTORY = "lib/sources/"
-  THUMBNAIL_DIRECTORY = "lib/thumbnails/"
-  ICON_DIRECTORY = "#{THUMBNAIL_DIRECTORY}icons/"
+  THUMBNAIL_DIRECTORY = "app/assets/images/sources/thumbnails/"
+  ICON_DIRECTORY = "app/assets/images/sources/icons/"
 
   belongs_to :author
   has_many :spells
@@ -53,7 +53,9 @@ class Source < ActiveRecord::Base
       :name => self.name,
       :author => self.author,
       :page_count => self.page_count,
-      :kind => self.kind
+      :kind => self.kind,
+      :image => image_url("sources/thumbnails/#{self.thumbnail_name}"),
+      :icon => image_url("sources/icon/#{self.thumbnail_name}"),
     }
   end
 
@@ -145,6 +147,10 @@ class Source < ActiveRecord::Base
   end
 
   private
+
+  def image_url(source)
+    ActionController::Base.helpers.image_url(source)
+  end
 
   def load_into_soulmate
     loader = Soulmate::Loader.new("sources")

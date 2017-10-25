@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     end
     resources :items, :only => [:index] do
     end
-    resources :sources, :only => [:index] do
+    resources :sources, :only => [:index, :show] do
     end
     resources :monsters, :only => [:index] do
     end

@@ -149,7 +149,7 @@ class Source < ActiveRecord::Base
   private
 
   def image_url(source)
-    ActionController::Base.helpers.image_url(source)
+    "http://0.0.0.0:3000#{ActionController::Base.helpers.image_url(source)}"
   end
 
   def load_into_soulmate

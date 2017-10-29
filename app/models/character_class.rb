@@ -43,7 +43,7 @@ class CharacterClass < ActiveRecord::Base
     self.source.name
   end
 
-  def source_kind
+  def kind
     self.source.kind
   end
 

@@ -5,6 +5,14 @@ class ApplicationController < ActionController::Base
 
   helper_method :mobile?
 
+  def default_url_options
+    if Rails.env.development?
+      {:host => "http://localhost:3000"}
+    else  
+      {}
+    end
+  end
+
   protected
 
    def mobile?

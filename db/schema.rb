@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171011200310) do
+ActiveRecord::Schema.define(version: 20171029210758) do
 
   create_table "authors", force: :cascade do |t|
     t.string   "name"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 20171011200310) do
     t.integer  "spell_ability",       limit: 1
     t.text     "long_description"
     t.integer  "num_starting_skills"
+    t.string   "subclass_descriptor"
   end
 
   add_index "character_classes", ["name"], name: "index_character_classes_on_name", unique: true
@@ -57,7 +58,10 @@ ActiveRecord::Schema.define(version: 20171011200310) do
     t.text    "description"
     t.integer "level",              limit: 1
     t.integer "character_class_id",           null: false
+    t.integer "subclass_id"
   end
+
+  add_index "class_features", ["subclass_id"], name: "index_class_features_on_subclass_id"
 
   create_table "items", force: :cascade do |t|
     t.string   "name"
@@ -122,6 +126,10 @@ ActiveRecord::Schema.define(version: 20171011200310) do
   create_table "subclasses", force: :cascade do |t|
     t.string  "name"
     t.integer "character_class_id", null: false
+    t.text    "description"
+    t.integer "source_id"
   end
+
+  add_index "subclasses", ["source_id"], name: "index_subclasses_on_source_id"
 
 end

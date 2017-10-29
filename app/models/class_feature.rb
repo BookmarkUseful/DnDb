@@ -3,14 +3,37 @@ class ClassFeature < ActiveRecord::Base
   before_destroy :remove_from_soulmate
 
   belongs_to :character_class
+  belongs_to :subclass
+
+  def is_subclass_feature?
+    self.subclass_id.present?
+  end
+
+  def is_class_feature?
+    self.subclass_id.nil?
+  end
+
+  def provider_class
+    if self.is_subclass_feature?
+      self.subclass
+    else
+      self.character_class
+    end
+  end
+
+  def kind
+    self.provider_class.kind
+  end
 
   def api_show
     char_class = self.character_class
+    s_class = self.subclass
     {
       :name => self.name,
       :level => self.level,
       :description => self.description,
       :character_class => char_class.api_form,
+      :subclass => s_class.api_form,
       :source => char_class.source.api_form
     }
   end

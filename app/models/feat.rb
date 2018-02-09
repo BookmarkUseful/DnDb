@@ -6,15 +6,14 @@ class Feat < ActiveRecord::Base
 
   def api_form
     {
+      :id => self.id,
       :name => self.name,
       :description => self.description,
       :prerequisite => self.prerequisite,
-      :id => self.id,
-      :src => self.source.api_form,
       :created_at => self.created_at,
-      source: self.source.api_form,
       :image => self.image_url,
-      :type => 'Feat'
+      :type => 'Feat',
+      :source => self.source.slice(:id, :name, :kind),
     }
   end
 

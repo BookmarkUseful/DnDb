@@ -4,8 +4,8 @@ class Feature < ActiveRecord::Base
 
   self.inheritance_column = :type
 
-  scope :class_features, -> { where(:type => 'ClassFeature') } 
-  scope :subclass_features, -> { where(:type => 'SubclassFeature') } 
+  scope :class_features, -> { where(:type => 'ClassFeature') }
+  scope :subclass_features, -> { where(:type => 'SubclassFeature') }
   scope :racial_features, -> { where(:type => 'RaceFeature') }
   scope :race_features, -> { where(:type => 'SubraceFeature') }
 
@@ -15,19 +15,6 @@ class Feature < ActiveRecord::Base
 
   def provider
     raise "Abstract method"
-  end
-
-  def api_show
-    show_form = {
-      :name => self.name,
-      :description => self.description,
-      :type => self.type,
-      :provider => self.provider.api_form
-    }
-    if (self.type == 'ClassFeature' || self.type == 'SubclassFeature')
-      show_form[:level] = self.level
-    end
-    show_form
   end
 
   private

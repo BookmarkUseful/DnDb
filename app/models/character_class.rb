@@ -30,17 +30,6 @@ class CharacterClass < ActiveRecord::Base
     self.source.kind
   end
 
-  def api_light
-    {
-      name: self.name,
-      id: self.id,
-      type: 'CharacterClass',
-      summary: self.summary,
-      source: self.source.api_form,
-      subclass_descriptor: self.subclass_descriptor
-    }
-  end
-
   def api_form
     {
       name: self.name,
@@ -49,20 +38,13 @@ class CharacterClass < ActiveRecord::Base
       summary: self.summary,
       hit_die: self.hit_die,
       description: self.description,
-      spellcasting: self.is_caster?,
-      features: self.features.order(:level),
-      subclasses: self.subclasses.map(&:api_form),
-      source: self.source.api_form,
       subclass_descriptor: self.subclass_descriptor,
       image: self.image_url,
-      created_at: self.created_at
+      source: self.source.slice(:id, :name, :kind),
+      features: self.features.select(:id, :name, :level, :description).order(:level),
+      subclasses: self.subclasses.select(:id, :name, :description),
+      spells: self.spells.select(:id, :name, :level).group_by{ |spell| spell[:level] }
     }
-  end
-
-  def api_show
-    character_class = self.api_form
-    character_class[:spells] = self.spells.map(&:api_form).group_by{ |spell| spell[:level] }
-    character_class
   end
 
   # @return [String] the snakecased filename

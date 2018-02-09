@@ -9,9 +9,7 @@ class Api::SourcesController < ApplicationController
 
   # GET /api/sources/:id
   def show
-    response = {
-      :data => @source.api_form
-    }
+    response = @source.api_form
     render :json => response.to_json
   end
 

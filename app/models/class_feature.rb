@@ -12,20 +12,8 @@ class ClassFeature < Feature
       :name => self.name,
       :description => self.description,
       :level => self.level,
-      :source => src.api_form,
-      :character_class => cl.api_light
-    }
-  end
-
-  def api_show
-    cl = self.provider
-    src = cl.source
-    {
-      :name => self.name,
-      :description => self.description,
-      :level => self.level,
-      :source => src.api_form,
-      :character_class => cl.api_light
+      :source => src.slice(:id, :name, :kind),
+      :character_class => cl.slice(:id, :name)
     }
   end
 

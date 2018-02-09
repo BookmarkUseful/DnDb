@@ -47,7 +47,9 @@ class Api::SubclassesController < ApplicationController
       end
     end
 
-    render :status => 200, :json => @subclass.reload.api_form.to_json
+    response = @subclass.reload.api_form
+
+    render :status => 200, :json => response.to_json
   end
 
   # POST /api/subclasses/

@@ -2,7 +2,6 @@ class Subclass < ActiveRecord::Base
   after_save :load_into_soulmate
   before_destroy :remove_from_soulmate
 
-  ARTWORK_DIRECTORY = "app/assets/images/sublasses/artwork/"
   ICON_DIRECTORY = "app/assets/images/subclasses/icons/"
 
   belongs_to :character_class
@@ -17,11 +16,11 @@ class Subclass < ActiveRecord::Base
       :id => self.id,
       :type => 'Subclass',
       :description => self.description,
-      :character_class => self.character_class.api_light,
-      :features => self.features.order(:level),
-      :source => self.source.try(:api_form),
       :image => self.image_url,
-      created_at: self.created_at
+      :created_at => self.created_at,
+      :features => self.features.select(:id, :name, :level, :description).order(:level),
+      :character_class => self.character_class.slice(:id, :name),
+      :source => self.source.slice(:id, :name, :kind),
     }
   end
 
@@ -29,18 +28,9 @@ class Subclass < ActiveRecord::Base
     self.source.kind
   end
 
-  # @return [String] the relative path of the class artwork
-  def artwork_path
-    "#{ARTWORK_DIRECTORY}#{self.artwork_name}"
-  end
-
   # @return [String] the snakecased filename
   def artwork_name
     "#{self.name.snakecase}.jpg"
-  end
-
-  def icon_path
-    "#{ICON_DIRECTORY}#{self.artwork_name}"
   end
 
   def image_url

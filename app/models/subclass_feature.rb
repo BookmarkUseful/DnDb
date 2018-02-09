@@ -6,14 +6,13 @@ class SubclassFeature < Feature
   end
 
   def api_form
-    cl = self.provider
-    src = cl.source
+    subclass = self.provider
     {
       :name => self.name,
       :description => self.description,
       :level => self.level,
-      :source => src.api_form,
-      :character_class => cl.api_form
+      :character_class => subclass.slice(:id, :name),
+      :source => subclass.source.slice(:id, :name, :kind)
     }
   end
 end

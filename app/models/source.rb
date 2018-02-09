@@ -41,7 +41,7 @@ class Source < ActiveRecord::Base
       :name => self.name,
       :id => self.id,
       :type => 'Source',
-      :author => self.author,
+      :author => self.author.name,
       :page_count => self.page_count,
       :kind => self.kind.gsub("_", " ").capitalize,
       :image => image_url("sources/artwork/#{self.artwork_name}"),

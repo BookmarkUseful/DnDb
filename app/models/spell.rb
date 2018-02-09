@@ -107,18 +107,13 @@ class Spell < ActiveRecord::Base
       :ritual => self.ritual,
       :concentration => self.concentration,
       :components => self.components,
-      :source => self.source.api_form,
       :read_level => self.print_level,
       :read_casting_time => self.print_casting_time(false),
       :read_duration => self.print_duration(false),
-      :image => self.image_url
+      :image => self.image_url,
+      :character_classes => self.character_classes.select(:id, :name),
+      :source => self.source.slice(:id, :name, :kind),
     }
-  end
-
-  def api_show
-    spell = self.api_form
-    spell[:character_classes] = self.character_classes.map(&:api_light)
-    spell
   end
 
   ############

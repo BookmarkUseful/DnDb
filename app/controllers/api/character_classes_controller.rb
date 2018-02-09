@@ -10,7 +10,7 @@ class Api::CharacterClassesController < ApplicationController
 
   # GET /api/character_classes/:id
   def show
-    response = @character_class.api_show
+    response = @character_class.api_form
     render :status => 200, :json => response.to_json
   end
 
@@ -30,6 +30,7 @@ class Api::CharacterClassesController < ApplicationController
     # add/update features
     features = character_class_params[:features] || []
     updatedFeatureIds = features.map{ |f| f[:id] }.compact
+
     # delete features not included
     @character_class.features.select { |currFeature| !updatedFeatureIds.include?(currFeature.id) }.map do |old_feature|
       puts "[update] destroying feature #{old_feature.name}"
@@ -47,7 +48,9 @@ class Api::CharacterClassesController < ApplicationController
       end
     end
 
-    render :status => 200, :json => @character_class.reload.api_form.to_json
+    response = @character_class.reload.api_form
+
+    render :status => 200, :json => response.to_json
   end
 
   private

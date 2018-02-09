@@ -5,7 +5,7 @@ class Source < ActiveRecord::Base
   before_destroy :remove_from_soulmate
 
   SOURCE_DIRECTORY = "lib/sources/"
-  THUMBNAIL_DIRECTORY = "app/assets/images/sources/thumbnails/"
+  ARTWORK_DIRECTORY = "app/assets/images/sources/artwork/"
   ICON_DIRECTORY = "app/assets/images/sources/icons/"
 
   belongs_to :author
@@ -31,9 +31,10 @@ class Source < ActiveRecord::Base
 # SCOPES #
 ##########
 
-  scope :indexed, -> { where(:indexed => 1) }
-  scope :incomplete, -> { where(:indexed => 0) }
+  scope :indexed, -> { where(:indexed => true) }
+  scope :incomplete, -> { where(:indexed => false) }
   scope :api, -> { select(:name, :id, :page_count, :kind, :author_id) }
+  scope :recent, -> { where('created_at >= ?', 2.weeks.ago) }
 
   def searchable?
     true
@@ -51,11 +52,13 @@ class Source < ActiveRecord::Base
   def api_form
     {
       :name => self.name,
+      :id => self.id,
+      :type => 'Source',
       :author => self.author,
       :page_count => self.page_count,
-      :kind => self.kind,
-      :image => image_url("sources/thumbnails/#{self.thumbnail_name}"),
-      :icon => image_url("sources/icon/#{self.thumbnail_name}"),
+      :kind => self.kind.gsub("_", " ").capitalize,
+      :image => image_url("sources/artwork/#{self.artwork_name}"),
+      :icon => image_url("sources/icons/#{self.artwork_name}")
     }
   end
 
@@ -77,22 +80,22 @@ class Source < ActiveRecord::Base
     "#{self.name.snakecase}.pdf"
   end
 
-  # Sources assume that the thumbnail is stored in the SOURCE_DIRECTORY and
+  # Sources assume that the artwork is stored in the ARTWORK_DIRECTORY and
   # the filename is in snakecase with no apostrophes or quotations, with a
   # jpg extension, determined by the string.snakecase method
 
-  # @return [String] the relative path of the source pdfs
-  def thumbnail_path
-    "#{THUMBNAIL_DIRECTORY}#{self.thumbnail_name}"
+  # @return [String] the relative path of the source artwork
+  def artwork_path
+    "#{ARTWORK_DIRECTORY}#{self.artwork_name}"
   end
 
   # @return [String] the snakecased filename
-  def thumbnail_name
+  def artwork_name
     "#{self.name.snakecase}.jpg"
   end
 
   def icon_path
-    "#{ICON_DIRECTORY}#{self.thumbnail_name}"
+    "#{ICON_DIRECTORY}#{self.artwork_name}"
   end
 
   # @return [PDF::Reader] parsed source pdf
@@ -123,13 +126,13 @@ class Source < ActiveRecord::Base
     SpellBuilder.build_spells(spell_text, self, num_cols)
   end
 
-  # uses ImageMagick to generate an icon and thumbnail for the PDF based on
+  # uses ImageMagick to generate an icon and artwork for the PDF based on
   # the first page
   # @return [Array<String>] array of pathes to new images
   def generate_images
     icon = self.generate_icon
-    thumbnail = self.generate_thumbnail
-    [icon, thumbnail]
+    artwork = self.generate_artwork
+    [icon, artwork]
   end
 
   def generate_icon
@@ -139,18 +142,18 @@ class Source < ActiveRecord::Base
     self.icon_path
   end
 
-  def generate_thumbnail
-    puts "Generating thumbnail for #{self.name}..."
+  def generate_artwork
+    puts "Generating artwork for #{self.name}..."
     # command line ImageMagick conversion of pdf page to image
-    `convert #{self.filepath}[0] -resize 950x1100 -background white -alpha remove #{self.thumbnail_path}`
-    self.thumbnail_path
+    `convert #{self.filepath}[0] -resize 950x1100 -background white -alpha remove #{self.artwork_path}`
+    self.artwork_path
+  end
+
+  def image_url(source)
+    "http://localhost:3000#{ActionController::Base.helpers.image_url(source)}"
   end
 
   private
-
-  def image_url(source)
-    "http://0.0.0.0:3000#{ActionController::Base.helpers.image_url(source)}"
-  end
 
   def load_into_soulmate
     loader = Soulmate::Loader.new("sources")

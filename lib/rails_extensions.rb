@@ -10,7 +10,7 @@ class String
         .tr('-', '_')
         .gsub(/\s/, '_')
         .gsub(/__+/, '_')
-        .delete("\"\'")
+        .delete("\"\':")
         .downcase
   end
 
@@ -20,7 +20,7 @@ class String
         .tr('-', '_')
         .gsub(/\s/, '-')
         .gsub(/__+/, '-')
-        .delete("\"\'")
+        .delete("\"\':")
         .downcase
   end
 

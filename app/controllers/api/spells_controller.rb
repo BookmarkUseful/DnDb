@@ -23,14 +23,33 @@ class Api::SpellsController < ApplicationController
 
   # GET /api/spells/:id
   def show
-    response = {
-      :data => @spell.api_show
-    }
+    response = @spell.api_show
     render :status => 200, :json => response.to_json
   end
 
   # POST /api/spells/
   def create
+    fields = spell_params
+    components_sorted = []
+    ["V", "S", "M",].each do |comp|
+      if fields[:components].include?(comp)
+        components_sorted << comp
+      end
+    end
+    fields[:components] = components_sorted.join(", ")
+    fields[:character_classes] = fields[:character_classes].map do |id|
+      CharacterClass.find(id)
+    end if fields[:character_classes].present?
+
+    puts fields
+    @spell = Spell.create!(fields)
+
+    if @spell
+      response = { :data => @spell.reload.api_show }
+      render :status => 200, :json => response.to_json
+    else
+      render :status => 400
+    end
   end
 
   # PUT /api/spells/:id
@@ -70,6 +89,7 @@ class Api::SpellsController < ApplicationController
       :level,
       :school,
       :casting_time,
+      :source_id,
       :duration,
       :range,
       {:components => []},

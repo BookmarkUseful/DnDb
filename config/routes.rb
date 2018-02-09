@@ -9,11 +9,18 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   namespace :api do
+    resources :discover, :only => [:index] do
+      collection do
+        get 'recently_created'
+      end
+    end
     resources :spells, :only => [:index, :show, :create, :update, :destroy] do
     end
     resources :character_classes, :only => [:index, :show, :update] do
     end
-    resources :class_features, :only => [:show] do
+    resources :subclasses, :only => [:index, :show, :update, :create] do
+    end
+    resources :features, :only => [:show] do
     end
     resources :items, :only => [:index] do
     end
@@ -21,7 +28,9 @@ Rails.application.routes.draw do
     end
     resources :monsters, :only => [:index] do
     end
-    resources :skills, :only => [:index] do
+    resources :skills, :only => [:index, :show] do
+    end
+    resources :feats, :only => [:index, :show] do
     end
   end
 

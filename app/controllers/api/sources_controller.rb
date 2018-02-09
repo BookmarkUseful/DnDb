@@ -3,10 +3,7 @@ class Api::SourcesController < ApplicationController
 
   # GET /api/sources
   def index
-    sources = Source.all.map(&:api_form)
-    response = {
-      :data => sources
-    }
+    response = Source.all.map(&:api_form)
     render :json => response.to_json
   end
 

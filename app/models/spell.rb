@@ -7,6 +7,8 @@ class Spell < ActiveRecord::Base
   belongs_to :source
   has_and_belongs_to_many :character_classes
 
+  ARTWORK_DIRECTORY = "app/assets/images/spells/artwork/"
+
   SecondsInDay    = 86400
   SecondsInHour   = 3600
   SecondsInMinute = 60
@@ -108,6 +110,7 @@ class Spell < ActiveRecord::Base
   scope :homebrew, -> { joins(:source).where('sources.kind' => Source::Kinds[:homebrew]) }
   scope :api, -> { select(:id, :name, :level, :school, :casting_time, :range, :duration, :description, :ritual, :concentration, :components, :source_id).order(:name) }
   scope :api_bundle, -> { select(:id, :name, :level, :school).order(:name) }
+  scope :recent, -> { where('created_at >= ?', 2.weeks.ago) }
 
   def searchable?
     true
@@ -129,10 +132,25 @@ class Spell < ActiveRecord::Base
     image_path("spell_icon.png")
   end
 
+  # @return [String] the relative path of the class artwork
+  def artwork_path
+    "#{ARTWORK_DIRECTORY}#{self.artwork_name}"
+  end
+
+  # @return [String] the snakecased filename
+  def artwork_name
+    "#{self.school}.png"
+  end
+
+  def image_url
+    "http://localhost:3000#{ActionController::Base.helpers.image_url("spells/artwork/#{self.artwork_name}")}"
+  end
+
   def api_form
     {
       :id => self.id,
       :name => self.name,
+      :type => 'Spell',
       :level => self.level,
       :school => self.school,
       :description => self.description,
@@ -146,13 +164,13 @@ class Spell < ActiveRecord::Base
       :read_level => self.print_level,
       :read_casting_time => self.print_casting_time(false),
       :read_duration => self.print_duration(false),
+      :image => self.image_url
     }
   end
 
   def api_show
     spell = self.api_form
-    spell[:character_classes] = self.character_classes.map(&:api_form)
-    puts spell
+    spell[:character_classes] = self.character_classes.map(&:api_light)
     spell
   end
 

@@ -96,10 +96,10 @@ class SpellBuilder
   def self.flatten_text(page_texts, num_cols)
     if (num_cols == 2)
       flattened_pages = page_texts.map do |page_text|
-                          self.flatten_two_columns(page_text).join("\n")
-                        end
+                          self.flatten_two_columns(page_text)
+                        end.join("\n");
     else
-      flattened_pages = page_texts.join("\n")
+      flattened_pages = pages_texts.is_a?(Array) ? page_texts.join("\n") : page_texts
     end
     flattened_pages
   end
@@ -179,6 +179,7 @@ class SpellBuilder
 
   #TODO: Will update with more dynamic methods, removing extensive if/else
   def self._parse_attribute(lines, attribute)
+    puts lines
   	result = nil
   	if attribute == :name then
   		result = _parse_name(lines)
@@ -216,12 +217,12 @@ class SpellBuilder
 
   def self._parse_casting_time(lines)
     puts "PARSE CASTING TIME"
-  	prefix = "Casting Time:"
-  	casting_time_lines = lines.select{ |line| line =~ /^#{prefix}/i }
+  	prefix = "Casting Time"
+  	casting_time_lines = lines.select{ |line| line =~ /^#{prefix} ?:/i }
   	raise "No casting times found! Make sure to include line '#{prefix}...'" if casting_time_lines.count == 0
   	raise "Multiple casting times found! Include only one line '#{prefix}..." if casting_time_lines.count != 1
     puts "Checking line '#{casting_time_lines.first}' for casting time"
-    _interpret_game_time(casting_time_lines.first[(prefix.length)..-1].strip)
+    _interpret_game_time(casting_time_lines.first.split(":").last)
   end
 
   def self._parse_concentration(lines)
@@ -250,18 +251,18 @@ class SpellBuilder
 
   def self._parse_duration(lines)
     puts "PARSE DURATION"
-  	prefix = "Duration:"
-  	duration_lines = lines.select{ |line| line =~ /^#{prefix}/i }
+  	prefix = "Duration"
+  	duration_lines = lines.select{ |line| line =~ /^#{prefix} ?:/i }
   	raise "No durations found! Make sure to include line '#{prefix}...'" if duration_lines.count == 0
   	raise "Multiple durations found! Include only one line '#{prefix}..." if duration_lines.count != 1
     puts "Checking line '#{duration_lines.first}' for duration"
-  	_interpret_game_time(duration_lines.first.remove(prefix).strip)
+  	_interpret_game_time(duration_lines.first.split(":").last)
   end
 
   def self._parse_range(lines)
     puts "PARSE RANGE"
-  	prefix = "Range:"
-  	range_lines = lines.select{ |line| line =~ /^#{prefix}/i }
+  	prefix = "Range"
+  	range_lines = lines.select{ |line| line =~ /^#{prefix} ?:/i }
   	raise "No ranges found! Make sure to include line '#{prefix}...'" if range_lines.count == 0
   	raise "Multiple rangess found! Include only one line '#{prefix}..." if range_lines.count != 1
     range_line = range_lines.first

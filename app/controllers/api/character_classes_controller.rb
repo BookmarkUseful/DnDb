@@ -2,25 +2,22 @@ class Api::CharacterClassesController < ApplicationController
   protect_from_forgery with: :null_session
   before_action :get_character_class, :only => [:show, :update]
 
-  # GET /character_classes
+  # GET /api/character_classes
   def index
     @classes = CharacterClass.all.map(&:api_form)
     render :json => @classes.to_json
   end
 
-  # GET /api/spells/:id
+  # GET /api/character_classes/:id
   def show
-    response = {
-      :data => @character_class.api_show
-    }
+    response = @character_class.api_show
     render :status => 200, :json => response.to_json
   end
 
-  # PUT /api/spells/:id
+  # PUT /api/character_classes/:id
   def update
-    puts character_class_params
 
-    # add/update class
+    # update class
     class_attributes = {
       :name => character_class_params[:name],
       :description => character_class_params[:description],
@@ -39,7 +36,7 @@ class Api::CharacterClassesController < ApplicationController
       old_feature.destroy!
     end
     features.each do |feature|
-      feature[:character_class_id] = @character_class.id
+      feature[:provider_id] = @character_class.id
       if feature[:id].present?
         old_feature = ClassFeature.find(feature[:id])
         puts "[update] Updating feature #{old_feature[:name]}"
@@ -49,14 +46,13 @@ class Api::CharacterClassesController < ApplicationController
         ClassFeature.create!(feature)
       end
     end
-    @character_class
-    
+
     render :status => 200, :json => @character_class.reload.api_form.to_json
   end
 
   private
 
-  # raise error if spell not found
+  # raise error if character class not found
   def get_character_class
     @character_class = CharacterClass.find_by(:id => params[:id])
     render :status => 500 if @character_class.nil?

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171029210758) do
+ActiveRecord::Schema.define(version: 20171231192050) do
 
   create_table "authors", force: :cascade do |t|
     t.string   "name"
@@ -53,15 +53,26 @@ ActiveRecord::Schema.define(version: 20171029210758) do
     t.integer "spell_id",           null: false
   end
 
-  create_table "class_features", force: :cascade do |t|
-    t.string  "name"
-    t.text    "description"
-    t.integer "level",              limit: 1
-    t.integer "character_class_id",           null: false
-    t.integer "subclass_id"
+  create_table "feats", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.string   "prerequisite"
+    t.integer  "source_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  add_index "class_features", ["subclass_id"], name: "index_class_features_on_subclass_id"
+  add_index "feats", ["source_id"], name: "index_feats_on_source_id"
+
+  create_table "features", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.string   "type"
+    t.integer  "provider_id"
+    t.integer  "level",       limit: 1
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
 
   create_table "items", force: :cascade do |t|
     t.string   "name"
@@ -74,9 +85,11 @@ ActiveRecord::Schema.define(version: 20171029210758) do
   end
 
   create_table "skills", force: :cascade do |t|
-    t.string  "name"
-    t.text    "description"
-    t.integer "ability",     limit: 1
+    t.string   "name"
+    t.text     "description"
+    t.integer  "ability",     limit: 1
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "sources", force: :cascade do |t|
@@ -124,10 +137,12 @@ ActiveRecord::Schema.define(version: 20171029210758) do
   end
 
   create_table "subclasses", force: :cascade do |t|
-    t.string  "name"
-    t.integer "character_class_id", null: false
-    t.text    "description"
-    t.integer "source_id"
+    t.string   "name"
+    t.integer  "character_class_id", null: false
+    t.text     "description"
+    t.integer  "source_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "subclasses", ["source_id"], name: "index_subclasses_on_source_id"

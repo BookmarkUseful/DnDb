@@ -2,14 +2,6 @@ class Author < ActiveRecord::Base
 
   has_many :sources
 
-  def to_param
-    permalink
-  end
-
-  def searchable?
-    true
-  end
-
 end
 
 #

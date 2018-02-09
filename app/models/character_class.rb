@@ -8,13 +8,6 @@ class CharacterClass < ActiveRecord::Base
   has_many :features, :class_name => "ClassFeature", :foreign_key => :provider_id
   has_many :subclasses
 
-  ARTWORK_DIRECTORY = "app/assets/images/character_classes/artwork/"
-  ICON_DIRECTORY = "app/assets/images/character_classes/icons/"
-
-  def to_param
-    permalink
-  end
-
 ##########
 # SCOPES #
 ##########
@@ -22,12 +15,8 @@ class CharacterClass < ActiveRecord::Base
   scope :core, -> { joins(:sources).where('sources.core', true) }
   scope :noncore, -> { joins(:sources).where('sources.core', false) }
   scope :homebrew, -> { joins(:sources).where('sources.homebrew', true) }
-  scope :api, -> { select(:id, :name, :description, :hit_die, :saving_throws, :spell_ability, :spell_slots, :features) }
+  scope :api, -> { select(:id, :name, :description, :summary, :hit_die, :saving_throws, :spell_ability, :spell_slots, :features) }
   scope :recent, -> { where('created_at >= ?', 2.weeks.ago) }
-
-  def searchable?
-    true
-  end
 
   def is_caster?
     self.spells.any?
@@ -41,16 +30,12 @@ class CharacterClass < ActiveRecord::Base
     self.source.kind
   end
 
-  def self.search(term)
-    self.where('LOWER(name) LIKE :term', :term => "%#{term.downcase}%")
-  end
-
   def api_light
     {
       name: self.name,
       id: self.id,
       type: 'CharacterClass',
-      description: self.description,
+      summary: self.summary,
       source: self.source.api_form,
       subclass_descriptor: self.subclass_descriptor
     }
@@ -61,9 +46,9 @@ class CharacterClass < ActiveRecord::Base
       name: self.name,
       id: self.id,
       type: 'CharacterClass',
-      description: self.description,
+      summary: self.summary,
       hit_die: self.hit_die,
-      long_description: self.long_description,
+      description: self.description,
       spellcasting: self.is_caster?,
       features: self.features.order(:level),
       subclasses: self.subclasses.map(&:api_form),
@@ -80,30 +65,13 @@ class CharacterClass < ActiveRecord::Base
     character_class
   end
 
-  # @return [String] the relative path of the class artwork
-  def artwork_path
-    "#{ARTWORK_DIRECTORY}#{self.artwork_name}"
-  end
-
   # @return [String] the snakecased filename
   def artwork_name
     "#{self.name.snakecase}.jpg"
   end
 
-  def icon_path
-    "#{ICON_DIRECTORY}#{self.artwork_name}"
-  end
-
   def image_url
     "http://localhost:3000#{ActionController::Base.helpers.image_url("character_classes/artwork/#{self.artwork_name}")}"
-  end
-
-  ############
-  # PRINTING #
-  ############
-
-  def print_name
-    self.name.titleize
   end
 
   private
@@ -128,3 +96,20 @@ class CharacterClass < ActiveRecord::Base
   end
 
 end
+
+#
+#------------Schema Information------------
+# id                  primary key
+# name                string
+# created_at          datetime
+# updated_at          datetime
+# source_id           foreign key
+# description         text
+# long_description    text
+# hit_die             integer
+# saving_throws       string
+# spell_ability       string
+# num_starting_skills integer
+# subclass_desriptor  string
+#
+

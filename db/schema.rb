@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171231192050) do
+ActiveRecord::Schema.define(version: 20180209023631) do
 
   create_table "authors", force: :cascade do |t|
     t.string   "name"
@@ -26,13 +26,12 @@ ActiveRecord::Schema.define(version: 20171231192050) do
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
     t.integer  "source_id"
-    t.text     "description"
-    t.string   "permalink"
+    t.text     "summary"
     t.integer  "hit_die",             limit: 1
     t.string   "saving_throws"
     t.string   "spell_slots"
     t.integer  "spell_ability",       limit: 1
-    t.text     "long_description"
+    t.text     "description"
     t.integer  "num_starting_skills"
     t.string   "subclass_descriptor"
   end
@@ -102,7 +101,6 @@ ActiveRecord::Schema.define(version: 20171231192050) do
     t.string   "link"
     t.boolean  "indexed",      default: false
     t.string   "abbreviation"
-    t.string   "permalink"
   end
 
   add_index "sources", ["author_id"], name: "index_sources_on_author_id"
@@ -121,9 +119,7 @@ ActiveRecord::Schema.define(version: 20171231192050) do
     t.boolean  "ritual"
     t.text     "components"
     t.integer  "source_id"
-    t.integer  "parent_school"
     t.string   "source_name"
-    t.string   "permalink"
   end
 
   add_index "spells", ["name"], name: "index_spells_on_name", unique: true

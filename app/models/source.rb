@@ -23,10 +23,6 @@ class Source < ActiveRecord::Base
 
   enum :kind => Kinds unless instance_methods.include? :kind
 
-  def to_param
-    permalink
-  end
-
 ##########
 # SCOPES #
 ##########
@@ -36,17 +32,8 @@ class Source < ActiveRecord::Base
   scope :api, -> { select(:name, :id, :page_count, :kind, :author_id) }
   scope :recent, -> { where('created_at >= ?', 2.weeks.ago) }
 
-  def searchable?
-    true
-  end
-
-  # shortened abbreviation getter
   def abbr
     self.abbreviation
-  end
-
-  def self.search(term)
-    self.where('LOWER(name) LIKE :term', term: "%#{term.downcase}%")
   end
 
   def api_form
@@ -101,7 +88,9 @@ class Source < ActiveRecord::Base
   # @return [PDF::Reader] parsed source pdf
   def pdf
     filepath = self.filepath
+
     raise(Errno::ENOENT, filepath) unless File.exist?(filepath)
+
     PDF::Reader.new(filepath)
   end
 

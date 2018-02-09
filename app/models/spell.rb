@@ -7,8 +7,6 @@ class Spell < ActiveRecord::Base
   belongs_to :source
   has_and_belongs_to_many :character_classes
 
-  ARTWORK_DIRECTORY = "app/assets/images/spells/artwork/"
-
   SecondsInDay    = 86400
   SecondsInHour   = 3600
   SecondsInMinute = 60
@@ -33,10 +31,7 @@ class Spell < ActiveRecord::Base
     -2 => "Sight"
   }
 
-  # Some homebrew schools have 'parent' schools.
-  # Ex. Hemomancy spells (Dark Arts Player's Companion) are part of the
-  # Necromancy school.
-  CoreSchools = {
+  Schools = {
     :abjuration => 0,
     :conjuration => 1,
     :divination => 2,
@@ -47,31 +42,7 @@ class Spell < ActiveRecord::Base
     :transmutation => 7,
   }
 
-  ### any following schools are homebrew ###
-  HomebrewSchools = {
-    # Hemomancy: introduced by the Dark Arts Player's Companion.
-    # Sub-school of necromancy. ie any hemomancy spell is considered necromantic
-    :hemomancy => 8
-  }
-
-  Schools = CoreSchools.merge(HomebrewSchools)
-
-  # as Rails 4.2.6 doesn't have prefixed enums, gonna replicate this enum to
-  # avoid duplicating enum methods.
-  ParentSchools = {
-    :parent_abjuration => 0,
-    :parent_conjuration => 1,
-    :parent_divination => 2,
-    :parent_enchantment => 3,
-    :parent_evocation => 4,
-    :parent_illusion => 5,
-    :parent_necromancy => 6,
-    :parent_transmutation => 7,
-    :parent_hemomancy => 8
-  }
-
   enum school: Schools unless instance_methods.include?(:school)
-  enum parent_school: ParentSchools unless instance_methods.include?(:parent_school)
 
   validates :name,
             :presence => true,
@@ -82,22 +53,15 @@ class Spell < ActiveRecord::Base
               :greater_than_or_equal_to => MIN_LEVEL,
               :less_than_or_equal_to => MAX_LEVEL
             }
-  #validates_inclusion_of :school, :in => Schools.values
-  #validates_inclusion_of :parent_school, :in => ParentSchools.values
+  validates_inclusion_of :school, :in => Schools.values
   validates :casting_time,
             :presence => true
   validates :range,
             :presence => true
   validates :duration,
             :presence => true
-  #validates :concentration, :presence => true
-  #validates :ritual, :presence => true
   validates :description,
             :presence => true
-
-  def to_param
-    permalink
-  end
 
   ##########
   # SCOPES #
@@ -112,29 +76,12 @@ class Spell < ActiveRecord::Base
   scope :api_bundle, -> { select(:id, :name, :level, :school).order(:name) }
   scope :recent, -> { where('created_at >= ?', 2.weeks.ago) }
 
-  def searchable?
-    true
-  end
-
   def self.schools
     Schools.keys.map(&:to_s)
   end
 
-  def source_kind
+  def kind
     self.source.kind
-  end
-
-  def self.search(term)
-    self.where('LOWER(name) LIKE :term', term: "%#{term.downcase}%")
-  end
-
-  def self.icon
-    image_path("spell_icon.png")
-  end
-
-  # @return [String] the relative path of the class artwork
-  def artwork_path
-    "#{ARTWORK_DIRECTORY}#{self.artwork_name}"
   end
 
   # @return [String] the snakecased filename

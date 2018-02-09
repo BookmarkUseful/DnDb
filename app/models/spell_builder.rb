@@ -55,7 +55,9 @@ class SpellBuilder
 
   # blocks can be detected by relying on the school/level line, which is always
   # the second line of the spell in the books.
-  # Not the best way to do this...
+  #
+  # Not the best way to do this, but pdfs are otherwise inconsistent in their
+  # formatting.
   def self.seperate_blocks(text)
     blocks = []
     lines = text.split("\n")
@@ -63,10 +65,10 @@ class SpellBuilder
     spell_name_indices.each_with_index do |line_index, array_index|
       start = line_index
       finish = if array_index+1 < spell_name_indices.length
-                 spell_name_indices[array_index+1] - 1 # line index at end of block
-               else
-                 lines.length - 1 # last line index of given text
-               end
+        spell_name_indices[array_index+1] - 1 # line index at end of block
+      else
+        lines.length - 1 # last line index of given text
+      end
       blocks << lines[start..finish].map(&:strip).join("\n")
     end
     blocks
@@ -74,20 +76,23 @@ class SpellBuilder
 
   def self.find_school_level_lines(lines)
     indices = []
+
     lines.each_with_index do |line, index|
-      (indices << index) if self.is_school_level_line?(line)
+      if self.is_school_level_line?(line)
+        indices << index
+      end
     end
     indices
   end
 
   def self.is_school_level_line?(line)
     has_school = Spell.schools.map do |school|
-               line =~ /#{school}/i
-             end.any?
+      line =~ /#{school}/i
+    end.any?
     ordinalized = (Spell::MIN_LEVEL..Spell::MAX_LEVEL).map(&:ordinalize)
     has_ordinal_level = ordinalized.map do |ord|
-                      line =~ /#{ord}/i
-                    end.any?
+      line =~ /#{ord}/i
+    end.any?
     has_cantrip = line =~ /cantrip/i
     has_level = has_ordinal_level || has_cantrip
     has_school && has_level
@@ -96,8 +101,8 @@ class SpellBuilder
   def self.flatten_text(page_texts, num_cols)
     if (num_cols == 2)
       flattened_pages = page_texts.map do |page_text|
-                          self.flatten_two_columns(page_text)
-                        end.join("\n");
+        self.flatten_two_columns(page_text)
+      end.join("\n");
     else
       flattened_pages = pages_texts.is_a?(Array) ? page_texts.join("\n") : page_texts
     end
@@ -154,8 +159,8 @@ class SpellBuilder
   def self.cleanup_text(text)
     text.split("\n").reject do |line|
       line.empty? ||
-        line =~ LINE_OF_DIGITS_REGEX ||
-        line =~ CHAPTER_INDICATOR_REGEX
+      line =~ LINE_OF_DIGITS_REGEX ||
+      line =~ CHAPTER_INDICATOR_REGEX
     end.join("\n")
   end
 
@@ -164,63 +169,65 @@ class SpellBuilder
 #################
 
   def self.initialize_block_parse(block)
-  	lines = block.gsub("\t", "\s").split("\n").reject{|line| line.empty?}
-  	results = {}
+    lines = block.gsub("\t", "\s").split("\n").reject{|line| line.empty?}
+    results = {}
 
-  	ATTRIBUTES_TO_COLLECT.each do |attribute|
-  		results[attribute] = _parse_attribute(lines, attribute)
-  	end
-  	results
+    ATTRIBUTES_TO_COLLECT.each do |attribute|
+      results[attribute] = _parse_attribute(lines, attribute)
+    end
+    results
   end
 
 ########################################
 # PARSE SPECIFIC ATTRIBUTES FROM BLOCK #
 ########################################
 
-  #TODO: Will update with more dynamic methods, removing extensive if/else
   def self._parse_attribute(lines, attribute)
-    puts lines
-  	result = nil
-  	if attribute == :name then
-  		result = _parse_name(lines)
-  	elsif attribute == :casting_time then
-  		result = _parse_casting_time(lines)
-  	elsif attribute == :duration then
-  		result = _parse_duration(lines)
-  	elsif attribute == :school then
-  		result = _parse_school(lines)
-  	elsif attribute == :level then
-  		result = _parse_level(lines)
-  	elsif attribute == :description then
-  		result = _parse_description(lines)
-  	elsif attribute == :range then
-  		result = _parse_range(lines)
-    elsif attribute == :concentration then
+    result = nil
+
+    case attribute
+    when :name
+      result = _parse_name(lines)
+    when :casting_time
+      result = _parse_casting_time(lines)
+    when :duration
+      result = _parse_duration(lines)
+    when :school
+      result = _parse_school(lines)
+    when :level
+      result = _parse_level(lines)
+    when :description
+      result = _parse_description(lines)
+    when :range
+      result = _parse_range(lines)
+    when :concentration
       result = _parse_concentration(lines)
-    elsif attribute == :ritual then
+    when :ritual
       result = _parse_ritual(lines)
-    elsif attribute == :components then
+    when :components
       result = _parse_components(lines)
-  	else
-  		raise "Attribute #{attribute} doesn't have a location method!"
-  	end
-  	raise "Attribute #{attribute} not found!" if result.nil?
-  	result
+    else
+      raise "Attribute #{attribute} doesn't have a location method!"
+    end
+
+    raise "Attribute #{attribute} not found!" if result.nil?
+
+    result
   end
 
   # assume name is first line
   def self._parse_name(lines)
     puts "PARSE NAME"
     puts "Name found: #{lines.first}"
-  	lines.first
+    lines.first
   end
 
   def self._parse_casting_time(lines)
     puts "PARSE CASTING TIME"
-  	prefix = "Casting Time"
-  	casting_time_lines = lines.select{ |line| line =~ /^#{prefix} ?:/i }
-  	raise "No casting times found! Make sure to include line '#{prefix}...'" if casting_time_lines.count == 0
-  	raise "Multiple casting times found! Include only one line '#{prefix}..." if casting_time_lines.count != 1
+    prefix = "Casting Time"
+    casting_time_lines = lines.select{ |line| line =~ /^#{prefix} ?:/i }
+    raise "No casting times found! Make sure to include line '#{prefix}...'" if casting_time_lines.count == 0
+    raise "Multiple casting times found! Include only one line '#{prefix}..." if casting_time_lines.count != 1
     puts "Checking line '#{casting_time_lines.first}' for casting time"
     _interpret_game_time(casting_time_lines.first.split(":").last)
   end
@@ -228,7 +235,7 @@ class SpellBuilder
   def self._parse_concentration(lines)
     puts "PARSE CONCENTRATION"
     prefix = "Duration:"
-  	duration_lines = lines.select{ |line| line =~ /^#{prefix}/i }
+    duration_lines = lines.select{ |line| line =~ /^#{prefix}/i }
     raise "No durations found! Make sure to include line '#{prefix}...'" if duration_lines.count == 0
     raise "Multiple durations found! Include only one line '#{prefix} ..." if duration_lines.count != 1
     puts "Checking line '#{duration_lines.first}' for concentration"
@@ -251,22 +258,25 @@ class SpellBuilder
 
   def self._parse_duration(lines)
     puts "PARSE DURATION"
-  	prefix = "Duration"
-  	duration_lines = lines.select{ |line| line =~ /^#{prefix} ?:/i }
-  	raise "No durations found! Make sure to include line '#{prefix}...'" if duration_lines.count == 0
-  	raise "Multiple durations found! Include only one line '#{prefix}..." if duration_lines.count != 1
+    prefix = "Duration"
+    duration_lines = lines.select{ |line| line =~ /^#{prefix} ?:/i }
+    raise "No durations found! Make sure to include line '#{prefix}...'" if duration_lines.count == 0
+    raise "Multiple durations found! Include only one line '#{prefix}..." if duration_lines.count != 1
     puts "Checking line '#{duration_lines.first}' for duration"
-  	_interpret_game_time(duration_lines.first.split(":").last)
+    _interpret_game_time(duration_lines.first.split(":").last)
   end
 
   def self._parse_range(lines)
     puts "PARSE RANGE"
-  	prefix = "Range"
-  	range_lines = lines.select{ |line| line =~ /^#{prefix} ?:/i }
-  	raise "No ranges found! Make sure to include line '#{prefix}...'" if range_lines.count == 0
-  	raise "Multiple rangess found! Include only one line '#{prefix}..." if range_lines.count != 1
+    prefix = "Range"
+    range_lines = lines.select{ |line| line =~ /^#{prefix} ?:/i }
+
+    raise "No ranges found! Make sure to include line '#{prefix}...'" if range_lines.count == 0
+    raise "Multiple rangess found! Include only one line '#{prefix}..." if range_lines.count != 1
+
     range_line = range_lines.first
     puts "Checking line '#{range_line}' for range"
+
     Spell::RangeMapping.invert.each do |key, val|
       puts "Checking '#{range_line}' for '#{key}'. Will assign #{val}"
       return val if range_line =~ /#{key}/i
@@ -279,20 +289,21 @@ class SpellBuilder
     # assumes school is on second line
     line = lines.second
     puts "Checking line '#{line}' for school"
+
     # only checks for valid schools from Spell class
     schools = Spell.schools.select do |school|
       line =~ /#{school}/i
     end
     puts "Found schools #{schools}"
-    school = if schools.size > 1
-               puts "Found multiple schools. Searching for special circumstances"
-               SpellBuilder._select_appropriate_school(schools)
-             elsif schools.size == 1
-               schools.first
-             else
-               raise "No school found in #{line}"
-             end
+
+    if schools.size != 0
+      school = schools.first
+    else
+      raise "No school found in #{line}"
+    end
+
     puts "Selected school #{school}"
+
     Spell::Schools[school.to_sym]
   end
 
@@ -301,9 +312,12 @@ class SpellBuilder
     # assume level is on second line
     line = lines.second.downcase
     puts "Checking line '#{line}' for level"
+
     return 0 if line =~ /cantrip/i
+
     levels = line.split(" ").select{|word| word =~ /\d/}
     puts "Found levels #{levels}"
+
     raise "No valid levels found! Make sure to include a level on the second line." if levels.count == 0
     raise "Multiple levels found! Include only one level on the second line." if levels.count != 1
     levels.first.first.to_i
@@ -349,7 +363,7 @@ class SpellBuilder
     end.compact.first
     number = time_string.delete("^0-9").to_i
     puts "Found #{number} #{unit}(s)"
-  	if unit == "action" || unit == "round" then
+    if unit == "action" || unit == "round" then
   		return number * 6 # since each action/round is 6 seconds
   	elsif unit == "minute" then
   		return number * 60
@@ -360,11 +374,6 @@ class SpellBuilder
   	else
   		raise "Can't process time string '#{time_string}'!"
   	end
-  end
-
-  def self._select_appropriate_school(schools)
-    return "hemomancy" if schools.include?("hemomancy") && schools.include?("necromancy")
-    raise "unable to determine appropriate school from #{schools}"
   end
 
 =begin

@@ -3,7 +3,7 @@ class Api::FeaturesController < ApplicationController
 
   # GET /api/features/:id
   def show
-		response = @feature.api_show
+    response = @feature.api_show
     render :json => response.to_json
   end
 

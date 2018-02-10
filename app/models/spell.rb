@@ -53,7 +53,7 @@ class Spell < ActiveRecord::Base
               :greater_than_or_equal_to => MIN_LEVEL,
               :less_than_or_equal_to => MAX_LEVEL
             }
-  validates_inclusion_of :school, :in => Schools.values
+  # validates_inclusion_of :school, :in => Schools.values
   validates :casting_time,
             :presence => true
   validates :range,

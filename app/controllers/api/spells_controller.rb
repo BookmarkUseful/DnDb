@@ -36,47 +36,30 @@ class Api::SpellsController < ApplicationController
   # POST /api/spells/
   def create
     fields = spell_params
-    components_sorted = []
-    ["V", "S", "M",].each do |comp|
-      if fields[:components].include?(comp)
-        components_sorted << comp
-      end
+
+    if fields[:character_classes]
+      fields[:character_classes] = CharacterClass.where(:id => fields[:character_classes]).select(:id)
     end
-    fields[:components] = components_sorted.join(", ")
-    fields[:character_classes] = fields[:character_classes].map do |id|
-      CharacterClass.find(id)
-    end if fields[:character_classes].present?
 
-    puts fields
-    @spell = Spell.create!(fields)
-
-    if @spell
-      response = @spell.reload.api_form
-      render :status => 200, :json => response.to_json
+    if Spell.create!(fields)
+      render :status => 200, :json => @spell.id.to_json
     else
-      render :status => 400
+      render :status => 400, :json => @spell.errors.messages.inspect.to_json
     end
   end
 
   # PUT /api/spells/:id
   def update
     fields = spell_params
-    components_sorted = []
-    ["V", "S", "M",].each do |comp|
-      if fields[:components].include?(comp)
-        components_sorted << comp
-      end
+
+    if fields[:character_classes]
+      fields[:character_classes] = CharacterClass.where(:id => fields[:character_classes]).select(:id)
     end
-    fields[:components] = components_sorted.join(", ")
-    fields[:character_classes] = fields[:character_classes].map do |id|
-      CharacterClass.find(id)
-    end if fields[:character_classes].present?
 
     if @spell.update_attributes(fields)
-      response = @spell.reload.api_form
-      render :status => 200, :json => response.to_json
+      render :status => 200, :json => @spell.id.to_json
     else
-      render :status => 400
+      render :status => 400, :json => @spell.errors.messages.inspect.to_json
     end
   end
 
@@ -98,7 +81,6 @@ class Api::SpellsController < ApplicationController
       :source_id,
       :duration,
       :range,
-      {:components => []},
       {:character_classes => []},
       :concentration,
       :ritual)

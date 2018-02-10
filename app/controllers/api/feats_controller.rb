@@ -10,10 +10,7 @@ class Api::FeatsController < ApplicationController
 
   # GET /api/feats/:id
   def show
-    response = {
-      :data => @feat.api_form
-    }
-    render :status => 200, :json => response.to_json
+    render :status => 200, :json => @feat.api_form
   end
 
   private

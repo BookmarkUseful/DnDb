@@ -12,6 +12,7 @@ class Api::DiscoverController < ApplicationController
   #
   # params:
   #   num: (Integer) number of items to return [Default: DEFAULT_NUM]
+  #
   def index
     num = params[:num].to_i || DEFAULT_NUM
     @items = []
@@ -31,19 +32,25 @@ class Api::DiscoverController < ApplicationController
   #
   # params:
   #   num (Integer) number of items to return [Default: DEFAULT_NUM]
+  #
   def recently_created
     num = params[:num] ? params[:num].to_i : DEFAULT_NUM
+
     @recent_items = []
     @items = []
 
     DISCOVERY_TYPES.each do |cl|
-      @recent_items = @recent_items + cl.recent.limit(15).map(&:api_form)
+      @recent_items = @recent_items + cl.recent.limit(15)
     end
 
-    1.upto(num) do |i|
-      d = rand(@recent_items.length)
-      @items << @recent_items[d]
-      @recent_items.delete_at(d)
+    if @recent_items.length <= num
+      @items = @recent_items.map(&:api_form)
+    else
+      1.upto(num) do |i|
+        d = rand(@recent_items.length)
+        @items << @recent_items[d].api_form
+        @recent_items.delete_at(d)
+      end
     end
 
     render :status => 200, :json => @items.to_json

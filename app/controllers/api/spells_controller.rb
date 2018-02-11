@@ -41,7 +41,9 @@ class Api::SpellsController < ApplicationController
       fields[:character_classes] = CharacterClass.where(:id => fields[:character_classes]).select(:id)
     end
 
-    if Spell.create!(fields)
+    @spell = Spell.create!(fields)
+
+    if @spell
       render :status => 200, :json => @spell.id.to_json
     else
       render :status => 400, :json => @spell.errors.messages.inspect.to_json

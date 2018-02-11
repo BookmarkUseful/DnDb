@@ -20,8 +20,8 @@ class Api::CharacterClassesController < ApplicationController
     # update class
     class_attributes = {
       :name => character_class_params[:name],
+      :summary => character_class_params[:summary],
       :description => character_class_params[:description],
-      :long_description => character_class_params[:long_description],
       :num_starting_skills => character_class_params[:num_starting_skills],
       :hit_die => character_class_params[:hit_die]
     }
@@ -71,8 +71,8 @@ class Api::CharacterClassesController < ApplicationController
       {:features => [:name, :level, :description, :id, :character_class_id]},
       {:spells => []},
       {:armour_proficiencies => []},
+      :summary,
       :description,
-      :long_description,
       :num_starting_skills,
       :hit_die
     )

@@ -26,7 +26,7 @@ Rails.application.routes.draw do
     end
     resources :skills, :only => [:index, :show] do
     end
-    resources :feats, :only => [:index, :show] do
+    resources :feats, :only => [:index, :show, :create, :update] do
     end
   end
 

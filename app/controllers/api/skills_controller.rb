@@ -3,14 +3,14 @@ class Api::SkillsController < ApplicationController
 
   # GET /api/skills
   def index
-    @skills = Skill.all
+    @skills = Skill.api.all
+
     render :json => @skills.to_json
   end
 
   # GET /api/skills/:id
   def show
-    response = @skill.api_form
-    render :json => response.to_json
+    render :json => @skill.api_form.to_json
   end
 
   private

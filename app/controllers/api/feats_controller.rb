@@ -2,15 +2,39 @@ class Api::FeatsController < ApplicationController
   protect_from_forgery with: :null_session
   before_action :get_feat, :only => [:show, :update, :delete]
 
+  ##
   # GET /api/feats
+  #
+  # Returns a collection of ordered Feats
+  #
+  # Filter Params - If any not provided, no filtering for that fields occurs
+  # @param {String[]} [:kinds] subset of ['core', 'supplement', 'unearthed_arcana', 'homebrew']
+  # @param {Fixnum[]} [:sources] array of source ids to pull from
+  # @param {Boolean} [:prerequisite] filters by presence of prerequisite
+  #
+  # @return {Object[]} array of Feat objects according to params, with limited source data
+  #
   def index
-    @feats = Feat.all.map(&:api_form)
+    prerequisite = params[:prerequisite].present? ? params[:prerequisite] == "true" : nil
+    sources = params[:sources].is_a?(Array) ? params[:sources].map(&:to_i) : nil
+    kinds = params[:kinds].is_a?(Array) ? params[:kinds].map{ |s| Source::Kinds[s.to_sym] } : nil
+
+    @feats = Feat.api
+    @feats = @feats.joins(:source).where(:sources => {:kind => kinds}) if kinds.present?
+    @feats = @feats.joins(:source).where(:sources => {:id => sources}) if sources.present?
+
+    if !prerequisite.nil?
+      @feats = prerequisite ? @feats.where.not(:prerequisite => nil) : @feats = @feats.where(:prerequisite => nil)
+    end
+
+    @feats = @feats.map(&:api_form)
+
     render :json => @feats.to_json
   end
 
   # GET /api/feats/:id
   def show
-    render :status => 200, :json => @feat.api_form
+    render :status => 200, :json => @feat.api_form.to_json
   end
 
   # PUT /api/feats/:id
@@ -28,8 +52,6 @@ class Api::FeatsController < ApplicationController
   def create
     fields = feat_params
 
-    puts fields
-
     @feat = Feat.create!(fields)
 
     if @feat
@@ -44,7 +66,7 @@ class Api::FeatsController < ApplicationController
   # raise error if feat not found
   def get_feat
     @feat = Feat.find_by(:id => params[:id])
-    render :status => 404 if @feat.nil?
+    render :status => 404, :json => {status: 404, message: "entity not found"}  if @feat.nil?
   end
 
   def feat_params

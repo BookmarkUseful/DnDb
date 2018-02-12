@@ -30,14 +30,14 @@ class Api::SpellsController < ApplicationController
     classes = params[:classes].is_a?(Array) ? params[:classes].map(&:to_i) : nil
     kinds = params[:kinds].is_a?(Array) ? params[:kinds].map{ |s| Source::Kinds[s.to_sym] } : nil
 
-    spells = Spell.api
-    spells = spells.where(:school => schools) if schools.present?
-    spells = spells.joins(:source).where(:sources => {:kind => kinds}) if kinds.present?
-    spells = spells.joins(:source).where(:sources => {:id => sources}) if sources.present?
-    spells = spells.joins(:character_classes).where(:character_classes => {:id => classes}) if classes.present?
+    @spells = Spell.api
+    @spells = @spells.where(:school => schools) if schools.present?
+    @spells = @spells.joins(:source).where(:sources => {:kind => kinds}) if kinds.present?
+    @spells = @spells.joins(:source).where(:sources => {:id => sources}) if sources.present?
+    @spells = @spells.joins(:character_classes).where(:character_classes => {:id => classes}) if classes.present?
 
-    pages = spells.each_slice(per_page).to_a
-    total = spells.length
+    pages = @spells.each_slice(per_page).to_a
+    total = @spells.length
     total_pages = pages.length
 
     spell_page = pages[page - 1] || []
@@ -59,8 +59,7 @@ class Api::SpellsController < ApplicationController
 
   # GET /api/spells/:id
   def show
-    response = @spell.api_form
-    render :status => 200, :json => response.to_json
+    render :status => 200, :json => @spell.api_form.to_json
   end
 
   # POST /api/spells/
@@ -100,7 +99,7 @@ class Api::SpellsController < ApplicationController
   # raise error if spell not found
   def get_spell
     @spell = Spell.find_by(:id => params[:id])
-    render :status => 404 if @spell.nil?
+    render :status => 404, :json => {status: 404, message: "entity not found"} if @spell.nil?
   end
 
   def spell_params

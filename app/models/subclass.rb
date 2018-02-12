@@ -9,6 +9,7 @@ class Subclass < ActiveRecord::Base
   has_many :features, :class_name => "SubclassFeature", :foreign_key => :provider_id
 
   scope :recent, -> { where('created_at >= ?', 2.weeks.ago) }
+  scope :api, -> { select(:id, :name, :description, :source_id, :created_at, :character_class_id) }
 
   def api_form
     {

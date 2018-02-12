@@ -15,7 +15,7 @@ class CharacterClass < ActiveRecord::Base
   scope :core, -> { joins(:sources).where('sources.core', true) }
   scope :noncore, -> { joins(:sources).where('sources.core', false) }
   scope :homebrew, -> { joins(:sources).where('sources.homebrew', true) }
-  scope :api, -> { select(:id, :name, :description, :summary, :hit_die, :saving_throws, :spell_ability, :spell_slots, :features) }
+  scope :api, -> { select(:id, :name, :description, :summary, :hit_die, :saving_throws, :spell_ability, :spell_slots, :subclass_descriptor, :source_id, :created_at) }
   scope :recent, -> { where('created_at >= ?', 2.weeks.ago) }
 
   def is_caster?
@@ -40,6 +40,7 @@ class CharacterClass < ActiveRecord::Base
       description: self.description,
       subclass_descriptor: self.subclass_descriptor,
       image: self.image_url,
+      created_at: self.created_at,
       source: self.source.slice(:id, :name, :kind),
       features: self.features.select(:id, :name, :level, :description).order(:level),
       subclasses: self.subclasses.select(:id, :name, :description),

@@ -2,16 +2,37 @@ class Api::SubclassesController < ApplicationController
   protect_from_forgery with: :null_session
   before_action :get_subclass, :only => [:show, :update]
 
+  ##
   # GET /api/subclasses
+  #
+  # Returns a collection of ordered Subclasses
+  #
+  # Filter Params - If any not provided, no filtering for that fields occurs
+  # @param {String[]} [:kinds] subset of ['core', 'supplement', 'unearthed_arcana', 'homebrew']
+  # @param {Fixnum[]} [:sources] array of source ids to pull from
+  # @param {Fixnum[]} [:classes] returns only subclassesbelonging to the included classes
+  #
+  # @return {Object[]} array of Subclass objects conforming to params including
+  # surface level details on source and character classes.
+  #
   def index
-    response = Subclass.all.map(&:api_form)
-    render :json => response.to_json
+    sources = params[:sources].is_a?(Array) ? params[:sources].map(&:to_i) : nil
+    kinds = params[:kinds].is_a?(Array) ? params[:kinds].map{ |s| Source::Kinds[s.to_sym] } : nil
+    classes = params[:classes].is_a?(Array) ? params[:classes].map(&:to_i) : nil
+
+    @subclasses = Subclass.api
+    @subclasses = @subclasses.joins(:source).where(:sources => {:kind => kinds}) if kinds.present?
+    @subclasses = @subclasses.joins(:source).where(:sources => {:id => sources}) if sources.present?
+    @subclasses = @subclasses.joins(:character_class).where(:character_classes => {:id => classes}) if classes.present?
+
+    @subclasses = @subclasses.map(&:api_form)
+
+    render :json => @subclasses.to_json
   end
 
   # GET /api/subclasses/:id
   def show
-    response = @subclass.api_form
-    render :json => response.to_json
+    render :json => @subclass.api_form.to_json
   end
 
   # PUT /api/subclasses/:id
@@ -74,7 +95,7 @@ class Api::SubclassesController < ApplicationController
 
   def get_subclass
     @subclass = Subclass.find_by(:id => params[:id])
-    render :status => 404 if @subclass.nil?
+    render :status => 404, :json => {status: 404, message: "entity not found"}  if @subclass.nil?
   end
 
   def subclass_params

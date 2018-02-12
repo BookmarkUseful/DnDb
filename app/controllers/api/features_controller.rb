@@ -3,8 +3,7 @@ class Api::FeaturesController < ApplicationController
 
   # GET /api/features/:id
   def show
-    response = @feature.api_form
-    render :json => response.to_json
+    render :json => @feature.api_form.to_json
   end
 
   private
@@ -12,7 +11,7 @@ class Api::FeaturesController < ApplicationController
   # raise error if feature not found
   def get_feature
     @feature = Feature.find_by(:id => params[:id])
-    render :status => 404 if @feature.nil?
+    render :status => 404, :json => {status: 404, message: "entity not found"}  if @feature.nil?
   end
 
 end

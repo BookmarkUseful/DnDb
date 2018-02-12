@@ -4,6 +4,8 @@ class Feat < ActiveRecord::Base
 
   belongs_to :source
 
+  scope :api, -> { select(:name, :id, :prerequisite, :description, :created_at, :source_id) }
+
   def api_form
     {
       :id => self.id,

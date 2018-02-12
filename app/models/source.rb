@@ -43,7 +43,7 @@ class Source < ActiveRecord::Base
       :type => 'Source',
       :author => self.author.name,
       :page_count => self.page_count,
-      :kind => self.kind.gsub("_", " ").capitalize,
+      :kind => self.kind,
       :image => image_url("sources/artwork/#{self.artwork_name}"),
       :icon => image_url("sources/icons/#{self.artwork_name}")
     }

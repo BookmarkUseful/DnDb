@@ -74,7 +74,7 @@ class Api::SubclassesController < ApplicationController
 
   def get_subclass
     @subclass = Subclass.find_by(:id => params[:id])
-    render :status => 500 if @subclass.nil?
+    render :status => 404 if @subclass.nil?
   end
 
   def subclass_params

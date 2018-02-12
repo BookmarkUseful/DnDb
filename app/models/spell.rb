@@ -70,10 +70,11 @@ class Spell < ActiveRecord::Base
   scope :cantrip, -> { where(:level => 0) }
   scope :level, -> (n) { where(:level => n) }
   scope :core, -> { joins(:source).where('sources.kind' => Source::Kinds[:core]) }
-  scope :noncore, -> { joins(:source).where('sources.kind is not ?', Source::Kinds[:core]) }
+  scope :supplement, -> { joins(:source).where('sources.kind', Source::Kinds[:supplement]) }
+  scope :unearthed_arcana, -> { joins(:source).where('sources.kind', Source::Kinds[:unearthed_arcana]) }
   scope :homebrew, -> { joins(:source).where('sources.kind' => Source::Kinds[:homebrew]) }
-  scope :api, -> { select(:id, :name, :level, :school, :casting_time, :range, :duration, :description, :ritual, :concentration, :components, :source_id).order(:name) }
-  scope :api_bundle, -> { select(:id, :name, :level, :school).order(:name) }
+  scope :noncore, -> { joins(:source).where('sources.kind is not ?', Source::Kinds[:core]) }
+  scope :api, -> { select(:id, :name, :level, :school, :casting_time, :range, :duration, :description, :ritual, :concentration, :components, :source_id) }
   scope :recent, -> { where('created_at >= ?', 2.weeks.ago) }
 
   def self.schools

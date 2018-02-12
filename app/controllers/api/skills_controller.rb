@@ -18,7 +18,7 @@ class Api::SkillsController < ApplicationController
   # raise error if source not found
   def get_skill
     @skill = Skill.find_by(:id => params[:id])
-    render :status => 500 if @skill.nil?
+    render :status => 404 if @skill.nil?
   end
 
 end

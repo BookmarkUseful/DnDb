@@ -44,7 +44,7 @@ class Api::FeatsController < ApplicationController
   # raise error if feat not found
   def get_feat
     @feat = Feat.find_by(:id => params[:id])
-    render :status => 500 if @feat.nil?
+    render :status => 404 if @feat.nil?
   end
 
   def feat_params

@@ -12,7 +12,7 @@ class Api::FeaturesController < ApplicationController
   # raise error if feature not found
   def get_feature
     @feature = Feature.find_by(:id => params[:id])
-    render :status => 500 if @feature.nil?
+    render :status => 404 if @feature.nil?
   end
 
 end

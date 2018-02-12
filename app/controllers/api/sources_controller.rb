@@ -18,7 +18,7 @@ class Api::SourcesController < ApplicationController
   # raise error if source not found
   def get_source
     @source = Source.find_by(:id => params[:id])
-    render :status => 500 if @source.nil?
+    render :status => 404 if @source.nil?
   end
 
 end

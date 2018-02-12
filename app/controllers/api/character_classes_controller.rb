@@ -58,7 +58,7 @@ class Api::CharacterClassesController < ApplicationController
   # raise error if character class not found
   def get_character_class
     @character_class = CharacterClass.find_by(:id => params[:id])
-    render :status => 500 if @character_class.nil?
+    render :status => 404 if @character_class.nil?
   end
 
   def character_class_params

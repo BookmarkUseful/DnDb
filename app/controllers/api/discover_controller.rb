@@ -3,9 +3,7 @@ class Api::DiscoverController < ApplicationController
 
   DEFAULT_NUM = 5
   DISCOVERY_TYPES = [
-    CharacterClass,
-    Subclass,
-    Spell
+    CharacterClass
   ]
 
   # GET /api/discover
@@ -40,7 +38,7 @@ class Api::DiscoverController < ApplicationController
     @items = []
 
     DISCOVERY_TYPES.each do |cl|
-      @recent_items = @recent_items + cl.recent.limit(15)
+      @recent_items = @recent_items + cl.order(:created_at => :desc).limit(15)
     end
 
     if @recent_items.length <= num

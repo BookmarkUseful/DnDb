@@ -3,7 +3,7 @@ class Api::SkillsController < ApplicationController
 
   # GET /api/skills
   def index
-    @skills = Skill.api.all
+    @skills = Skill.all.map(&:api_form)
 
     render :json => @skills.to_json
   end

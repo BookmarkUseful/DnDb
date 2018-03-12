@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180209023631) do
+ActiveRecord::Schema.define(version: 20180312002638) do
 
   create_table "authors", force: :cascade do |t|
     t.string   "name"
@@ -20,6 +20,28 @@ ActiveRecord::Schema.define(version: 20180209023631) do
     t.boolean  "trusted"
     t.string   "permalink"
   end
+
+  create_table "backgrounds", force: :cascade do |t|
+    t.string   "name"
+    t.string   "slug"
+    t.text     "description"
+    t.string   "feature_name"
+    t.text     "feature_description"
+    t.text     "tool_proficiencies",  default: "[]"
+    t.text     "equipment",           default: "[]"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.integer  "source_id"
+  end
+
+  add_index "backgrounds", ["source_id"], name: "index_backgrounds_on_source_id"
+
+  create_table "backgrounds_skills", id: false, force: :cascade do |t|
+    t.integer "skill_id",      null: false
+    t.integer "background_id", null: false
+  end
+
+  add_index "backgrounds_skills", ["skill_id", "background_id"], name: "index_backgrounds_skills_on_skill_id_and_background_id"
 
   create_table "character_classes", force: :cascade do |t|
     t.string   "name"

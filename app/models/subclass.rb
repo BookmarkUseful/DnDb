@@ -13,6 +13,8 @@ class Subclass < ActiveRecord::Base
 
   scope :recent, -> { where('created_at >= ?', 2.weeks.ago) }
   scope :api, -> { select(:id, :slug, :name, :description, :source_id, :created_at, :character_class_id) }
+  scope :by_classes, -> (classes) { joins(:character_class).where(Subclass.where(:character_classes => {:slug => classes, :id => classes}).where_values.last(2).inject(:or)) }
+  scope :by_sources, -> (sources) { joins(:source).where(Subclass.where(:sources => {:slug => sources, :id => sources}).where_values.last(2).inject(:or)) }
 
   def api_form
     {

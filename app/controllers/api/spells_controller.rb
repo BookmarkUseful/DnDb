@@ -14,8 +14,8 @@ class Api::SpellsController < ApplicationController
   # Filter Params - If any not provided, no filtering for that fields occurs
   # @param {String[]} [:schools] schools for spells. Example: ['conjuration', 'abjuration']
   # @param {String[]} [:kinds] subset of ['core', 'supplement', 'unearthed_arcana', 'homebrew']
-  # @param {Fixnum[]} [:sources] array of source ids to pull from
-  # @param {Fixnum[]} [:classes] array of character class ids to pull from
+  # @param {(Fixnum|String)[]} [:sources] array of source ids to pull from
+  # @param {(Fixnum|String)[]} [:classes] array of character class ids to pull from
   #
   # @return {Object[]} array of spell objects conforming to params including
   # surface level details on source and character classes.
@@ -26,15 +26,15 @@ class Api::SpellsController < ApplicationController
     per_page = params[:per_page].present? ? params[:per_page].to_i : 25
 
     schools = params[:schools].is_a?(Array) ? params[:schools].map{ |s| Spell::Schools[s.to_sym] } : nil
-    sources = params[:sources].is_a?(Array) ? params[:sources].map(&:to_i) : nil
-    classes = params[:classes].is_a?(Array) ? params[:classes].map(&:to_i) : nil
+    sources = params[:sources].is_a?(Array) ? params[:sources] : nil
+    classes = params[:classes].is_a?(Array) ? params[:classes] : nil
     kinds = params[:kinds].is_a?(Array) ? params[:kinds].map{ |s| Source::Kinds[s.to_sym] } : nil
 
     @spells = Spell.api
     @spells = @spells.where(:school => schools) if schools.present?
     @spells = @spells.joins(:source).where(:sources => {:kind => kinds}) if kinds.present?
-    @spells = @spells.joins(:source).where(:sources => {:id => sources}) if sources.present?
-    @spells = @spells.joins(:character_classes).where(:character_classes => {:id => classes}) if classes.present?
+    @spells = @spells.by_sources(sources) if sources.present?
+    @spells = @spells.by_classes(classes) if classes.present?
 
     pages = @spells.each_slice(per_page).to_a
     total = @spells.length

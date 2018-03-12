@@ -9,19 +9,19 @@ class Api::FeatsController < ApplicationController
   #
   # Filter Params - If any not provided, no filtering for that fields occurs
   # @param {String[]} [:kinds] subset of ['core', 'supplement', 'unearthed_arcana', 'homebrew']
-  # @param {Fixnum[]} [:sources] array of source ids to pull from
+  # @param {(Fixnum|String)[]} [:sources] array of source ids/slugs to pull from
   # @param {Boolean} [:prerequisite] filters by presence of prerequisite
   #
   # @return {Object[]} array of Feat objects according to params, with limited source data
   #
   def index
     prerequisite = params[:prerequisite].present? ? params[:prerequisite] == "true" : nil
-    sources = params[:sources].is_a?(Array) ? params[:sources].map(&:to_i) : nil
+    sources = params[:sources].is_a?(Array) ? params[:sources] : nil
     kinds = params[:kinds].is_a?(Array) ? params[:kinds].map{ |s| Source::Kinds[s.to_sym] } : nil
 
     @feats = Feat.api
     @feats = @feats.joins(:source).where(:sources => {:kind => kinds}) if kinds.present?
-    @feats = @feats.joins(:source).where(:sources => {:id => sources}) if sources.present?
+    @feats = @feats.by_sources(sources) if sources.present?
 
     if !prerequisite.nil?
       @feats = prerequisite ? @feats.where.not(:prerequisite => nil) : @feats = @feats.where(:prerequisite => nil)

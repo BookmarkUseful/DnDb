@@ -20,6 +20,8 @@ class CharacterClass < ActiveRecord::Base
   scope :homebrew, -> { joins(:sources).where('sources.homebrew', true) }
   scope :api, -> { select(:id, :slug, :name, :description, :summary, :hit_die, :saving_throws, :spell_ability, :spell_slots, :subclass_descriptor, :source_id, :created_at) }
   scope :recent, -> { where('created_at >= ?', 2.weeks.ago) }
+  scope :by_spells, -> (spells) { joins(:spells).where(CharacterClass.where(:spells => {:slug => spells, :id => spells}).where_values.last(2).inject(:or)) }
+  scope :by_sources, -> (sources) { joins(:source).where(CharacterClass.where(:sources => {:slug => sources, :id => sources}).where_values.last(2).inject(:or)) }
 
   def is_caster?
     self.spells.any?

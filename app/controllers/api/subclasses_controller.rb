@@ -9,21 +9,21 @@ class Api::SubclassesController < ApplicationController
   #
   # Filter Params - If any not provided, no filtering for that fields occurs
   # @param {String[]} [:kinds] subset of ['core', 'supplement', 'unearthed_arcana', 'homebrew']
-  # @param {Fixnum[]} [:sources] array of source ids to pull from
-  # @param {Fixnum[]} [:classes] returns only subclassesbelonging to the included classes
+  # @param {(Fixnum|String)[]} [:sources] array of source ids to pull from
+  # @param {(Fixnum|String)[]} [:classes] returns only subclassesbelonging to the included classes
   #
   # @return {Object[]} array of Subclass objects conforming to params including
   # surface level details on source and character classes.
   #
   def index
-    sources = params[:sources].is_a?(Array) ? params[:sources].map(&:to_i) : nil
+    classes = params[:classes].is_a?(Array) ? params[:classes] : nil
+    sources = params[:sources].is_a?(Array) ? params[:sources]: nil
     kinds = params[:kinds].is_a?(Array) ? params[:kinds].map{ |s| Source::Kinds[s.to_sym] } : nil
-    classes = params[:classes].is_a?(Array) ? params[:classes].map(&:to_i) : nil
 
     @subclasses = Subclass.api
     @subclasses = @subclasses.joins(:source).where(:sources => {:kind => kinds}) if kinds.present?
-    @subclasses = @subclasses.joins(:source).where(:sources => {:id => sources}) if sources.present?
-    @subclasses = @subclasses.joins(:character_class).where(:character_classes => {:id => classes}) if classes.present?
+    @subclasses = @subclasses.by_sources(sources) if sources.present?
+    @subclasses = @subclasses.by_classes(classes) if classes.present?
 
     @subclasses = @subclasses.map(&:api_form)
 

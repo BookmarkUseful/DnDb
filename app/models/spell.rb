@@ -79,6 +79,8 @@ class Spell < ActiveRecord::Base
   scope :noncore, -> { joins(:source).where('sources.kind is not ?', Source::Kinds[:core]) }
   scope :api, -> { select(:id, :slug, :name, :level, :school, :casting_time, :range, :duration, :description, :ritual, :concentration, :components, :source_id) }
   scope :recent, -> { where('created_at >= ?', 2.weeks.ago) }
+  scope :by_classes, -> (classes) { joins(:character_classes).where(Spell.where(:character_classes => {:slug => classes, :id => classes}).where_values.last(2).inject(:or)) }
+  scope :by_sources, -> (sources) { joins(:source).where(Spell.where(:sources => {:slug => sources, :id => sources}).where_values.last(2).inject(:or)) }
 
   def self.schools
     Schools.keys.map(&:to_s)

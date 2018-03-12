@@ -9,17 +9,17 @@ class Api::BackgroundsController < ApplicationController
   #
   # Filter Params - If any not provided, no filtering for that field occurs
   # @param {String[]} [:kinds] subset of ['core', 'supplement', 'unearthed_arcana', 'homebrew']
-  # @param {Fixnum[]} [:sources] array of source ids to pull from
+  # @param {(Fixnum|String)[]} [:sources] array of source ids/slugs to pull from
   #
   # @return {Object[]} array of Background objects according to params, with limited source data
   #
   def index
-    sources = params[:sources].is_a?(Array) ? params[:sources].map(&:to_i) : nil
+    sources = params[:sources].is_a?(Array) ? params[:sources] : nil
     kinds = params[:kinds].is_a?(Array) ? params[:kinds].map{ |s| Source::Kinds[s.to_sym] } : nil
 
     @backgrounds = Background.api
     @backgrounds = @backgrounds.joins(:source).where(:sources => {:kind => kinds}) if kinds.present?
-    @backgrounds = @backgrounds.joins(:source).where(:sources => {:id => sources}) if sources.present?
+    @backgrounds = @backgrounds.by_sources(sources) if sources.present?
 
     @backgrounds = @backgrounds.map(&:api_form)
 

@@ -10,22 +10,22 @@ class Api::CharacterClassesController < ApplicationController
   # Filter Params - If any not provided, no filtering for that fields occurs
   # @param {Boolean}  [:spellcasting] if provided, returns only casters or not casters
   # @param {String[]} [:kinds] subset of ['core', 'supplement', 'unearthed_arcana', 'homebrew']
-  # @param {Fixnum[]} [:sources] array of source ids to pull from
-  # @param {Fixnum[]} [:spells] returns only classes that can cast these spells
+  # @param {(Fixnum|String)[]} [:sources] array of source ids/slugs to pull from
+  # @param {(Fixnum|String)[]} [:spells] returns only classes that can cast these spells by slug/id
   #
   # @return {Object[]} array of CharacterClass objects conforming to params including
   # surface level details on source and spells.
   #
   def index
     spellcasting = params[:spellcasting].present? ? params[:spellcasting] == "true" : nil
-    sources = params[:sources].is_a?(Array) ? params[:sources].map(&:to_i) : nil
-    spells = params[:spells].is_a?(Array) ? params[:spells].map(&:to_i) : nil
+    sources = params[:sources].is_a?(Array) ? params[:sources] : nil
+    spells = params[:spells].is_a?(Array) ? params[:spells] : nil
     kinds = params[:kinds].is_a?(Array) ? params[:kinds].map{ |s| Source::Kinds[s.to_sym] } : nil
 
     @classes = CharacterClass.api
     @classes = @classes.joins(:source).where(:sources => {:kind => kinds}) if kinds.present?
-    @classes = @classes.joins(:source).where(:sources => {:id => sources}) if sources.present?
-    @classes = @classes.joins(:spells).where(:spells => {:id => spells}) if spells.present?
+    @classes = @classes.by_sources(sources) if sources.present?
+    @classes = @classes.by_spells(spells) if spells.present?
 
     @classes = @classes.map(&:api_form)
 

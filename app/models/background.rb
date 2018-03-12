@@ -23,6 +23,8 @@ class Background < ActiveRecord::Base
       :skill_proficiencies,
       :created_at,
       :source_id) }
+    scope :by_sources, -> (sources) { joins(:source).where(Background.where(:sources => {:slug => sources, :id => sources}).where_values.last(2).inject(:or)) }
+
 
   def api_form
     {

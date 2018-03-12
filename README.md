@@ -21,7 +21,7 @@ It features the following GET endpoints to reference rules:
 * `/api/subclasses`
 * `/api/subclasses/(:id|:slug)`
 
-Other resources, like races, items, and monsters are not yet implemented. Each existing endpoint can be filtered according to relevant parameters. For instances, the `/api/spells` endpoint can be filtered by `schools`, `sources` (source ids), `classes` (character class ids), and `kinds` (`core`, `supplement`, `unearthed_arcana`, or `homebrew`).
+Other resources, like races, items, and monsters are not yet implemented. Each existing endpoint can be filtered according to relevant parameters. For instance, the `/api/spells` endpoint can be filtered by `schools`, `sources` (source ids or slugs), `classes` (character class ids or slugs), and `kinds` (`core`, `supplement`, `unearthed_arcana`, or `homebrew`).
 
 A response might look something like this (some fields have been omitted):
 
@@ -109,5 +109,15 @@ A response might look something like this (some fields have been omitted):
 	...
 ]
 ```
+
+Other requests might include:
+
+`GET /api/spells?schools[]=conjuration&schools[]=transmutation&classes[]=bard`
+
+`GET /api/spells?schools[]=conjuration&schools[]=transmutation&classes[]=4`
+
+`GET /api/feats?prerequisite=true&sources[]=xanathars-guide-to-everything`
+
+`GET /api/subclasses?kinds[]=homebrew&classes[]=fighter`
 
 Note: No data is included in this repository. The API and the data that populates it is used privately. This is not meant for distribution. It is a personal project.

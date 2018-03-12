@@ -30,12 +30,12 @@ class Api::SubclassesController < ApplicationController
     render :json => @subclasses.to_json
   end
 
-  # GET /api/subclasses/:id
+  # GET /api/subclasses/(:id|:slug)
   def show
     render :json => @subclass.api_form.to_json
   end
 
-  # PUT /api/subclasses/:id
+  # PUT /api/subclasses/(:id|:slug)
   def update
 
     # update subclass
@@ -95,13 +95,13 @@ class Api::SubclassesController < ApplicationController
 
   def get_subclass
     @subclass = Subclass.find_by(:id => params[:id])
+    @subclass ||= Subclass.find_by(:slug => params[:id])
     render :status => 404, :json => {status: 404, message: "entity not found"}  if @subclass.nil?
   end
 
   def subclass_params
     params.require(:subclass).permit(
       :name,
-      :id,
       :character_class_id,
       :source_id,
       :description,

@@ -9,6 +9,8 @@ class ClassFeature < Feature
     cl = self.provider
     src = cl.source
     {
+      :id => self.id,
+      :slug => self.slug,
       :name => self.name,
       :description => self.description,
       :level => self.level,

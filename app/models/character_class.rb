@@ -2,6 +2,9 @@ class CharacterClass < ActiveRecord::Base
   after_save :load_into_soulmate
 	before_destroy :remove_from_soulmate
 
+  before_create :set_slug
+  before_save :set_slug
+
   belongs_to :source
   has_and_belongs_to_many :skills # starting proficiencies
   has_and_belongs_to_many :spells
@@ -15,7 +18,7 @@ class CharacterClass < ActiveRecord::Base
   scope :core, -> { joins(:sources).where('sources.core', true) }
   scope :noncore, -> { joins(:sources).where('sources.core', false) }
   scope :homebrew, -> { joins(:sources).where('sources.homebrew', true) }
-  scope :api, -> { select(:id, :name, :description, :summary, :hit_die, :saving_throws, :spell_ability, :spell_slots, :subclass_descriptor, :source_id, :created_at) }
+  scope :api, -> { select(:id, :slug, :name, :description, :summary, :hit_die, :saving_throws, :spell_ability, :spell_slots, :subclass_descriptor, :source_id, :created_at) }
   scope :recent, -> { where('created_at >= ?', 2.weeks.ago) }
 
   def is_caster?
@@ -34,6 +37,7 @@ class CharacterClass < ActiveRecord::Base
     {
       name: self.name,
       id: self.id,
+      slug: self.slug,
       type: 'CharacterClass',
       summary: self.summary,
       hit_die: self.hit_die,
@@ -60,10 +64,15 @@ class CharacterClass < ActiveRecord::Base
 
   private
 
+  def set_slug
+    self.slug = self.name.to_slug
+  end
+
   def load_into_soulmate
     loader = Soulmate::Loader.new("classes")
     src = self.source
     loader.add("term" => self.name, "id" => self.id, "data" => {
+      "slug" => self.slug,
       "type" => "Character Class",
       "kind" => src.kind,
       "source" => {

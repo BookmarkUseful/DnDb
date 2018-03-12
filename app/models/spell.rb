@@ -2,6 +2,9 @@ class Spell < ActiveRecord::Base
   after_save :load_into_soulmate
 	before_destroy :remove_from_soulmate
 
+  before_create :set_slug
+  before_save :set_slug
+
   # TODO: Fix missing Thunderous Smite and Aura of Vitality spells in DB
 
   belongs_to :source
@@ -74,7 +77,7 @@ class Spell < ActiveRecord::Base
   scope :unearthed_arcana, -> { joins(:source).where('sources.kind', Source::Kinds[:unearthed_arcana]) }
   scope :homebrew, -> { joins(:source).where('sources.kind' => Source::Kinds[:homebrew]) }
   scope :noncore, -> { joins(:source).where('sources.kind is not ?', Source::Kinds[:core]) }
-  scope :api, -> { select(:id, :name, :level, :school, :casting_time, :range, :duration, :description, :ritual, :concentration, :components, :source_id) }
+  scope :api, -> { select(:id, :slug, :name, :level, :school, :casting_time, :range, :duration, :description, :ritual, :concentration, :components, :source_id) }
   scope :recent, -> { where('created_at >= ?', 2.weeks.ago) }
 
   def self.schools
@@ -97,6 +100,7 @@ class Spell < ActiveRecord::Base
   def api_form
     {
       :id => self.id,
+      :slug => self.slug,
       :name => self.name,
       :type => 'Spell',
       :level => self.level,
@@ -260,10 +264,15 @@ class Spell < ActiveRecord::Base
 
   private
 
+  def set_slug
+    self.slug = self.name.to_slug
+  end
+
   def load_into_soulmate
     loader = Soulmate::Loader.new("spells")
     src = self.source
   	loader.add("term" => self.name, "id" => self.id, "data" => {
+      "slug" => self.slug,
       "type" => "Spell",
       "kind" => src.kind,
       "source" => {

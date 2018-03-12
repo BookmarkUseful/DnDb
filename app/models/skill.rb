@@ -2,15 +2,19 @@ class Skill < ActiveRecord::Base
   after_save :load_into_soulmate
   before_destroy :remove_from_soulmate
 
+  before_create :set_slug
+  before_save :set_slug
+
   has_and_belongs_to_many :character_classes # starting skill proficiencies
 
   enum :ability => Dnd::Abilities unless instance_methods.include? :ability
 
   def api_form
     {
+      :id => self.id,
+      :slug => self.slug,
       :name => self.name,
       :description => self.description,
-      :id => self.id,
       :created_at => self.created_at,
       :image => self.image_url
     }
@@ -22,10 +26,15 @@ class Skill < ActiveRecord::Base
 
   private
 
+  def set_slug
+    self.slug = self.name.to_slug
+  end
+
   def load_into_soulmate
     loader = Soulmate::Loader.new("skills")
     src = Source.find_by(:name => "Player's Handbook")
     loader.add("term" => self.name, "id" => self.id, "data" => {
+      "slug" => self.slug,
       "type" => "Skill",
       "kind" => src.kind,
       "source" => {

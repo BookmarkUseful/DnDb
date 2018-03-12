@@ -8,7 +8,7 @@ class Api::SkillsController < ApplicationController
     render :json => @skills.to_json
   end
 
-  # GET /api/skills/:id
+  # GET /api/skills/(:id|:slug)
   def show
     render :json => @skill.api_form.to_json
   end
@@ -18,6 +18,7 @@ class Api::SkillsController < ApplicationController
   # raise error if source not found
   def get_skill
     @skill = Skill.find_by(:id => params[:id])
+    @skill ||= Skill.find_by(:slug => params[:id])
     render :status => 404 if @skill.nil?
   end
 

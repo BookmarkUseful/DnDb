@@ -3,6 +3,7 @@ class Background < ActiveRecord::Base
   before_destroy :remove_from_soulmate
 
   before_create :set_slug
+  before_save :set_slug
 
   serialize :tool_proficiencies, Array
   serialize :equipment, Array
@@ -45,15 +46,15 @@ class Background < ActiveRecord::Base
     self.skills
   end
 
-  def set_slug
-    self.slug = self.name.to_slug
-  end
-
   def image_url
     "http://localhost:3000#{ActionController::Base.helpers.image_url("default.jpg")}"
   end
 
   private
+
+  def set_slug
+    self.slug = self.name.to_slug
+  end
 
   def load_into_soulmate
     loader = Soulmate::Loader.new("backgrounds")

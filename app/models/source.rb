@@ -4,6 +4,9 @@ class Source < ActiveRecord::Base
   after_save :load_into_soulmate
   before_destroy :remove_from_soulmate
 
+  before_create :set_slug
+  before_save :set_slug
+
   SOURCE_DIRECTORY = "lib/sources/"
   ARTWORK_DIRECTORY = "app/assets/images/sources/artwork/"
   ICON_DIRECTORY = "app/assets/images/sources/icons/"
@@ -29,7 +32,7 @@ class Source < ActiveRecord::Base
 
   scope :indexed, -> { where(:indexed => true) }
   scope :incomplete, -> { where(:indexed => false) }
-  scope :api, -> { select(:name, :id, :page_count, :kind, :author_id) }
+  scope :api, -> { select(:name, :id, :slug, :page_count, :kind, :author_id) }
   scope :recent, -> { where('created_at >= ?', 2.weeks.ago) }
 
   def abbr
@@ -40,6 +43,7 @@ class Source < ActiveRecord::Base
     {
       :name => self.name,
       :id => self.id,
+      :slug => self.slug,
       :type => 'Source',
       :author => self.author.name,
       :page_count => self.page_count,
@@ -144,9 +148,14 @@ class Source < ActiveRecord::Base
 
   private
 
+  def set_slug
+    self.slug = self.name.to_slug
+  end
+
   def load_into_soulmate
     loader = Soulmate::Loader.new("sources")
     loader.add("term" => self.name, "id" => self.id, "data" => {
+      "slug" => self.slug,
       "kind" => self.kind,
       "type" => "Source",
     })

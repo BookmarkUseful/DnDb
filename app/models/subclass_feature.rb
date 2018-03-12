@@ -9,6 +9,8 @@ class SubclassFeature < Feature
     subclass = self.provider
     {
       :name => self.name,
+      :id => self.id,
+      :slug => self.slug,
       :description => self.description,
       :level => self.level,
       :character_class => subclass.slice(:id, :name),

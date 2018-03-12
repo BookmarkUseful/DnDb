@@ -26,12 +26,12 @@ class Api::BackgroundsController < ApplicationController
     render :json => @backgrounds.to_json
   end
 
-  # GET /api/backgrounds/:id
+  # GET /api/backgrounds/(:id|:slug)
   def show
     render :status => 200, :json => @background.api_form.to_json
   end
 
-  # PUT /api/backgrounds/:id
+  # PUT /api/backgrounds/(:id|:slug)
   def update
     fields = background_params
 
@@ -60,14 +60,13 @@ class Api::BackgroundsController < ApplicationController
   # raise error if background not found
   def get_background
     @background = Background.find_by(:slug => params[:id])
-    @background = Background.find_by(:id => params[:id]) if @background.nil?
+    @background ||= Background.find_by(:id => params[:id])
     render :status => 404, :json => {status: 404, message: "entity not found"}  if @background.nil?
   end
 
   def background_params
     params.require(:background).permit(
       :name,
-      :id,
       :source_id,
       :description,
       :feature_name,

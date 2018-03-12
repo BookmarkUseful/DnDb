@@ -36,12 +36,12 @@ class Api::CharacterClassesController < ApplicationController
     render :json => @classes.to_json
   end
 
-  # GET /api/character_classes/:id
+  # GET /api/character_classes/(:id|:slug)
   def show
     render :status => 200, :json => @character_class.api_form.to_json
   end
 
-  # PUT /api/character_classes/:id
+  # PUT /api/character_classes/(:id|:slug)
   def update
 
     # update class
@@ -85,13 +85,13 @@ class Api::CharacterClassesController < ApplicationController
   # raise error if character class not found
   def get_character_class
     @character_class = CharacterClass.find_by(:id => params[:id])
+    @character_class ||= CharacterClass.find_by(:slug => params[:id])
     render :status => 404, :json => {status: 404, message: "entity not found"}  if @character_class.nil?
   end
 
   def character_class_params
     params.require(:character_class).permit(
       :name,
-      :id,
       :spellcasting,
       {:skills => []},
       {:saving_throws => []},

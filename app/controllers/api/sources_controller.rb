@@ -25,7 +25,7 @@ class Api::SourcesController < ApplicationController
     render :json => @sources.to_json
   end
 
-  # GET /api/sources/:id
+  # GET /api/sources/(:id|:slug)
   def show
     render :json => @source.api_form.to_json
   end
@@ -35,6 +35,7 @@ class Api::SourcesController < ApplicationController
   # raise error if source not found
   def get_source
     @source = Source.find_by(:id => params[:id])
+    @source ||= Source.find_by(:slug => params[:id])
     render :status => 404, :json => {status: 404, message: "entity not found"}  if @source.nil?
   end
 

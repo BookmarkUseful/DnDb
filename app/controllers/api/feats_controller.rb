@@ -32,12 +32,12 @@ class Api::FeatsController < ApplicationController
     render :json => @feats.to_json
   end
 
-  # GET /api/feats/:id
+  # GET /api/feats/(:id|:slug)
   def show
     render :status => 200, :json => @feat.api_form.to_json
   end
 
-  # PUT /api/feats/:id
+  # PUT /api/feats/(:id|:slug)
   def update
     fields = feat_params
 
@@ -66,13 +66,13 @@ class Api::FeatsController < ApplicationController
   # raise error if feat not found
   def get_feat
     @feat = Feat.find_by(:id => params[:id])
+    @feat ||= Feat.find_by(:slug => params[:id])
     render :status => 404, :json => {status: 404, message: "entity not found"}  if @feat.nil?
   end
 
   def feat_params
     params.require(:feat).permit(
       :name,
-      :id,
       :source_id,
       :description,
       :prerequisite

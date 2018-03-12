@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180312002638) do
+ActiveRecord::Schema.define(version: 20180312014330) do
 
   create_table "authors", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean  "trusted"
-    t.string   "permalink"
+    t.string   "slug"
   end
 
   create_table "backgrounds", force: :cascade do |t|
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 20180312002638) do
     t.text     "description"
     t.integer  "num_starting_skills"
     t.string   "subclass_descriptor"
+    t.string   "slug"
   end
 
   add_index "character_classes", ["name"], name: "index_character_classes_on_name", unique: true
@@ -81,6 +82,7 @@ ActiveRecord::Schema.define(version: 20180312002638) do
     t.integer  "source_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "slug"
   end
 
   add_index "feats", ["source_id"], name: "index_feats_on_source_id"
@@ -93,6 +95,7 @@ ActiveRecord::Schema.define(version: 20180312002638) do
     t.integer  "level",       limit: 1
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
+    t.string   "slug"
   end
 
   create_table "items", force: :cascade do |t|
@@ -102,7 +105,6 @@ ActiveRecord::Schema.define(version: 20180312002638) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
     t.integer  "rarity",     default: 0
-    t.string   "permalink"
   end
 
   create_table "skills", force: :cascade do |t|
@@ -111,6 +113,7 @@ ActiveRecord::Schema.define(version: 20180312002638) do
     t.integer  "ability",     limit: 1
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "slug"
   end
 
   create_table "sources", force: :cascade do |t|
@@ -123,6 +126,7 @@ ActiveRecord::Schema.define(version: 20180312002638) do
     t.string   "link"
     t.boolean  "indexed",      default: false
     t.string   "abbreviation"
+    t.string   "slug"
   end
 
   add_index "sources", ["author_id"], name: "index_sources_on_author_id"
@@ -142,6 +146,7 @@ ActiveRecord::Schema.define(version: 20180312002638) do
     t.text     "components"
     t.integer  "source_id"
     t.string   "source_name"
+    t.string   "slug"
   end
 
   add_index "spells", ["name"], name: "index_spells_on_name", unique: true
@@ -161,6 +166,7 @@ ActiveRecord::Schema.define(version: 20180312002638) do
     t.integer  "source_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "slug"
   end
 
   add_index "subclasses", ["source_id"], name: "index_subclasses_on_source_id"

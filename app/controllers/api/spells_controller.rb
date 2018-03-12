@@ -57,12 +57,12 @@ class Api::SpellsController < ApplicationController
     render :status => 200, :json => response.to_json
   end
 
-  # GET /api/spells/:id
+  # GET /api/spells/(:id|:slug)
   def show
     render :status => 200, :json => @spell.api_form.to_json
   end
 
-  # POST /api/spells/
+  # POST /api/spells
   def create
     fields = spell_params
 
@@ -79,7 +79,7 @@ class Api::SpellsController < ApplicationController
     end
   end
 
-  # PUT /api/spells/:id
+  # PUT /api/spells/(:id|:slug)
   def update
     fields = spell_params
 
@@ -99,6 +99,7 @@ class Api::SpellsController < ApplicationController
   # raise error if spell not found
   def get_spell
     @spell = Spell.find_by(:id => params[:id])
+    @spell ||= Spell.find_by(:slug => params[:id])
     render :status => 404, :json => {status: 404, message: "entity not found"} if @spell.nil?
   end
 

@@ -2,6 +2,9 @@ class Subclass < ActiveRecord::Base
   after_save :load_into_soulmate
   before_destroy :remove_from_soulmate
 
+  before_create :set_slug
+  before_save :set_slug
+
   ICON_DIRECTORY = "app/assets/images/subclasses/icons/"
 
   belongs_to :character_class
@@ -9,12 +12,13 @@ class Subclass < ActiveRecord::Base
   has_many :features, :class_name => "SubclassFeature", :foreign_key => :provider_id
 
   scope :recent, -> { where('created_at >= ?', 2.weeks.ago) }
-  scope :api, -> { select(:id, :name, :description, :source_id, :created_at, :character_class_id) }
+  scope :api, -> { select(:id, :slug, :name, :description, :source_id, :created_at, :character_class_id) }
 
   def api_form
     {
       :name => self.name,
       :id => self.id,
+      :slug => self.slug,
       :type => 'Subclass',
       :description => self.description,
       :image => self.image_url,
@@ -40,6 +44,10 @@ class Subclass < ActiveRecord::Base
 
   private
 
+  def set_slug
+    self.slug = self.name.to_slug
+  end
+
   def load_into_soulmate
     loader = Soulmate::Loader.new("subclasses")
     src = self.source
@@ -54,6 +62,7 @@ class Subclass < ActiveRecord::Base
     end
 
     loader.add("term" => self.name, "id" => self.id, "data" => {
+      "slug" => self.slug,
       "type" => "Subclass",
       "kind" => src.present? ? src.kind : nil,
       "source" => src

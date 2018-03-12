@@ -2,13 +2,17 @@ class Feat < ActiveRecord::Base
   after_save :load_into_soulmate
   before_destroy :remove_from_soulmate
 
+  before_create :set_slug
+  before_save :set_slug
+
   belongs_to :source
 
-  scope :api, -> { select(:name, :id, :prerequisite, :description, :created_at, :source_id) }
+  scope :api, -> { select(:name, :id, :slug, :prerequisite, :description, :created_at, :source_id) }
 
   def api_form
     {
       :id => self.id,
+      :slug => self.slug,
       :name => self.name,
       :description => self.description,
       :prerequisite => self.prerequisite,
@@ -25,10 +29,15 @@ class Feat < ActiveRecord::Base
 
   private
 
+  def set_slug
+    self.slug = self.name.to_slug
+  end
+
   def load_into_soulmate
     loader = Soulmate::Loader.new("feats")
     src = self.source
     loader.add("term" => self.name, "id" => self.id, "data" => {
+      "slug" => self.slug,
       "type" => "Feat",
       "kind" => src.kind,
       "source" => {

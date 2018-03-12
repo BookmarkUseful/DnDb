@@ -37,13 +37,14 @@ class CharacterClass < ActiveRecord::Base
       type: 'CharacterClass',
       summary: self.summary,
       hit_die: self.hit_die,
+      saving_throws: self.saving_throws || [],
       description: self.description,
       subclass_descriptor: self.subclass_descriptor,
       image: self.image_url,
       created_at: self.created_at,
       source: self.source.slice(:id, :name, :kind),
       features: self.features.select(:id, :name, :level, :description).order(:level),
-      subclasses: self.subclasses.select(:id, :name, :description),
+      subclasses: self.subclasses.joins(:source).select(:id, :name, :description, :source_id),
       spells: self.spells.select(:id, :name, :level).group_by{ |spell| spell[:level] }
     }
   end

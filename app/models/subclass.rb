@@ -20,7 +20,7 @@ class Subclass < ActiveRecord::Base
       :image => self.image_url,
       :created_at => self.created_at,
       :features => self.features.select(:id, :name, :level, :description).order(:level),
-      :character_class => self.character_class.slice(:id, :name),
+      :character_class => self.character_class.slice(:id, :name, :subclass_descriptor),
       :source => self.source.slice(:id, :name, :kind),
     }
   end

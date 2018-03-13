@@ -12,6 +12,10 @@ It features the following GET endpoints to reference rules:
 * `/api/character_classes/(:id|:slug)`
 * `/api/feats`
 * `/api/feats/(:id|:slug)`
+* `/api/races`
+* `/api/races/(:id|:slug)`
+* `/api/subraces`
+* `/api/subraces/(:id|:slug)`
 * `/api/skills`
 * `/api/skills/(:id|:slug)`
 * `/api/sources`
@@ -21,7 +25,7 @@ It features the following GET endpoints to reference rules:
 * `/api/subclasses`
 * `/api/subclasses/(:id|:slug)`
 
-Other resources, like races, items, and monsters are not yet implemented. Each existing endpoint can be filtered according to relevant parameters. For instance, the `/api/spells` endpoint can be filtered by `schools`, `sources` (source ids or slugs), `classes` (character class ids or slugs), and `kinds` (`core`, `supplement`, `unearthed_arcana`, or `homebrew`).
+Other resources, like items and monsters, are not yet implemented. Each existing endpoint can be filtered according to relevant parameters. For instance, the `/api/spells` endpoint can be filtered by `schools`, `sources` (source ids or slugs), `classes` (character class ids or slugs), and `kinds` (`core`, `supplement`, `unearthed_arcana`, or `homebrew`).
 
 A response might look something like this (some fields have been omitted):
 

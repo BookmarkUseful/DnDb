@@ -31,11 +31,13 @@ class Skill < ActiveRecord::Base
   end
 
   def load_into_soulmate
-    loader = Soulmate::Loader.new("skills")
+    loader = Soulmate::Loader.new("rule")
     src = Source.find_by(:name => "Player's Handbook")
-    loader.add("term" => self.name, "id" => self.id, "data" => {
+    loader.add("term" => self.name, "id" => "#{self.id}_skill", "data" => {
+    	"id" => self.id,
+    	"name" => self.name,
       "slug" => self.slug,
-      "type" => "Skill",
+      "type" => "skill",
       "kind" => src.kind,
       "source" => {
         "name" => src.name,
@@ -46,7 +48,7 @@ class Skill < ActiveRecord::Base
   end
 
   def remove_from_soulmate
-    loader = Soulmate::Loader.new("skills")
+    loader = Soulmate::Loader.new("rule")
     loader.remove("id" => self.id)
   end
 end

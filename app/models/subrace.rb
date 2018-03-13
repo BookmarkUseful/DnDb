@@ -28,11 +28,13 @@ class Subrace < ActiveRecord::Base
   end
 
   def load_into_soulmate
-    loader = Soulmate::Loader.new("subraces")
+    loader = Soulmate::Loader.new("rule")
     src = self.source
-    loader.add("term" => self.name, "id" => self.id, "data" => {
+    loader.add("term" => self.name, "id" => "#{self.id}_subrace", "data" => {
+    	"id" => self.id,
+    	"name" => self.name,
       "slug" => self.slug,
-      "type" => "Subrace",
+      "type" => "subrace",
       "kind" => src.kind,
       "source" => {
         "name" => src.name,
@@ -43,7 +45,7 @@ class Subrace < ActiveRecord::Base
   end
 
   def remove_from_soulmate
-    loader = Soulmate::Loader.new("subraces")
+    loader = Soulmate::Loader.new("rule")
     loader.remove("id" => self.id)
   end
 

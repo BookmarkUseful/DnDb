@@ -153,16 +153,18 @@ class Source < ActiveRecord::Base
   end
 
   def load_into_soulmate
-    loader = Soulmate::Loader.new("sources")
-    loader.add("term" => self.name, "id" => self.id, "data" => {
+    loader = Soulmate::Loader.new("rule")
+    loader.add("term" => self.name, "id" => "#{self.id}_source", "data" => {
+    	"id" => self.id,
+    	"name" => self.name,
       "slug" => self.slug,
       "kind" => self.kind,
-      "type" => "Source",
+      "type" => "source",
     })
   end
 
   def remove_from_soulmate
-    loader = Soulmate::Loader.new("sources")
+    loader = Soulmate::Loader.new("rule")
     loader.remove("id" => self.id)
   end
 

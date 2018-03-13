@@ -47,11 +47,13 @@ class Race < ActiveRecord::Base
   end
 
   def load_into_soulmate
-    loader = Soulmate::Loader.new("races")
+    loader = Soulmate::Loader.new("rule")
     src = self.source
-    loader.add("term" => self.name, "id" => self.id, "data" => {
+    loader.add("term" => self.name, "id" => "#{self.id}_race", "data" => {
+    	"id" => self.id,
+    	"name" => self.name,
       "slug" => self.slug,
-      "type" => "Race",
+      "type" => "race",
       "kind" => src.kind,
       "source" => {
         "name" => src.name,
@@ -62,7 +64,7 @@ class Race < ActiveRecord::Base
   end
 
   def remove_from_soulmate
-    loader = Soulmate::Loader.new("races")
+    loader = Soulmate::Loader.new("rule")
     loader.remove("id" => self.id)
   end
 

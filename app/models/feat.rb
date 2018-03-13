@@ -35,11 +35,13 @@ class Feat < ActiveRecord::Base
   end
 
   def load_into_soulmate
-    loader = Soulmate::Loader.new("feats")
+    loader = Soulmate::Loader.new("rule")
     src = self.source
-    loader.add("term" => self.name, "id" => self.id, "data" => {
+    loader.add("term" => self.name, "id" => "#{self.id}_feat", "data" => {
+    	"id" => self.id,
+    	"name" => self.name,
       "slug" => self.slug,
-      "type" => "Feat",
+      "type" => "feat",
       "kind" => src.kind,
       "source" => {
         "name" => src.name,
@@ -50,7 +52,7 @@ class Feat < ActiveRecord::Base
   end
 
   def remove_from_soulmate
-    loader = Soulmate::Loader.new("feats")
+    loader = Soulmate::Loader.new("rule")
     loader.remove("id" => self.id)
   end
 

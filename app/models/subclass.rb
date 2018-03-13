@@ -51,7 +51,7 @@ class Subclass < ActiveRecord::Base
   end
 
   def load_into_soulmate
-    loader = Soulmate::Loader.new("subclasses")
+    loader = Soulmate::Loader.new("rule")
     src = self.source
     if src.present?
       src_info = {
@@ -63,16 +63,18 @@ class Subclass < ActiveRecord::Base
       src_info = {}
     end
 
-    loader.add("term" => self.name, "id" => self.id, "data" => {
+    loader.add("term" => self.name, "id" => "#{self.id}_subclass", "data" => {
+    	"id" => self.id,
+    	"name" => self.name,
       "slug" => self.slug,
-      "type" => "Subclass",
+      "type" => "subclass",
       "kind" => src.present? ? src.kind : nil,
       "source" => src
     })
   end
 
   def remove_from_soulmate
-    loader = Soulmate::Loader.new("subclasses")
+    loader = Soulmate::Loader.new("rule")
     loader.remove("id" => self.id)
   end
 

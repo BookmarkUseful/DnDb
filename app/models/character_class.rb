@@ -71,11 +71,13 @@ class CharacterClass < ActiveRecord::Base
   end
 
   def load_into_soulmate
-    loader = Soulmate::Loader.new("classes")
+    loader = Soulmate::Loader.new("rule")
     src = self.source
-    loader.add("term" => self.name, "id" => self.id, "data" => {
+    loader.add("term" => self.name, "id" => "#{self.id}_character_class", "data" => {
+      "id" => self.id,
+      "name" => self.name,
       "slug" => self.slug,
-      "type" => "Character Class",
+      "type" => "character_class",
       "kind" => src.kind,
       "source" => {
         "name" => src.name,
@@ -86,7 +88,7 @@ class CharacterClass < ActiveRecord::Base
   end
 
   def remove_from_soulmate
-    loader = Soulmate::Loader.new("classes")
+    loader = Soulmate::Loader.new("rule")
     loader.remove("id" => self.id)
   end
 

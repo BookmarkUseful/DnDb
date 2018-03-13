@@ -10,7 +10,6 @@ class Feat < ActiveRecord::Base
   scope :api, -> { select(:name, :id, :slug, :prerequisite, :description, :created_at, :source_id) }
   scope :by_sources, -> (sources) { joins(:source).where(Feat.where(:sources => {:slug => sources, :id => sources}).where_values.last(2).inject(:or)) }
 
-
   def api_form
     {
       :id => self.id,

@@ -93,13 +93,14 @@ class Api::CharacterClassesController < ApplicationController
     params.require(:character_class).permit(
       :name,
       :spellcasting,
+      :summary,
+      :description,
+      :source_id,
       {:skills => []},
       {:saving_throws => []},
       {:features => [:name, :level, :description, :id, :character_class_id]},
       {:spells => []},
       {:armour_proficiencies => []},
-      :summary,
-      :description,
       :num_starting_skills,
       :hit_die
     )

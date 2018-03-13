@@ -24,6 +24,8 @@ Rails.application.routes.draw do
 
     resources :monsters, :only => [:index, :show]
 
+    resources :races, :only => [:index, :show, :create, :update]
+
     resources :skills, :only => [:index, :show]
 
     resources :sources, :only => [:index, :show]
@@ -31,6 +33,8 @@ Rails.application.routes.draw do
     resources :spells, :only => [:index, :show, :create, :update]
 
     resources :subclasses, :only => [:index, :show, :create, :update]
+
+    resources :subraces, :only => [:index, :show, :create, :update]
 
   end
 

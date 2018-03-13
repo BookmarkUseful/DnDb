@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180312014330) do
+ActiveRecord::Schema.define(version: 20180312234050) do
 
   create_table "authors", force: :cascade do |t|
     t.string   "name"
@@ -107,6 +107,17 @@ ActiveRecord::Schema.define(version: 20180312014330) do
     t.integer  "rarity",     default: 0
   end
 
+  create_table "races", force: :cascade do |t|
+    t.string   "name"
+    t.string   "slug"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "source_id"
+  end
+
+  add_index "races", ["source_id"], name: "index_races_on_source_id"
+
   create_table "skills", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
@@ -170,5 +181,18 @@ ActiveRecord::Schema.define(version: 20180312014330) do
   end
 
   add_index "subclasses", ["source_id"], name: "index_subclasses_on_source_id"
+
+  create_table "subraces", force: :cascade do |t|
+    t.string   "name"
+    t.string   "slug"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "source_id"
+    t.integer  "race_id"
+  end
+
+  add_index "subraces", ["race_id"], name: "index_subraces_on_race_id"
+  add_index "subraces", ["source_id"], name: "index_subraces_on_source_id"
 
 end
